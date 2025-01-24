@@ -1,6 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {routes} from './Routes/users.routes.js';
+import {CreateUserRoute, GetUserRoute} from './Routes/users.routes.js';
 
 const app = new express();
 app.use(express.json());
@@ -20,4 +20,5 @@ db.off("error", ()=> {
     console.log("Database connection is failed!")
 })
 
-routes(app);
+CreateUserRoute(app);
+GetUserRoute(app);

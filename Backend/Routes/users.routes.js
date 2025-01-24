@@ -1,7 +1,11 @@
 import { createUser } from "../Controller/users.controller.js";
+import { getUser } from "../Controller/users.controller.js";
 
-export function routes(app){
-    console.log("posted the request on the route.");
+export function CreateUserRoute(app){
     app.post("/api/user",createUser);
     
+}
+
+export function GetUserRoute(app){
+    app.get("/api/users",getUser);
 }

@@ -1,7 +1,22 @@
 import userModel from "../Model/users.model.js";
+import jwt from "jsonwebtoken";
+
+export async function getUser(req, res) {
+    try {
+        const { username } = req.body;
+        const user = await userModel.findOne({ username: username });
+
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        res.send(user);
+    } catch (error) {
+        res.status(500).send({ message: "An error occurred", error: error.message });
+    }
+}
 
 export function createUser(req,res){
-    console.log(req.body);
     const{username,email,password,avatar,channel} = req.body;
     const newUser = new userModel({
         username: username,
@@ -15,9 +30,8 @@ export function createUser(req,res){
         if(!data){
             return res.status(400).json({message: "Something went wrong"});
         }
-        console.log("new user data is recevied...........");
-        res.send(data);
-        console.log("sending new user data............");
-
+        const acessToken = jwt.sign({username : data.username, email : data.email, password : data.password}, `${password}+"12345@#$&*"+ ${username}`);
+        res.send(acessToken);
     });
 }
+
