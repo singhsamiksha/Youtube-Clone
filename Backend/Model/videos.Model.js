@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const videoSchema = new mongoose.Schema({
     "videoId": String,
     "title": String,
-    "thumbnailUrl": URL,
+    "thumbnailUrl": String,
     "description": String,
     "channelId": String,
     "uploader": String,
@@ -16,7 +16,7 @@ const videoSchema = new mongoose.Schema({
             "commentId": String,
             "userId": String,
             "text": String,
-            "timestamp": timestamp
+            "timestamp": String
         }
     ]
 });

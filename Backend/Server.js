@@ -2,9 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import {CreateUserRoute, GetUserRoute} from './Routes/users.routes.js';
 import { channelCreate, channelGet } from './Controller/channel.controller.js';
+import { GetVideos } from './Controller/videos.controller.js';
 
 const app = new express();
 app.use(express.json());
+
+
 //Server is connection at port 3000
 app.listen(3000, ()=> {
     console.log("Server is running on port 3000....");
@@ -23,5 +26,6 @@ db.off("error", ()=> {
 
 CreateUserRoute(app);
 GetUserRoute(app);
-channelCreate(app);
-channelGet(app);
+GetVideos(app);
+//channelCreate(app);
+//channelGet(app);

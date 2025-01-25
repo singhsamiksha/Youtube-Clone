@@ -4,6 +4,6 @@ export function createChannelRoute(app){
     app.post('/api/user/channel',channelCreate);
 }
 
-export function getChannelRouter(app){
-    app.get('/api/user/channnel', channelGet);
+export function getChannelRoute(app){
+    app.get('/api/user/channel', channelGet);
 }
