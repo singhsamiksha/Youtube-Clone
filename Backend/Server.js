@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import {CreateUserRoute, GetUserRoute} from './Routes/users.routes.js';
+import { channelCreate, channelGet } from './Controller/channel.controller.js';
 
 const app = new express();
 app.use(express.json());
@@ -22,3 +23,5 @@ db.off("error", ()=> {
 
 CreateUserRoute(app);
 GetUserRoute(app);
+channelCreate(app);
+channelGet(app);

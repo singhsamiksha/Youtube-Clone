@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const channelSchema = new mongoose.Schema({
-    channelId: Number,
+    channelId: String,
     channelName: String, 
     owner: String, 
     description: String,
-    channelBanner: URL,
+    channelBanner: String,
     subscribers: Number, 
     videos: Array
 });
