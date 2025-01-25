@@ -1,5 +1,4 @@
-import { createUser } from "../Controller/users.controller.js";
-import { getUser } from "../Controller/users.controller.js";
+import { createUser,getUser,authenticateUser } from "../Controller/users.controller.js";
 
 export function CreateUserRoute(app){
     app.post("/api/user",createUser);
@@ -7,5 +6,5 @@ export function CreateUserRoute(app){
 }
 
 export function GetUserRoute(app){
-    app.get("/api/users",getUser);
+    app.get("/api/users",authenticateUser,getUser);
 }
