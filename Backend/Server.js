@@ -1,8 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import {CreateUserRoute, GetUserRoute} from './Routes/users.routes.js';
-import { channelCreate, channelGet } from './Controller/channel.controller.js';
-import { GetVideos } from './Controller/videos.controller.js';
+import { createChannelRoute, getChannelRoute } from './Routes/channel.route.js';
+import { getVideoRoute } from './Routes/videos.route.js';
 
 const app = new express();
 app.use(express.json());
@@ -26,6 +26,6 @@ db.off("error", ()=> {
 
 CreateUserRoute(app);
 GetUserRoute(app);
-GetVideos(app);
-//channelCreate(app);
-//channelGet(app);
+getVideoRoute(app);
+createChannelRoute(app);
+getChannelRoute(app);

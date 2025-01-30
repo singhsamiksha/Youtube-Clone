@@ -2,7 +2,7 @@ import videoModel from "../Model/videos.Model.js";
 
 export async function GetVideos(req, res) {
     try {
-        const { title } = req.query; // Use req.query instead of req.body
+        const { title } = req.query; 
         if (!title) {
             return res.status(400).send({ message: "Title is required!" });
         }
@@ -15,7 +15,7 @@ export async function GetVideos(req, res) {
 
         res.status(200).send(videoDetails);
     } catch (error) {
-        res.status(500).send({ message: "An error occurred", error: error.message });
+        res.send({ message: "An error occurred", error: error.message });
     }
 }
 
