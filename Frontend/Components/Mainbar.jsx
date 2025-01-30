@@ -1,8 +1,9 @@
-import Header from "./Header";
-function Mainbar(){
-   return(<>
-   <Header/>
-   </>)
+import React from 'react';
+function Mainbar() {
+  return (
+    <>
+   </>
+  );
 }
 
-export default Mainbar; 
+export default Mainbar;

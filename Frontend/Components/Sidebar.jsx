@@ -1,4 +1,4 @@
-function Sidebar(){
+function Sidebar() {
     return(<>
     </>)
 }
