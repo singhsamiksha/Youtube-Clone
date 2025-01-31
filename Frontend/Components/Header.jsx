@@ -4,7 +4,7 @@ import { IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 
-function Header({ toggleSidebar }){
+function Header({ toggleSidebar, profile }){
     return(
         <div className='Header'>
             <div className='left-header'>
@@ -43,7 +43,7 @@ function Header({ toggleSidebar }){
                 />
             </div>
             <div className='right-header'>
-                <Button variant="outlined" startIcon={<AccountCircleIcon />}>Sign in</Button>
+                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={profile}>Sign in</Button>
             </div>
         </div>
     );
