@@ -1,10 +1,9 @@
-import { createUser,getUser,authenticateUser } from "../Controller/users.controller.js";
+import { createUser, getUser, authenticateUser } from "../Controller/users.controller.js";
+import express from "express"; 
 
-export function CreateUserRoute(app){
-    app.post("/api/user",createUser);
-    
-}
+const router = express.Router(); 
 
-export function GetUserRoute(app){
-    app.get("/api/users",authenticateUser,getUser);
-}
+router.post("/signup", createUser);
+router.get("/signin", authenticateUser, getUser);
+
+export default router;

@@ -1,5 +1,7 @@
 import { GetVideos } from "../Controller/videos.controller.js";
+import express from "express"; 
 
-export function getVideoRoute(app) {
-    app.get('/api/videos', GetVideos);
-}
+const router = express.Router(); 
+router.get('/api/videos', GetVideos);
+
+export default router;

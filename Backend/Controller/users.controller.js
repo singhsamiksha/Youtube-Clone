@@ -27,6 +27,7 @@ export function authenticateUser(req, res, next) {
 
 //fetch the user data
 export async function getUser(req, res) {
+    console.log(req.body);
     try {
         const { username } = req.body;
         const user = await userModel.findOne({ username });

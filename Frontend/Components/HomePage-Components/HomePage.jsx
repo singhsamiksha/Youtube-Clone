@@ -2,9 +2,9 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Mainbar from "./Mainbar";
 import Welcomebar from "./Welcomebar";
-import Signin from "./Signin";
-import SideDetailbar from '../Components/SideDetailbar';
-import '../Stylesheets/HomePage.css';
+import Signin from "../Signin-components/Signin.jsx";
+import SideDetailbar from './SideDetailbar';
+import '../../Stylesheets/HomePage.css';
 import { useState } from "react";
 
 function HomePage(){

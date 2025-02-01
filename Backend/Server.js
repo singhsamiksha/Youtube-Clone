@@ -1,11 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import {CreateUserRoute, GetUserRoute} from './Routes/users.routes.js';
-import { createChannelRoute, getChannelRoute } from './Routes/channel.route.js';
-import { getVideoRoute } from './Routes/videos.route.js';
+import cors from 'cors';
+import user from './Routes/users.routes.js';
+import channel from './Routes/channel.route.js';
+import video from './Routes/videos.route.js';
 
 const app = new express();
 app.use(express.json());
+app.use(cors());
 
 
 //Server is connection at port 3000
@@ -24,8 +26,4 @@ db.off("error", ()=> {
     console.log("Database connection is failed!")
 })
 
-CreateUserRoute(app);
-GetUserRoute(app);
-getVideoRoute(app);
-createChannelRoute(app);
-getChannelRoute(app);
+app.use('/user', user,channel,video);

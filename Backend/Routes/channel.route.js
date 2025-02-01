@@ -1,9 +1,9 @@
 import { channelCreate, channelGet} from "../Controller/channel.controller.js";
+import express from "express"; 
 
-export function createChannelRoute(app){
-    app.post('/api/user/channel',channelCreate);
-}
+const router = express.Router(); 
 
-export function getChannelRoute(app){
-    app.get('/api/user/channel', channelGet);
-}
+router.post('/newchannel',channelCreate);
+router.get('/channels', channelGet);
+
+export default router;
