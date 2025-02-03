@@ -3,8 +3,9 @@ import { Box, TextField, Button, Typography, Link, Container, FormControlLabel, 
 import GoogleIcon from "@mui/icons-material/Google";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-function Signin() {
+function Signin({handleUserState, handleMainbar}) {
   const [page, setPage] = useState(1);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +17,13 @@ function Signin() {
 
   const handleClick = () => {
     setOpen(true);
+  
+    setTimeout(() => {
+      handleUserState();
+      handleMainbar();
+    }, 2000);
   };
+  
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -28,13 +35,10 @@ function Signin() {
 
   const action = (
     <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
-        UNDO
-      </Button>
       <IconButton
         size="small"
         aria-label="close"
-        color="inherit"
+        color="white"
         onClick={handleClose}
       >
         <CloseIcon fontSize="small" />
@@ -235,11 +239,18 @@ function Signin() {
             <Button variant="text" onClick={() => setPage(4)}>Back</Button>
             <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={handleClick}>Finish</Button>
             <Snackbar
+              IconButton={CheckCircleIcon}
               open={open}
-              autoHideDuration={6000}
+              autoHideDuration={2000}
               onClose={handleClose}
-              message="Your Accout is Successfully Created!"
+              message= {
+                  <span style={{ display: "flex", alignItems: "center", color: "white" }}>
+                  <CheckCircleIcon style={{ marginRight: 8, color: "green" }} />
+                  Your Account is Successfully Created!
+                  </span>
+              }
               action={action}
+              sx={{ backgroundColor: "white" }}
             />
           </Box>
         </Box>

@@ -1,0 +1,20 @@
+.AllVideos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px; /* Add space between cards */
+    padding: 20px 5px;
+}
+
+.AllVideos .MuiCard-root {
+    flex: 1 1 calc(33% - 20px);  
+    max-width: calc(33% - 20px); /* Limit the card width */
+    display: flex;
+    flex-direction: column;
+}
+
+.subheadings{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

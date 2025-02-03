@@ -10,27 +10,32 @@ import { useState } from "react";
 function HomePage(){
     const [activeSidebar, setActiveSidebar] = useState(false);
     const [userState, setUserState] = useState(false);
+    const [activeMainbar, setActiveMainbar] = useState(false);
 
-    const toggleSidebar = () => {
+    const handleSidebar = () => {
       setActiveSidebar(!activeSidebar);
     };
 
-    const profile = () => {
+    const handleUserState = () => {
         setUserState(!userState);
     };
 
+    const handleMainbar = () =>{
+        setActiveMainbar(!activeMainbar)
+    }
+
     return (
-        userState === true ? <Signin/> : 
+        userState === true ? <Signin handleUserState={handleUserState} handleMainbar={handleMainbar}/> : 
         <div className="main-page">
             <div className="header-div">
-                <Header toggleSidebar={toggleSidebar} profile={profile}/>
+                <Header handleSidebar={handleSidebar} handleUserState={handleUserState}/>
             </div>
             <div className="center-div">
                 <div>
                     {activeSidebar === false ? <Sidebar /> : <SideDetailbar />}
                 </div>
                 <div style={{position: "relative"}}>
-                    {userState === false ? <Welcomebar/> : <Mainbar/> }
+                    {activeMainbar === false ? <Welcomebar/> : <Mainbar/> }
                 </div>
             </div>
         </div>

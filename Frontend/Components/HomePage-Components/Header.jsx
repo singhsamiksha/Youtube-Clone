@@ -4,11 +4,11 @@ import { IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 
-function Header({ toggleSidebar, profile }){
+function Header({ handleSidebar, handleUserState }){
     return(
         <div className='Header'>
             <div className='left-header'>
-                <IconButton aria-label="menu" size="medium" onClick={toggleSidebar}>
+                <IconButton aria-label="menu" size="medium" onClick={handleSidebar}>
                     <DensityMediumIcon fontSize="inherit" />
                 </IconButton>
                 <button className='logo-button'>
@@ -27,7 +27,7 @@ function Header({ toggleSidebar, profile }){
                         borderRadius: '20px',
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: 'rgb(243, 242, 242)',
+                                borderColor: '#f3f2f2',
                             },
                         },
                     }}
@@ -43,7 +43,7 @@ function Header({ toggleSidebar, profile }){
                 />
             </div>
             <div className='right-header'>
-                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={profile}>Sign in</Button>
+                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={handleUserState}>Sign in</Button>
             </div>
         </div>
     );
