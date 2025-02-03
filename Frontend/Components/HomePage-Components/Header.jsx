@@ -3,8 +3,19 @@ import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
+import { use, useState } from 'react';
 
 function Header({ handleSidebar, handleUserState }){
+    const [search,setSearch] = useState("");
+
+    function handleSearch(e){
+       setSearch(e.target.value);
+    }
+
+    function handleClick(){
+        setSearch("");
+    }
+
     return(
         <div className='Header'>
             <div className='left-header'>
@@ -27,19 +38,20 @@ function Header({ handleSidebar, handleUserState }){
                         borderRadius: '20px',
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
-                                borderColor: '#f3f2f2',
+                                borderColor: 'hsl(0, 4.00%, 95.10%)',
                             },
                         },
                     }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton>
+                                <IconButton onClick={handleClick}>
                                     <SearchIcon />
                                 </IconButton>
                             </InputAdornment>
                         ),
                     }}
+                    onChange={handleSearch}
                 />
             </div>
             <div className='right-header'>

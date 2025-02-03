@@ -11,6 +11,7 @@
     max-width: calc(33% - 20px); /* Limit the card width */
     display: flex;
     flex-direction: column;
+    border: none;
 }
 
 .subheadings{

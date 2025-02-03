@@ -29,7 +29,7 @@ function AllVideos() {
                             alt={video.videoId}
                             border="none"
                         />
-                        <CardContent>
+                        <CardContent sx={{border: "none"} }>
                             <Typography gutterBottom component="div" sx={{ color: 'black', fontSize: '17px', fontWeight: "500"}}>
                                 {video.title}
                             </Typography>

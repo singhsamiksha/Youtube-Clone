@@ -4,6 +4,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import '../../Stylesheets/Signin.css';
 
 function Signin({handleUserState, handleMainbar}) {
   const [page, setPage] = useState(1);
@@ -14,16 +15,54 @@ function Signin({handleUserState, handleMainbar}) {
   const [error, setError] = useState("");
   const [email, setEmail] = useState(""); 
   const [open, setOpen] = useState(false);
+  const [image, setImage] = useState(null);
 
-  const handleClick = () => {
-    setOpen(true);
-  
-    setTimeout(() => {
-      handleUserState();
-      handleMainbar();
-    }, 2000);
+ 
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImage(URL.createObjectURL(file));  
+    }
+    console.log(image);
   };
-  
+
+  const handleClick = async () => {
+    try {
+        const response = await fetch("http://localhost:3000/user/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                image: image,
+            }),
+        });
+
+        console.log(response);
+
+        if (!response.ok) {
+            throw new Error("Failed to create user");
+        }
+
+        const data = await response.json();
+        console.log("User Created:", data);
+    } catch (error) {
+        console.error("Error:", error);
+        setError("Failed to create user.");
+    }
+
+    setOpen(true);
+    handleUserState();
+
+    setTimeout(() => {
+        handleMainbar();
+    }, 2000);
+};
+
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -212,52 +251,69 @@ function Signin({handleUserState, handleMainbar}) {
         </>
       )}
 
-{page === 5 && (
-      <>
-        <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>Your Avatar</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Please upload your profile picture.</Typography>
-        <Box sx={{ width: "100%", marginBottom: "50px"}}>
-          <Button
-            component="label"
-            variant="outlined"
-            startIcon={<AccountCircleIcon sx={{width: "100px", height: "100px"}}/>}
-            sx={{
-              width: "100%", 
-              display:"flex", 
-              justifyContent: "center", 
-              alignItems: "center", 
-              border:"none" }}
-          >
-            <input
-              type="file"
-              accept="image/*"
-              style={{ display: 'none' }}
-              onChange={(event) => console.log(event.target.files)}
-            />
-          </Button>
-          <Box sx={{ display: "flex", justifyContent: "space-between", marginTop:"20px"}}>
-            <Button variant="text" onClick={() => setPage(4)}>Back</Button>
-            <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={handleClick}>Finish</Button>
-            <Snackbar
-              IconButton={CheckCircleIcon}
-              open={open}
-              autoHideDuration={2000}
-              onClose={handleClose}
-              message= {
-                  <span style={{ display: "flex", alignItems: "center", color: "white" }}>
-                  <CheckCircleIcon style={{ marginRight: 8, color: "green" }} />
-                  Your Account is Successfully Created!
+      {page === 5 && (
+            <>
+              <Typography variant="h5" sx={{ mt: 2, fontWeight: 'bold' }}>
+                Your Avatar
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                Please upload your profile picture.
+              </Typography>
+              <Box sx={{ width: '100%', marginBottom: '50px' }}>
+                <Button
+                  component="label"
+                  variant="outlined"
+                  startIcon={
+                    image ? (
+                      <img
+                        src={image}
+                        alt="Profile"
+                        style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                      />
+                    ) : (
+                      <AccountCircleIcon sx={{ width: '100px', height: '100px' }} />
+                    )
+                  }
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    border: 'none',
+                  }}
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={handleImageChange}
+                  />
+                </Button>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                  <Button variant="text" onClick={() => setPage(4)}>
+                    Back
+                  </Button>
+                  <Button variant="contained" sx={{ backgroundColor: '#1A73E8' }} onClick={handleClick}>
+                    Finish
+                  </Button>
+                </Box>
+              </Box>
+              <Snackbar
+                open={open}
+                autoHideDuration={2000}
+                onClose={handleClose}
+                message={
+                  <span style={{ display: 'flex', alignItems: 'center', color: 'white' }} className="avatar">
+                    <CheckCircleIcon style={{ marginRight: 8, color: 'green' }} />
+                    Your Account is Successfully Created!
                   </span>
-              }
-              action={action}
-              sx={{ backgroundColor: "white" }}
-            />
-          </Box>
-        </Box>
-      </>
-    )}
-    </Container>
-  );
-}
+                }
+                sx={{ backgroundColor: 'white' }}
+              />
+            </>
+          )}
+          </Container>
+        );
+      }
 
 export default Signin;
