@@ -9,7 +9,7 @@ import {
 import "../../Stylesheets/AllVideos.css";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
-function AllVideos({ search }) {
+function AllVideos({ search , selectedCategory}) {
     const [videos, setVideos] = useState([]);
   
     useEffect(() => {
@@ -25,9 +25,11 @@ function AllVideos({ search }) {
       fetchVideos();
     }, []);
   
-    // Use search state properly
-    const filteredVideos = videos.filter((video) => 
-      video.title.toLowerCase().includes(search.toLowerCase())
+    const filteredVideos = videos.filter((video) =>
+        selectedCategory === "All"
+          ? video.title.toLowerCase().includes(search.toLowerCase())
+          : video.title.toLowerCase().includes(search.toLowerCase()) &&
+            video.title.toLowerCase().includes(selectedCategory.toLowerCase())
     );
   
     return (

@@ -17,7 +17,7 @@ function Mainbar({ search }) {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-      <AllVideos search={search} />
+      <AllVideos search={search} selectedCategory={selectedCategory}/>
     </>
   );
 }
