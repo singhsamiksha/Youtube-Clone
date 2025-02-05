@@ -50,9 +50,9 @@ export function createUser(req, res) {
         email,
         password,
         avatar,
-        channel,
+        channel
     });
-
+    
     newUser.save().then((data) => {
         if (!data) {
             return res.status(400).json({ message: "Something went wrong" });

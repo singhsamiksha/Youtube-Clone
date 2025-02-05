@@ -3,19 +3,11 @@ import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
-import { use, useState } from 'react';
 
-function Header({ handleSidebar, handleUserState }){
-    const [search,setSearch] = useState("");
-
-    function handleSearch(e){
-       setSearch(e.target.value);
-    }
-
+function Header({ handleSidebar, handleUserState, handleSearch }){
     function handleClick(){
-        setSearch("");
+        handleSearch;
     }
-
     return(
         <div className='Header'>
             <div className='left-header'>
