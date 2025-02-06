@@ -1,10 +1,15 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography, Link, Container, FormControlLabel, Checkbox, Alert, Snackbar, IconButton } from "@mui/material";
+import {Container, IconButton } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from "@mui/icons-material/Close";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Page1 from "./Page1";
+import Page2 from "./Page2";
+import Page3 from "./Page3";
+import Page4 from "./Page4";
+import Page5 from "./Page5";
+import { postUser, getUsers } from "../../Utilites/Apis";
 import '../../Stylesheets/Signin.css';
+
 
 function Signin({handleUserState, handleMainbar}) {
   const [page, setPage] = useState(1);
@@ -19,7 +24,7 @@ function Signin({handleUserState, handleMainbar}) {
   const [user, setUser] = useState(null);
 
  
-
+  // Handle Image Selection
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -27,44 +32,23 @@ function Signin({handleUserState, handleMainbar}) {
     }
     console.log(image);
   };
-
+ 
+  // Handle User Registration
   const handleClick = async () => {
     try {
-        const response = await fetch("http://localhost:3000/user/signup", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                username: username,
-                email: email,
-                password: password,
-                image: image,
-            }),
-        });
-
-        console.log(response);
-
-        if (!response.ok) {
-            throw new Error("Failed to create user");
-        }
-
-        const data = await response.json();
-        console.log("User Created:", data);
-    } catch (error) {
-        console.error("Error:", error);
-        setError("Failed to create user.");
-    }
-
-    setOpen(true);
-    handleUserState();
-
-    setTimeout(() => {
+      await postUser(username, email, password, image);
+      setOpen(true);
+      handleUserState();
+      
+      setTimeout(() => {
         handleMainbar();
-    }, 2000);
-};
+      }, 2000);
+    } catch (error) {
+      setError("Failed to create user.");
+    }
+  };
 
-
+  // Close Snackbar
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -85,12 +69,14 @@ function Signin({handleUserState, handleMainbar}) {
       </IconButton>
     </React.Fragment>
   );
-
+  
+  // Handle Input Change
   function handleChange(e) {
     setUsername(e.target.value);
     setError("");
   }
-
+  
+  //Handle Page 2
   function handlepage2() {
     if (username.trim() === '') {
       setError("Please enter the Email or Username.");
@@ -107,43 +93,29 @@ function Signin({handleUserState, handleMainbar}) {
 
   const handlepage3 = async () => {
     try {
-      if (password.trim() === '') {
-        setError("Please enter the Password.");
-        return;
-      }
-  
-      const response = await fetch("http://localhost:3000/user/signin", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to find any user!");
-      }
-  
-      const data = await response.json();                                     
-      
-      const user = data.find((user) => user.email === email && user.password === password);
-      
-      if (user) {
-        console.log(`Welcome ${user.username}! You are successfully signed in.`);
-        setUser(user);
-        setOpen(true); 
-        handleUserState();
-  
-        setTimeout(() => {
-          handleMainbar();
-        }, 3000);
-      } else {
-        setError("User doesn't exist, Please Try again!");
-      }
+        if (password.trim() === '') {
+            setError("Please enter the Password.");
+            return;
+        }
+        const users = await getUsers();
+        const user = users.find((user) => user.email === email && user.password === password);
+        if (user) {
+            console.log(`Welcome ${user.username}! You are successfully signed in.`);
+            setUser(user);
+            setOpen(true); 
+            handleUserState();
+            setTimeout(() => {
+                handleMainbar();
+            }, 3000);
+        } else {
+            setError("User doesn't exist, Please Try again!");
+        }
     } catch (error) {
-      console.error("Error:", error);
-      setError("Please check your credentials!");
+        console.error("Error:", error);
+        setError("Please check your credentials!");
     }
-  };
+};
+
   
 
   return (
@@ -161,209 +133,48 @@ function Signin({handleUserState, handleMainbar}) {
     >
       <GoogleIcon sx={{ fontSize: 50, color: "#4285F4" }} />
 
-      {page === 1 && (
-        <>
-          <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>Sign in</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>to continue to YouTube</Typography>
-          <Box sx={{ width: "100%" }}>
-            {error && <Alert severity="error">{error}</Alert>}
-            <TextField
-              fullWidth
-              label="Email or Username"
-              variant="outlined"
-              margin="normal"
-              onChange={handleChange}
-              value={username}
-              required
-            />
-            <Link href="#" variant="body2" sx={{ display: "block", textAlign: "right", mb: 2 }}>Forgot email?</Link>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Not your computer? Use a private browsing window to sign in.
-              <Link href="#" variant="body2"> Learn more</Link>
-            </Typography>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Button variant="text" onClick={()=> setPage(3)}>Create account</Button>
-              <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={handlepage2}>Next</Button>
-            </Box>
-          </Box>
-        </>
-      )}
+      {page === 1 && <Page1 
+      error={error} 
+      username={username} 
+      handleChange={handleChange} 
+      setPage={setPage} 
+      handlepage2={handlepage2}/>}
 
-      {page === 2 && (
-        <>
-          <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>Welcome</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>{username}</Typography>
-          <Box sx={{ width: "100%" }}>
-            {error && <Alert severity="error">{error}</Alert>}
-            <TextField
-              fullWidth
-              label="Password"
-              variant="outlined"
-              margin="normal"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={handlePassword}
-              required
-            />
-            <FormControlLabel
-              control={<Checkbox checked={showPassword} onChange={() => setShowPassword(!showPassword)} />}
-              label="Show Password"
-              sx={{ mb: 2 }}
-            />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Link href="#" variant="body2">Try another way</Link>
-              <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={handlepage3}>Next</Button>
-            </Box>
-          </Box>
-          <Snackbar
-            open={open}
-            autoHideDuration={2000}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          >
-            <Alert
-              onClose={handleClose}
-              severity="success"
-              sx={{ width: '100%' }}
-              icon={<CheckCircleIcon fontSize="inherit" style={{ color: 'green' }} />}
-            >
-              Your Account is Successfully Signed In!
-            </Alert>
-          </Snackbar>
+      {page === 2 && <Page2 
+      error={error} 
+      username={username} 
+      showPassword={showPassword} 
+      password={password} 
+      handlepage3={handlepage3}
+      setShowPassword={setShowPassword}
+      open={open}
+      handleClose={handleClose}
+      handlePassword={handlePassword} />}
 
-        </>
-      )}
+      {page === 3 && <Page3
+      error={error} 
+      username={username} 
+      setUsername={setUsername}
+      email={email}
+      setEmail={setEmail}
+      setPage={setPage}/>}
 
-      {page === 3 && (
-        <>
-          <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>Create a Google Account</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Enter your Full Name and Email Address</Typography>
-          <Box sx={{ width: "100%" }}>
-            {error && username === '' && <Alert severity="error">Enter the Username</Alert>}
-            {error && email === '' && <Alert severity="error">Enter the Email</Alert>}
+      {page === 4 && <Page4
+      password={password}
+      confirmpassword={confirmpassword}
+      handlePassword={handlePassword}
+      setConfirmPassword={setConfirmPassword}
+      setPage={setPage}
+      />}
 
-            <TextField
-              fullWidth
-              label="Username"
-              variant="outlined"
-              margin="normal"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              label="Email Address"
-              variant="outlined"
-              margin="normal"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}  
-            />
-
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Button variant="text" onClick={() => setPage(1)}>Back</Button>
-              <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={()=>setPage(4)}>Next</Button>
-            </Box>
-          </Box>
-        </>
-      )}
-
-      {page === 4 && (
-        <>
-          <Typography variant="h5" sx={{ mt: 2, fontWeight: "bold" }}>Create Password</Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>Create a strong new password for authentication.</Typography>
-          <Box sx={{ width: "100%" }}>
-            {password!==confirmpassword && <Alert severity="error">Password doesn't Match!</Alert>}
-            <TextField
-              fullWidth
-              label="New Password"
-              variant="outlined"
-              margin="normal"
-              type="password"
-              value={password}
-              onChange={handlePassword}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Confirm Password"
-              variant="outlined"
-              margin="normal"
-              type="password"
-              onChange={(e)=>setConfirmPassword(e.target.value)}
-              required
-            />
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Button variant="text" onClick={() => setPage(3)}>Back</Button>
-              <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={()=>setPage(5)}>Next</Button>
-            </Box>
-          </Box>
-        </>
-      )}
-
-      {page === 5 && (
-            <>
-              <Typography variant="h5" sx={{ mt: 2, fontWeight: 'bold' }}>
-                Your Avatar
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                Please upload your profile picture.
-              </Typography>
-              <Box sx={{ width: '100%', marginBottom: '50px' }}>
-                <Button
-                  component="label"
-                  variant="outlined"
-                  startIcon={
-                    image ? (
-                      <img
-                        src={image}
-                        alt="Profile"
-                        style={{ width: '100px', height: '100px', borderRadius: '50%' }}
-                      />
-                    ) : (
-                      <AccountCircleIcon sx={{ width: '100px', height: '100px' }} />
-                    )
-                  }
-                  sx={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    border: 'none',
-                  }}
-                >
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={handleImageChange}
-                  />
-                </Button>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-                  <Button variant="text" onClick={() => setPage(4)}>
-                    Back
-                  </Button>
-                  <Button variant="contained" sx={{ backgroundColor: '#1A73E8' }} onClick={handleClick}>
-                    Finish
-                  </Button>
-                </Box>
-              </Box>
-              <Snackbar
-                open={open}
-                autoHideDuration={2000}
-                onClose={handleClose}
-                message={
-                  <span style={{ display: 'flex', alignItems: 'center', color: 'white' }} className="avatar">
-                    <CheckCircleIcon style={{ marginRight: 8, color: 'green' }} />
-                    Your Account is Successfully Created!
-                  </span>
-                }
-                sx={{ backgroundColor: 'white' }}
-              />
-            </>
-          )}
-          </Container>
+      {page === 5 && <Page5
+      image={image}
+      handleImageChange={handleImageChange}
+      handleClick={handleClick}
+      setPage={setPage}
+      open={open}
+      handleClose={handleClose}/>}
+      </Container>
         );
       }
 
