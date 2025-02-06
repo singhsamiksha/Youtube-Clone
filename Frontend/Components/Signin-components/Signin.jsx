@@ -9,6 +9,9 @@ import Page4 from "./Page4";
 import Page5 from "./Page5";
 import { postUser, getUsers } from "../../Utilites/Apis";
 import '../../Stylesheets/Signin.css';
+import { useDispatch } from "react-redux";
+import { login } from "../../Redux/userSlice";
+
 
 
 function Signin({handleUserState, handleMainbar}) {
@@ -21,7 +24,7 @@ function Signin({handleUserState, handleMainbar}) {
   const [email, setEmail] = useState(""); 
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
  
   // Handle Image Selection
@@ -36,7 +39,10 @@ function Signin({handleUserState, handleMainbar}) {
   // Handle User Registration
   const handleClick = async () => {
     try {
-      await postUser(username, email, password, image);
+      const user = await postUser(username, email, password, image); 
+      
+      dispatch(login(user)); 
+  
       setOpen(true);
       handleUserState();
       
@@ -91,30 +97,36 @@ function Signin({handleUserState, handleMainbar}) {
     setError("");
   }
 
-  const handlepage3 = async () => {
-    try {
-        if (password.trim() === '') {
-            setError("Please enter the Password.");
-            return;
-        }
-        const users = await getUsers();
-        const user = users.find((user) => user.email === email && user.password === password);
-        if (user) {
-            console.log(`Welcome ${user.username}! You are successfully signed in.`);
-            setUser(user);
-            setOpen(true); 
-            handleUserState();
-            setTimeout(() => {
-                handleMainbar();
-            }, 3000);
-        } else {
-            setError("User doesn't exist, Please Try again!");
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        setError("Please check your credentials!");
+
+
+const handlepage3 = async () => {
+  try {
+    if (password.trim() === '') {
+      setError("Please enter the Password.");
+      return;
     }
+    const users = await getUsers();
+    const user = users.find((user) => user.email === email && user.password === password);
+
+    if (user) {
+      console.log(`Welcome ${user.username}! You are successfully signed in.`);
+      
+      dispatch(login(user));  // Store user in Redux
+
+      setOpen(true); 
+      handleUserState();
+      setTimeout(() => {
+        handleMainbar();
+      }, 3000);
+    } else {
+      setError("User doesn't exist, Please Try again!");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    setError("Please check your credentials!");
+  }
 };
+
 
   
 
