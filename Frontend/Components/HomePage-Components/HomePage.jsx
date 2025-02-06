@@ -20,6 +20,7 @@ function HomePage(){
 
     const handleUserState = () => {
         setUserState(!userState);
+        console.log(userState);
     };
 
     const handleMainbar = () =>{
@@ -34,7 +35,7 @@ function HomePage(){
             userState === true ? <Signin handleUserState={handleUserState} handleMainbar={handleMainbar}/> : 
             <div className="main-page">
                 <div className="header-div">
-                    <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch}/>
+                    <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch} userState={userState}/>
                 </div>
                 <div className="center-div">
                     <div>

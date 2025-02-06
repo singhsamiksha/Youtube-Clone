@@ -16,6 +16,7 @@ function Signin({handleUserState, handleMainbar}) {
   const [email, setEmail] = useState(""); 
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [user, setUser] = useState(null);
 
  
 
@@ -95,6 +96,7 @@ function Signin({handleUserState, handleMainbar}) {
       setError("Please enter the Email or Username.");
       return;
     }
+    setEmail(username);
     setPage(2);
   }
 
@@ -103,13 +105,46 @@ function Signin({handleUserState, handleMainbar}) {
     setError("");
   }
 
-  function handlepage3() {
-    if (password.trim() === '') {
-      setError("Please enter the Password.");
-      return;
+  const handlepage3 = async () => {
+    try {
+      if (password.trim() === '') {
+        setError("Please enter the Password.");
+        return;
+      }
+  
+      const response = await fetch("http://localhost:3000/user/signin", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to find any user!");
+      }
+  
+      const data = await response.json();                                     
+      
+      const user = data.find((user) => user.email === email && user.password === password);
+      
+      if (user) {
+        console.log(`Welcome ${user.username}! You are successfully signed in.`);
+        setUser(user);
+        setOpen(true); 
+        handleUserState();
+  
+        setTimeout(() => {
+          handleMainbar();
+        }, 3000);
+      } else {
+        setError("User doesn't exist, Please Try again!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Please check your credentials!");
     }
-    // Proceed to authentication logic here
-  }
+  };
+  
 
   return (
     <Container
@@ -180,6 +215,22 @@ function Signin({handleUserState, handleMainbar}) {
               <Button variant="contained" sx={{ backgroundColor: "#1A73E8" }} onClick={handlepage3}>Next</Button>
             </Box>
           </Box>
+          <Snackbar
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert
+              onClose={handleClose}
+              severity="success"
+              sx={{ width: '100%' }}
+              icon={<CheckCircleIcon fontSize="inherit" style={{ color: 'green' }} />}
+            >
+              Your Account is Successfully Signed In!
+            </Alert>
+          </Snackbar>
+
         </>
       )}
 

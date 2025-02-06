@@ -9,18 +9,29 @@ const categories = [
 
 function Mainbar({ search }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [mainBar, setMainBar] = useState(true);
+
+  const toggleMainBar = () => {
+    setMainBar(!mainBar);
+  };
 
   return (
     <>
-      <Tabs
-        categories={categories}
+      {mainBar && (
+        <Tabs
+          categories={categories}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
+      )}
+      <AllVideos
+        search={search}
         selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
+        mainBar={mainBar}
+        toggleMainBar={toggleMainBar}
       />
-      <AllVideos search={search} selectedCategory={selectedCategory}/>
     </>
   );
 }
-
 
 export default Mainbar;

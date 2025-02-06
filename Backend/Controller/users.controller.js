@@ -25,9 +25,22 @@ export function authenticateUser(req, res, next) {
     });
 }
 
+//fetch all users
+export async function getAllUser(req, res) {
+    try {
+        const user = await userModel.find();
+
+        if (!user) {
+            return res.status(404).send({ message: "Users not found" });
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(500).send({ message: "An error occurred", error: error.message });
+    }
+}
+
 //fetch the user data
 export async function getUser(req, res) {
-    console.log(req.body);
     try {
         const { username } = req.body;
         const user = await userModel.findOne({ username });

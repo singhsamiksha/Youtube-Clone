@@ -1,10 +1,34 @@
 import '../../Stylesheets/Header.css';
+import React from 'react';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { IconButton, TextField, Button, InputAdornment } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
+import { AuthenticationContext, SessionContext } from '@toolpad/core/AppProvider';
+import { Account } from '@toolpad/core/Account';
 
-function Header({ handleSidebar, handleUserState, handleSearch }){
+const demoSession = {
+  user: {
+    name: 'Bharat Kashyap',
+    email: 'bharatkashyap@outlook.com',
+    image: 'https://avatars.githubusercontent.com/u/19550456',
+  },
+};
+
+function Header({ handleSidebar, handleUserState, handleSearch, userState }){
+
+    const [session, setSession] = React.useState(demoSession);
+    const authentication = React.useMemo(() => {
+      return {
+        signIn: () => {
+          setSession(demoSession);
+        },
+        signOut: () => {
+          setSession(null);
+        },
+      };
+    }, []);
+
     function handleClick(){
         handleSearch;
     }
@@ -47,7 +71,16 @@ function Header({ handleSidebar, handleUserState, handleSearch }){
                 />
             </div>
             <div className='right-header'>
-                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={handleUserState}>Sign in</Button>
+                
+                { userState ? 
+                 <AuthenticationContext.Provider value={authentication}>
+                 <SessionContext.Provider value={session}>
+                   {/* preview-start */}
+                   <Account />
+                   {/* preview-end */}
+                 </SessionContext.Provider>
+               </AuthenticationContext.Provider> :
+                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={handleUserState}>Sign in</Button>}
             </div>
         </div>
     );
