@@ -7,9 +7,6 @@ import SideDetailbar from './SideDetailbar';
 import '../../Stylesheets/HomePage.css';
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { logout } from "../../Redux/userSlice.js";
-
 
 
 function HomePage(){
@@ -17,10 +14,6 @@ function HomePage(){
     const [userState, setUserState] = useState(false);
     const [activeMainbar, setActiveMainbar] = useState(false);
     const [search,setSearch] = useState("");
-    const dispatch = useDispatch();
-    const handleLogout = () => {
-    dispatch(logout());
-    };
 
     const user = useSelector((state) => state.user.user);
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
@@ -48,7 +41,7 @@ function HomePage(){
             userState === true ? <Signin handleUserState={handleUserState} handleMainbar={handleMainbar}/> : 
             <div className="main-page">
                 <div className="header-div">
-                    <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch} userState={userState}/>
+                    <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch} isAuthenticated={isAuthenticated}/>
                 </div>
                 <div className="center-div">
                     <div>
@@ -58,7 +51,6 @@ function HomePage(){
                         {activeMainbar === false ? <Welcomebar/> : <Mainbar search={search} /> }
                     </div>
                 </div>
-                <button onClick={handleLogout}>Logout</button>
                 
             </div>
         );

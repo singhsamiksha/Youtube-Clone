@@ -6,33 +6,45 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SearchIcon from '@mui/icons-material/Search';
 import { AuthenticationContext, SessionContext } from '@toolpad/core/AppProvider';
 import { Account } from '@toolpad/core/Account';
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../Redux/userSlice";
 
-const demoSession = {
-  user: {
-    name: 'Bharat Kashyap',
-    email: 'bharatkashyap@outlook.com',
-    image: 'https://avatars.githubusercontent.com/u/19550456',
-  },
-};
+function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated }) {
 
-function Header({ handleSidebar, handleUserState, handleSearch, userState }){
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.user);
+
+    const handleLogout = () => {
+        dispatch(logout());
+    };
+
+    const demoSession = {
+        user: {
+            name: user?.username || "Guest",
+            email: user?.email || "guest@example.com",
+            image: 'https://fotoscluster.com/wp-content/uploads/2024/11/salwar-suit-girl-dp-image%E2%80%8B.jpg',
+        },
+    };
 
     const [session, setSession] = React.useState(demoSession);
+
     const authentication = React.useMemo(() => {
-      return {
-        signIn: () => {
-          setSession(demoSession);
-        },
-        signOut: () => {
-          setSession(null);
-        },
-      };
+        return {
+            signIn: () => {
+                setSession(demoSession);
+            },
+            signOut: () => {
+                handleLogout();
+                setSession(null);
+            },
+        };
     }, []);
 
-    function handleClick(){
-        handleSearch;
+    function handleClick() {
+        handleSearch();
     }
-    return(
+
+    return (
         <div className='Header'>
             <div className='left-header'>
                 <IconButton aria-label="menu" size="medium" onClick={handleSidebar}>
@@ -43,10 +55,10 @@ function Header({ handleSidebar, handleUserState, handleSearch, userState }){
                 </button>
             </div>
             <div className='center-header'>
-                <TextField 
-                    variant="outlined" 
-                    placeholder="Search" 
-                    size="small" 
+                <TextField
+                    variant="outlined"
+                    placeholder="Search"
+                    size="small"
                     className="search-bar"
                     sx={{
                         width: 400,
@@ -71,16 +83,19 @@ function Header({ handleSidebar, handleUserState, handleSearch, userState }){
                 />
             </div>
             <div className='right-header'>
-                
-                { userState ? 
-                 <AuthenticationContext.Provider value={authentication}>
-                 <SessionContext.Provider value={session}>
-                   {/* preview-start */}
-                   <Account />
-                   {/* preview-end */}
-                 </SessionContext.Provider>
-               </AuthenticationContext.Provider> :
-                <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={handleUserState}>Sign in</Button>}
+                {isAuthenticated ? (
+                    <AuthenticationContext.Provider value={authentication}>
+                        <SessionContext.Provider value={session}>
+                            {/* preview-start */}
+                            <Account />
+                            {/* preview-end */}
+                        </SessionContext.Provider>
+                    </AuthenticationContext.Provider>
+                ) : (
+                    <Button variant="outlined" startIcon={<AccountCircleIcon />} onClick={handleUserState}>
+                        Sign in
+                    </Button>
+                )}
             </div>
         </div>
     );
