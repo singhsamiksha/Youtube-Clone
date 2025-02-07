@@ -48,7 +48,7 @@ function HomePage(){
                         {activeSidebar === false ? <Sidebar /> : <SideDetailbar />}
                     </div>
                     <div style={{position: "relative"}}>
-                        {activeMainbar === false ? <Welcomebar/> : <Mainbar search={search} /> }
+                        {activeMainbar === false && isAuthenticated === false ? <Welcomebar/> : <Mainbar search={search} /> }
                     </div>
                 </div>
                 

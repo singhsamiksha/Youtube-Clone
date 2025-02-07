@@ -10,9 +10,10 @@ export async function postUser(username, email, password, image) {
                 email: email,
                 password: password,
                 image: image,
+                channel: [username]
             }),
         });
-
+        console.log(response);
         if (!response.ok) {
             throw new Error("Failed to create user");
         }
@@ -46,4 +47,31 @@ export async function getUsers() {
         return []; 
     }
 }
+
+export async function postChannel(channelName, username, description, channelBanner, subscribers, videos) {
+    try {
+        const response = await fetch("http://localhost:3000/user/newchannel", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                channelName,
+                owner: username,
+                description,
+                channelBanner,
+                subscribers,
+                videos, 
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Failed to create channel");
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error("Error:", error);
+        throw error;
+    }
+}
+
 

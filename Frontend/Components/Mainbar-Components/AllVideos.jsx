@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import "../../Stylesheets/AllVideos.css"; // Use this to handle styles
+import "../../Stylesheets/AllVideos.css"; 
 
 function AllVideos({ search, selectedCategory, mainBar, toggleMainBar}) {
   const [videos, setVideos] = useState([]);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Tabs from "../Mainbar-Components/Tabs";
-import AllVideos from "../Mainbar-Components/AllVideos";
+import AllVideos from "../Mainbar-Components/AllVideos.jsx";
 
 const categories = [
   "All", "Music", "Mixes", "Rowan Atkinson", "Comedy clubs", "Game shows",
@@ -12,7 +12,7 @@ function Mainbar({ search }) {
   const [mainBar, setMainBar] = useState(true);
 
   const toggleMainBar = () => {
-    setMainBar(!mainBar);
+    setMainBar(false);
   };
 
   return (

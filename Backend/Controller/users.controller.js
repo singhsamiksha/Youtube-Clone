@@ -56,24 +56,24 @@ export async function getUser(req, res) {
 
 //Create user in database
 export function createUser(req, res) {
-    const { username, email, password, avatar, channel } = req.body;
+    const { username, email, password, image, channel } = req.body;
 
-    const newUser = new userModel({
+    const user = new userModel({
         username,
         email,
         password,
-        avatar,
+        image,
         channel
     });
     
-    newUser.save().then((data) => {
+    user.save().then((data) => {
         if (!data) {
             return res.status(400).json({ message: "Something went wrong" });
         }
 
         //Generate the access token
         const accessToken = jwt.sign({ username: data.username, email: data.email }, SECRET_KEY);
-        res.send({ accessToken });
+        res.send({accessToken});
     }).catch((error) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     });

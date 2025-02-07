@@ -13,13 +13,13 @@ export function channelCreate(req, res) {
         owner,
         description,
         channelBanner,
-        subscribers,
-        videos,
+        subscribers: subscribers || 0, // Default value
+        videos: videos || [],
     });
 
     newChannel
         .save()
-        .then((data) => res.status(201).send(data))
+        .then((data) => res.status(201).json(data))
         .catch((error) => res.status(500).json({ message: "Internal server error", error: error.message }));
 }
 
