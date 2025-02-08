@@ -99,7 +99,7 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
         </CardContent>
 
       </div>
-      <div className='right' style={{ display: 'flex', flexDirection: 'column',  gap: '5px', justifyContent: 'center', border: 'none' }}>
+      <div className='right' style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', border: 'none' }}>
         {filteredVideos.map(video => (
           <Card
             key={video.videoId}

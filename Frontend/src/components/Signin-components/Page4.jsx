@@ -24,7 +24,7 @@ const Page4 = ({ password, confirmpassword, handlePassword, setConfirmPassword, 
         variant='outlined'
         margin='normal'
         type='password'
-        value={confirmpassword}  // You might need to bind `confirmpassword` to the input value
+        value={confirmpassword} // You might need to bind `confirmpassword` to the input value
         onChange={e => setConfirmPassword(e.target.value)}
       />
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

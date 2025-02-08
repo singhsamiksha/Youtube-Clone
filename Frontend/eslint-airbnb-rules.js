@@ -5,6 +5,7 @@ export default {
     'no-dupe-keys': 'error',
     'no-duplicate-case': 'error',
     'no-empty': ['error', { allowEmptyCatch: true }],
+    'no-multi-spaces': ['error', { ignoreEOLComments: false }],
     'no-extra-semi': 'error',
     'no-irregular-whitespace': 'error',
     'array-callback-return': 'error',

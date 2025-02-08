@@ -106,7 +106,7 @@ const Signin = ({ handleUserState, handleMainbar }) => {
       if (user) {
         console.log(`Welcome ${user.username}! You are successfully signed in.`);
 
-        dispatch(login(user));  // Store user in Redux
+        dispatch(login(user)); // Store user in Redux
 
         setOpen(true);
         handleUserState();
