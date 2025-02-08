@@ -25,7 +25,7 @@ const Page4 = ({ password, confirmpassword, handlePassword, setConfirmPassword, 
         margin='normal'
         type='password'
         value={confirmpassword} // You might need to bind `confirmpassword` to the input value
-        onChange={e => setConfirmPassword(e.target.value)}
+        onChange={(e) => setConfirmPassword(e.target.value)}
       />
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button variant='text' onClick={() => setPage(3)}>Back</Button>

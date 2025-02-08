@@ -29,14 +29,14 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
   }, []);
 
   // Filter videos based on search and selected category
-  const filteredVideos = videos.filter(video =>
+  const filteredVideos = videos.filter((video) =>
     selectedCategory === 'All'
       ? video.title.toLowerCase().includes(search.toLowerCase())
       : video.title.toLowerCase().includes(search.toLowerCase()) &&
         video.title.toLowerCase().includes(selectedCategory.toLowerCase())
   );
 
-  const handleVideoClick = video => {
+  const handleVideoClick = (video) => {
     setSelectedVideo(video);
     toggleMainBar();
   };
@@ -88,7 +88,7 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
               {selectedVideo.comments.length}
             </Typography>
             <input placeholder='Add a Comment' />
-            {selectedVideo.comments.map(comment => (
+            {selectedVideo.comments.map((comment) => (
               <div key={comment.commentId}>
                 <Typography variant='body2' sx={{ color: 'text.secondary' }}>
                   {comment.text}
@@ -100,7 +100,7 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
 
       </div>
       <div className='right' style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', border: 'none' }}>
-        {filteredVideos.map(video => (
+        {filteredVideos.map((video) => (
           <Card
             key={video.videoId}
             sx={{ maxWidth: 400, border: 'none', width: '100%' }}
@@ -146,7 +146,7 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
     </div>
   ) : (
     <div className='AllVideos'>
-      {filteredVideos.map(video => (
+      {filteredVideos.map((video) => (
         <Card
           key={video.videoId}
           sx={{ maxWidth: 345, border: 'none' }}

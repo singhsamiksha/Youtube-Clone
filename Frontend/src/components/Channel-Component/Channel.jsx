@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 const Channel = () => {
-  const user = useSelector(state => state.user.user);
+  const user = useSelector((state) => state.user.user);
 
   const handleClick = async() => {
     try {

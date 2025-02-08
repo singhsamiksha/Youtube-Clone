@@ -16,7 +16,7 @@ const Page3 = ({ error, username, email, setUsername, setEmail, setPage }) => (
         margin='normal'
         type='text'
         value={username}
-        onChange={e => setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
         fullWidth
@@ -25,7 +25,7 @@ const Page3 = ({ error, username, email, setUsername, setEmail, setPage }) => (
         margin='normal'
         type='email'
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
       />
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

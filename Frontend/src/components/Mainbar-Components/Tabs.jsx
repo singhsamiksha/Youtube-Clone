@@ -13,7 +13,7 @@ const Tabs = ({ categories, selectedCategory, setSelectedCategory }) => (
       borderRadius: '8px',
     }}
   >
-    {categories.map(category => (
+    {categories.map((category) => (
       <Chip
         key={category}
         clickable
