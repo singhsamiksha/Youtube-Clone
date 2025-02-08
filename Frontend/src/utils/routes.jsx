@@ -1,7 +1,7 @@
 import { createBrowserRouter} from "react-router-dom";
-import App from "../src/App";
-import Video from "../Components/Video-Component/video";
-import Channel from "../Components/Channel-Component/Channel";
+import App from "../App";
+import Video from "../components/Video-Component/video";
+import Channel from "../components/Channel-Component/Channel";
 
 const appRouter = createBrowserRouter([
     {

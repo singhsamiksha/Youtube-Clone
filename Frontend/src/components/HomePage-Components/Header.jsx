@@ -7,8 +7,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { AuthenticationContext, SessionContext } from '@toolpad/core/AppProvider';
 import { Account } from '@toolpad/core/Account';
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../Redux/userSlice";
-import { postChannel } from '../../Utilites/Apis';
+import { logout } from "../../redux/userSlice";
+import { postChannel } from '../../utils/apis';
 
 function ChannelDialog({ open, handleClose, handleCreateChannel, channelName, setChannelName, description, setDescription, channelBanner, setChannelBanner, subscribers, setSubscribers, setVideos }) {
     return (

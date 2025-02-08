@@ -7,10 +7,10 @@ import Page2 from "./Page2";
 import Page3 from "./Page3";
 import Page4 from "./Page4";
 import Page5 from "./Page5";
-import { postUser, getUsers } from "../../Utilites/Apis";
+import { postUser, getUsers } from "../../utils/apis";
 import '../../Stylesheets/Signin.css';
 import { useDispatch } from "react-redux";
-import { login } from "../../Redux/userSlice";
+import { login } from "../../redux/userSlice";
 
 
 
