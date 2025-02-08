@@ -13,47 +13,47 @@ import HistoryIcon from '@mui/icons-material/History';
 
 function Sidebar() {
   return (
-    <Box sx={{ width: '100%', maxWidth: 200}}>
+    <Box sx={{ width: '100%', maxWidth: 200 }}>
       <nav >
         <List>
           <ListItem disablePadding >
-            <ListItemButton sx={{display:"flex", flexDirection:"column", gap: "5px"}}>
-              <ListItemIcon sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <HomeIcon/>
               </ListItemIcon>
-              <ListItemText primary="Home"/>
+              <ListItemText primary='Home'/>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton sx={{display:"flex", flexDirection:"column", gap: "5px"}}>
-              <ListItemIcon sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <SlideshowIcon />
               </ListItemIcon>
-              <ListItemText primary="Shorts" />
+              <ListItemText primary='Shorts' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton sx={{display:"flex", flexDirection:"column", gap: "5px"}}>
-              <ListItemIcon sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <VideoLibraryIcon />
               </ListItemIcon>
-              <ListItemText primary="Subscriptions" />
+              <ListItemText primary='Subscriptions' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton sx={{display:"flex", flexDirection:"column", gap: "5px"}}>
-              <ListItemIcon sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <AccountCircleIcon />
               </ListItemIcon>
-              <ListItemText primary="You" />
+              <ListItemText primary='You' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton sx={{display:"flex", flexDirection:"column", gap: "5px"}}>
-              <ListItemIcon sx={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <HistoryIcon />
               </ListItemIcon>
-              <ListItemText primary="History" />
+              <ListItemText primary='History' />
             </ListItemButton>
           </ListItem>
         </List>

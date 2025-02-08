@@ -22,18 +22,17 @@ import OutlinedFlagIcon from '@mui/icons-material/OutlinedFlag';
 import HelpIcon from '@mui/icons-material/Help';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 
-
 function SideDetailbar() {
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <nav aria-label="main mailbox folders">
+      <nav aria-label='main mailbox folders'>
         <List>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary='Home' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -41,7 +40,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <SlideshowIcon />
               </ListItemIcon>
-              <ListItemText primary="Shorts" />
+              <ListItemText primary='Shorts' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -49,7 +48,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <VideoLibraryIcon />
               </ListItemIcon>
-              <ListItemText primary="Subscription" />
+              <ListItemText primary='Subscription' />
             </ListItemButton>
           </ListItem>
           <Divider />
@@ -58,7 +57,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
-              <ListItemText primary="You" />
+              <ListItemText primary='You' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -66,7 +65,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <HistoryIcon />
               </ListItemIcon>
-              <ListItemText primary="History" />
+              <ListItemText primary='History' />
             </ListItemButton>
           </ListItem>
           <Divider />
@@ -75,7 +74,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <WhatshotIcon />
               </ListItemIcon>
-              <ListItemText primary="Trending" />
+              <ListItemText primary='Trending' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -83,7 +82,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <ShoppingBagIcon />
               </ListItemIcon>
-              <ListItemText primary="Shopping" />
+              <ListItemText primary='Shopping' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -91,7 +90,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <MusicNoteIcon />
               </ListItemIcon>
-              <ListItemText primary="Music" />
+              <ListItemText primary='Music' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -99,7 +98,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <MovieIcon />
               </ListItemIcon>
-              <ListItemText primary="Movie" />
+              <ListItemText primary='Movie' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -107,7 +106,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <LiveTvIcon />
               </ListItemIcon>
-              <ListItemText primary="Live" />
+              <ListItemText primary='Live' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -115,7 +114,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <SportsEsportsIcon />
               </ListItemIcon>
-              <ListItemText primary="Gaming" />
+              <ListItemText primary='Gaming' />
             </ListItemButton>
           </ListItem>
           <Divider />
@@ -124,7 +123,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Setting" />
+              <ListItemText primary='Setting' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -132,7 +131,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <OutlinedFlagIcon />
               </ListItemIcon>
-              <ListItemText primary="Report history" />
+              <ListItemText primary='Report history' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -140,7 +139,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <HelpIcon />
               </ListItemIcon>
-              <ListItemText primary="Help" />
+              <ListItemText primary='Help' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -148,7 +147,7 @@ function SideDetailbar() {
               <ListItemIcon>
                 <FeedbackIcon />
               </ListItemIcon>
-              <ListItemText primary="Send feedback" />
+              <ListItemText primary='Send feedback' />
             </ListItemButton>
           </ListItem>
         </List>

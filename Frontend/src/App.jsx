@@ -1,13 +1,13 @@
-import HomePage from './components/HomePage-Components/HomePage'
-import './App.css'
+import HomePage from './components/HomePage-Components/HomePage';
+import appRouter from './utils/routes.jsx';
+import { RouterProvider } from 'react-router-dom';
+import './App.css';
 
-function App() {
+const App = () => (
+  <>
+    <RouterProvider router={appRouter} />
+    <HomePage />
+  </>
+);
 
-  return (
-    <>
-      <HomePage/>
-    </>
-  )
-}
-
-export default App
+export default App;
