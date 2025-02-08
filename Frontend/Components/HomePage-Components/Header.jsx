@@ -28,15 +28,25 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
 
     const demoSession = {
         user: {
-            name: user?.username || "Guest",
-            email: user?.email || "guest@example.com",
-            image: user?.image || 'https://fotoscluster.com/wp-content/uploads/2024/11/salwar-suit-girl-dp-image%E2%80%8B.jpg',
+            name: user?.username || user?.data?.username || "Guest",
+            email: user?.email || user?.data?.email || "guest@example.com",
+            image: user?.image || user?.data?.image || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
         },
     };
+    
 
     const handleCreateChannel = async () => {
+        console.log("Sending data:", {
+            channelName,
+            owner: user?.username,
+            description,
+            channelBanner,
+            subscribers,
+            videos
+        });
         try {
-            const channel = await postChannel(channelName, user.username, description, channelBanner, subscribers, videos);
+            const owner = user?.username || user?.data?.username;
+            const channel = await postChannel(channelName, owner, description, channelBanner, subscribers, videos);
             console.log("Channel Created Successfully:", channel);
         } catch (error) {
             setError("Failed to create channel.");

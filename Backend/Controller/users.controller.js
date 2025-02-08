@@ -73,7 +73,7 @@ export function createUser(req, res) {
 
         //Generate the access token
         const accessToken = jwt.sign({ username: data.username, email: data.email }, SECRET_KEY);
-        res.send({accessToken});
+        res.send({accessToken,data});
     }).catch((error) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     });
