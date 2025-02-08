@@ -54,7 +54,7 @@ export default {
     'space-infix-ops': 'error',
     'spaced-comment': ['error', 'always', { markers: ['/'] }],
     'arrow-body-style': ['error', 'as-needed'],
-    'arrow-parens': ['error', 'as-needed'],
+    'arrow-parens': ['error', 'always'],
     'no-var': 'error',
     'prefer-const': ['error', { destructuring: 'all' }],
     'prefer-template': 'error',
@@ -122,7 +122,7 @@ export default {
     'react/jsx-one-expression-per-line': ['error', { allow: 'single-child' }],
     'react/jsx-pascal-case': ['error', { allowAllCaps: true }],
     'react/jsx-props-no-multi-spaces': 'error',
-    'react/jsx-props-no-spreading': ['error', { html: 'enforce', custom: 'enforce' }],
+    'react/jsx-props-no-spreading': ['ignore', { html: 'enforce', custom: 'enforce' }],
     'react/jsx-sort-props': [
       'error',
       {

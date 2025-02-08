@@ -1,4 +1,4 @@
-import Header from './Header';
+import Header from '../common/Header.jsx';
 import Sidebar from './Sidebar';
 import Mainbar from './Mainbar';
 import Welcomebar from './Welcomebar';
