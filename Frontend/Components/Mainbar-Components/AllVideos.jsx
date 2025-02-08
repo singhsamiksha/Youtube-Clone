@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import ReactPlayer from 'react-player';
 import "../../Stylesheets/AllVideos.css"; 
 
 function AllVideos({ search, selectedCategory, mainBar, toggleMainBar}) {
@@ -47,7 +48,7 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar}) {
   return selectedVideo ? (
     <div className="Video" style={{display: "flex", justifyContent: "space-between"}}>
       <div className="left" style={{width: "60%"}}>
-        <video src={selectedVideo.videoUrl} className="video" controls width="100%" ></video>
+      <ReactPlayer url={selectedVideo.videoUrl} controls={true}/>
         <CardContent sx={{ border: "none" }}>
           <Typography
             gutterBottom
