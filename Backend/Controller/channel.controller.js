@@ -25,7 +25,7 @@ export function channelCreate(req, res) {
 
 // Controller to get a channel by owner
 export function channelGet(req, res) {
-    const { owner } = req.query;
+    const { _id } = req.body;
 
     if (!owner) {
         return res.status(400).json({ message: "Owner ID is required" });

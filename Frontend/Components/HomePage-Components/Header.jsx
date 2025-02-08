@@ -54,6 +54,16 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
+        const handleCreateChannel = async () => {
+            try {
+                const owner = user?._id || user?.data?._id;
+                await postChannel(channelName, owner, description, channelBanner, subscribers, videos);
+                setChannelExists(true);
+                handleClose();
+            } catch (error) {
+                console.error("Failed to create channel:", error);
+            }
+        };
         setChannelExists(user?.channel && user?.channel.length > 0);
     }, [user?.channel]);
 
@@ -71,7 +81,7 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
 
     const handleCreateChannel = async () => {
         try {
-            const owner = user?.username || user?.data?.username;
+            const owner = user?._id || user?.data?._id;
             await postChannel(channelName, owner, description, channelBanner, subscribers, videos);
             setChannelExists(true);
             handleClose();
