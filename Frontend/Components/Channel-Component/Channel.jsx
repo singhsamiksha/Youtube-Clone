@@ -12,7 +12,7 @@ function Channel(){
       };
 
     return(<>
-       <button onClick={handleClick}></button>
+       console.log("Hello");
     
     </>)
 }

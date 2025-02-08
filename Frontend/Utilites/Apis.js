@@ -10,7 +10,7 @@ export async function postUser(username, email, password, image) {
                 email: email,
                 password: password,
                 image: image,
-                channel: [username]
+                channel: []
             }),
         });
         console.log(response);
@@ -66,7 +66,7 @@ export async function postChannel(channelName, username, description, channelBan
         if (!response.ok) {
             throw new Error("Failed to create channel");
         }
-
+        
         return await response.json();
     } catch (error) {
         console.error("Error:", error);

@@ -16,7 +16,7 @@ app.listen(3000, ()=> {
 })
 
 //Mongodb connection established
-mongoose.connect("mongodb://localhost:27017");
+mongoose.connect("mongodb+srv://singhsamiksha877:AlyuB4oOGdkrPOm0@cluster0.6aa60.mongodb.net/");
 const db = mongoose.connection;
 db.on("open", ()=> {
     console.log("Database is connected successfully!")

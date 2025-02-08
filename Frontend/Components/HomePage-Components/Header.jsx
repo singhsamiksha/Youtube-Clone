@@ -1,5 +1,5 @@
 import '../../Stylesheets/Header.css';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import DensityMediumIcon from '@mui/icons-material/DensityMedium';
 import { IconButton, TextField, Button, InputAdornment, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -10,17 +10,52 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../Redux/userSlice";
 import { postChannel } from '../../Utilites/Apis';
 
+function ChannelDialog({ open, handleClose, handleCreateChannel, channelName, setChannelName, description, setDescription, channelBanner, setChannelBanner, subscribers, setSubscribers, setVideos }) {
+    return (
+        <Dialog open={open} onClose={handleClose}>
+            <DialogTitle>Create Your Channel</DialogTitle>
+            <DialogContent>
+                <DialogContentText>Enter your channel details below:</DialogContentText>
+                <TextField autoFocus required margin="dense" label="Channel Name" fullWidth variant="standard" 
+                    value={channelName}
+                    onChange={(e) => setChannelName(e.target.value)} 
+                />
+                <TextField required margin="dense" label="Description" fullWidth variant="standard" multiline rows={3} 
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)} 
+                />
+                <TextField required margin="dense" label="Channel Banner URL" fullWidth variant="standard" 
+                    value={channelBanner}
+                    onChange={(e) => setChannelBanner(e.target.value)} 
+                />
+                <TextField required margin="dense" label="Subscribers" fullWidth variant="standard" type="number" 
+                    value={subscribers}
+                    onChange={(e) => setSubscribers(Number(e.target.value))} 
+                />
+                <input type="file" multiple onChange={(e) => setVideos(Array.from(e.target.files))} />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={handleClose}>Cancel</Button>
+                <Button onClick={handleCreateChannel}>Create Channel</Button>
+            </DialogActions>
+        </Dialog>
+    );
+}
+
 function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated }) {
     const dispatch = useDispatch();
     const user = useSelector((state) => state.user.user);
-    const [error, setError] = useState("");
-
-    // State for channel form
+    const [channelExists, setChannelExists] = useState(false);
     const [channelName, setChannelName] = useState("");
     const [description, setDescription] = useState("");
     const [channelBanner, setChannelBanner] = useState("");
     const [subscribers, setSubscribers] = useState(0);
     const [videos, setVideos] = useState([]);
+    const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        setChannelExists(user?.channel && user?.channel.length > 0);
+    }, [user?.channel]);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -33,31 +68,18 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
             image: user?.image || user?.data?.image || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png',
         },
     };
-    
 
     const handleCreateChannel = async () => {
-        console.log("Sending data:", {
-            channelName,
-            owner: user?.username,
-            description,
-            channelBanner,
-            subscribers,
-            videos
-        });
         try {
             const owner = user?.username || user?.data?.username;
-            const channel = await postChannel(channelName, owner, description, channelBanner, subscribers, videos);
-            console.log("Channel Created Successfully:", channel);
+            await postChannel(channelName, owner, description, channelBanner, subscribers, videos);
+            setChannelExists(true);
+            handleClose();
         } catch (error) {
-            setError("Failed to create channel.");
+            console.error("Failed to create channel:", error);
         }
     };
 
-    const handleVideoUpload = (event) => {
-        setVideos(event.target.files);
-    };
-
-    const [session, setSession] = useState(demoSession);
     const authentication = useMemo(() => ({
         signIn: () => setSession(demoSession),
         signOut: () => {
@@ -66,8 +88,14 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
         },
     }), []);
 
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = () => setOpen(true);
+    const handleClickOpen = () => {
+        if (channelExists) {
+            console.log("hello");
+        } else {
+            setOpen(true);
+        }
+    };
+
     const handleClose = () => setOpen(false);
 
     return (
@@ -109,9 +137,11 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
             <div className='right-header'>
                 {isAuthenticated ? (
                     <AuthenticationContext.Provider value={authentication}>
-                        <SessionContext.Provider value={session}>
+                        <SessionContext.Provider value={demoSession}>
                             <Account />
-                            <Button variant="outlined" onClick={handleClickOpen}>View my channel</Button>
+                            <Button variant="outlined" onClick={handleClickOpen}>
+                                {channelExists ? "View My Channel" : "Create Channel"}
+                            </Button>
                         </SessionContext.Provider>
                     </AuthenticationContext.Provider>
                 ) : (
@@ -120,35 +150,20 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
                     </Button>
                 )}
             </div>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Channel Information</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>Enter your channel details below:</DialogContentText>
-                    <TextField autoFocus required margin="dense" label="Channel Name" fullWidth variant="standard" 
-                        onChange={(e) => setChannelName(e.target.value)} 
-                    />
-
-                    <TextField required margin="dense" label="Description" fullWidth variant="standard" multiline rows={3} 
-                        onChange={(e) => setDescription(e.target.value)} 
-                    />
-
-                    <TextField required margin="dense" label="Channel Banner URL" fullWidth variant="standard" 
-                        onChange={(e) => setChannelBanner(e.target.value)} 
-                    />
-
-                    <TextField required margin="dense" label="Subscribers" fullWidth variant="standard" type="number" 
-                        onChange={(e) => setSubscribers(Number(e.target.value))} 
-                    />
-
-                    <TextField required margin="dense" label="Upload Videos" fullWidth variant="standard" type="file" inputProps={{ multiple: true }}
-                        onChange={(e) => setVideos([...e.target.files])} 
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleCreateChannel}>Create Channel</Button>
-                </DialogActions>
-            </Dialog>
+            <ChannelDialog 
+                open={open} 
+                handleClose={handleClose} 
+                handleCreateChannel={handleCreateChannel}
+                channelName={channelName}
+                setChannelName={setChannelName}
+                description={description}
+                setDescription={setDescription}
+                channelBanner={channelBanner}
+                setChannelBanner={setChannelBanner}
+                subscribers={subscribers}
+                setSubscribers={setSubscribers}
+                setVideos={setVideos}
+            />
         </div>
     );
 }
