@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -11,12 +12,12 @@ app.use(cors());
 
 
 //Server is connection at port 3000
-app.listen(3000, ()=> {
+app.listen(process.env.APP_PORT, ()=> {
     console.log("Server is running on port 3000....");
 })
 
 //Mongodb connection established
-mongoose.connect("mongodb+srv://singhsamiksha877:AlyuB4oOGdkrPOm0@cluster0.6aa60.mongodb.net/");
+mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection;
 db.on("open", ()=> {
     console.log("Database is connected successfully!")
