@@ -6,12 +6,14 @@ export default TokenHelper;
 const secretKey = process.env.JWT_SECRET_TOKEN;
 
 TokenHelper.generateUserToken = (user) => {
-    const { email, username, } = user;
-    const payload = { email, username };
+    const { email, username, _id: userId} = user;
+    const payload = { email, username, userId };
     const options = {
-        expiresIn: '1h', // Token expiration time
+        expiresIn: '1h',
     };
 
     const token = jwt.sign(payload, secretKey, options);
     return token;
 };
+
+TokenHelper.verifyToken = (token) => jwt.verify(token, process.env.JWT_SECRET_TOKEN);

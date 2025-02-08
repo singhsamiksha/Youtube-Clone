@@ -73,6 +73,26 @@ export async function signinUser(req, res) {
     }
 }
 
+export async function getAuthUser(req, res) {
+    try {
+        if(req.user) {
+            return res.json({
+                data: {
+                    user: {
+                        email: req.user.email,
+                        name: req.user.username,
+                        userId: req.user._id,
+                    }
+                }
+            })
+        }
+        res.send(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "An error occurred", error: error.message });
+    }
+}
+
 //fetch the user data
 export async function getUser(req, res) {
     try {

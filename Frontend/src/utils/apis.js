@@ -2,6 +2,15 @@ import axios from 'axios';
 
 const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
+const getHeaderToken = () => {
+  let token = localStorage.getItem('token');
+  if(token) {
+    token = atob(token);
+    return `Bearer ${token}`;
+  }
+  return null;
+};
+
 export const loginUser = async(params) => {
   const { payload, setters } = params;
   const {
@@ -23,6 +32,28 @@ export const loginUser = async(params) => {
   } catch(e) {
     setError(e.response?.data?.message || e.message || e.code || 'Internal Server erorr' );
   }
+};
+
+export const getAuthUser = async() => {
+  try {
+    const token = getHeaderToken();
+    if(token) {
+      const response = await axios.get(`${baseUrl}/user/auth`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      if(response.data.data) {
+        const { user } = response.data.data;
+        return user;
+      }
+    }
+  } catch( e) {
+    console.error(e);
+    // localStorage.removeItem('token');
+  }
+  return null;
 };
 
 export async function postUser(username, email, password, image) {

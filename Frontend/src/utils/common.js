@@ -16,12 +16,18 @@ const stringToColor = (string) => {
   return color;
 };
 
-export const stringAvatar = (name) => ({
-  sx: {
-    bgcolor: stringToColor(name),
-  },
-  children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-});
+export const stringAvatar = (name) => {
+  const nameParts = name.split(' ');
+  const a = (nameParts[0] ? nameParts[0][0] : '').toUpperCase();
+  const b = (nameParts[1] ? nameParts[1][0] : '').toUpperCase();
+
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${a}${b}`,
+  };
+};
 
 export const validateEmail = (email) => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
