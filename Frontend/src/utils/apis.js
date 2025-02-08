@@ -49,9 +49,8 @@ export const getAuthUser = async() => {
         return user;
       }
     }
-  } catch( e) {
-    console.error(e);
-    // localStorage.removeItem('token');
+  } catch {
+    localStorage.removeItem('token');
   }
   return null;
 };

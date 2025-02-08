@@ -111,7 +111,7 @@ export default {
     'react/jsx-indent': ['error', 2],
     'react/jsx-indent-props': ['error', 2],
     'react/jsx-key': 'error',
-    'react/jsx-max-depth': ['warn', { max: 5 }],
+    'react/jsx-max-depth': ['warn', { max: 10 }],
     'react/jsx-no-comment-textnodes': 'error',
     'react/jsx-no-constructed-context-values': 'error',
     'react/jsx-no-duplicate-props': ['error', { ignoreCase: true }],

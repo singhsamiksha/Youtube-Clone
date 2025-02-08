@@ -82,6 +82,7 @@ export async function getAuthUser(req, res) {
                         email: req.user.email,
                         name: req.user.username,
                         userId: req.user._id,
+                        channels: req.user.channels,
                     }
                 }
             })

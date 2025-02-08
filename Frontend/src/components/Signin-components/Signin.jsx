@@ -1,24 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { Alert, Box, Container, Grid2, IconButton, Paper, Snackbar, Stack, useTheme } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import Page3 from './Page3';
-import Page4 from './Page4';
-import Page5 from './Page5';
-import { postUser, loginUser } from '../../utils/apis';
-import { connect, useDispatch } from 'react-redux';
-import { updateUser } from '../../redux/userSlice';
-import GoogleIcon from '../../assets/icons/GoogleIcon';
-import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../constants';
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PropTypes from 'prop-types';
+
+// MUI Components
+import { Alert, Grid2, Stack, useTheme } from '@mui/material';
+
+// Components
 import SigninEmailTab from './SigninEmailTab';
 import SigninPasswordTab from './SigninPasswordTab';
+import GoogleIcon from '../../assets/icons/GoogleIcon';
+
+// Utils
+import { loginUser } from '../../utils/apis';
+import { updateUser } from '../../redux/userSlice';
+import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../constants';
 import { validateEmail } from '../../utils/common';
 
 const Signin = (props) => {
   const {
     // Redux Dispatchers
-    updateUser,
+    updateUserData,
   } = props;
 
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ const Signin = (props) => {
         setters: {
           setError,
           onSuccessHandler: ({ user }) => {
-            updateUser({ user });
+            updateUserData({ user });
             navigate('/');
           },
         },
@@ -146,8 +148,12 @@ const Signin = (props) => {
   );
 };
 
+Signin.propTypes = {
+  updateUserData: PropTypes.func.isRequired,
+};
+
 const mapDispatchToProp = (dispatch) => ({
-  updateUser: (payload) => dispatch(updateUser(payload)),
+  updateUserData: (payload) => dispatch(updateUser(payload)),
 });
 
 export default connect(null, mapDispatchToProp)(Signin);

@@ -1,25 +1,39 @@
-import React from 'react';
-import { TextField, Button, InputAdornment, useTheme, Avatar } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
+// MUI Components
+import {
+  TextField,
+  Button,
+  InputAdornment,
+  useTheme,
+  Avatar,
+  Typography,
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  MenuItem,
+  Menu,
+  Divider,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+
+// MUI Icons
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import LogoutIcon from '@mui/icons-material/Logout';
+
+// Utils
 import AppLogo from '../../assets/icons/appLogo';
 import { stringAvatar } from '../../utils/common';
-import { useNavigate } from 'react-router-dom';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { updateUser } from '../../redux/userSlice';
+import CreateChannelDialog from './CreateChannelDialog';
 
 const Header = (props) => {
   const {
@@ -27,44 +41,40 @@ const Header = (props) => {
     isAuthenticated,
     userData,
 
+    // Redux actions
+    updateUserData,
   } = props;
 
   const theme = useTheme();
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [createChannelDialogOpen, setCreateChannelDialogOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    updateUserData(null);
+    navigate('/');
   };
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
+  const menuId = 'account-menu';
+  const renderMenu = isAuthenticated ? (
     <Menu
-      keepMounted
+      id={menuId}
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
+        vertical: 'bottom',
         horizontal: 'right',
       }}
-      id={menuId}
       transformOrigin={{
         vertical: 'top',
         horizontal: 'right',
@@ -72,65 +82,69 @@ const Header = (props) => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        paddingLeft: 2,
+        paddingRight: 5,
+        paddingTop: 1,
+        paddingBottom: 1,
+      }}
+      >
+        <Avatar {...stringAvatar(userData?.name)}/>
+        <Box>
+          <Typography variant='body1' sx={{ ml: 1 }}>{userData?.name}</Typography>
+          <Typography variant='subtitle2' sx={{ ml: 1 }}>{userData?.email}</Typography>
+        </Box>
+      </Box>
+      <Divider/>
+      <Typography variant='caption' sx={{ ml: 1.5, color: theme.palette.text.secondary }}>Channels</Typography>
+      {(userData?.channels || []).length
+        ? 'Showing channels here'
+        : (
+          <MenuItem
+            sx={{ color: theme.palette.primary.main }} onClick={() => {
+              handleMenuClose();
+              setCreateChannelDialogOpen(true);
+            }}
+          >
+            <AddCircleOutlineIcon sx={{ color: 'inherit', mr: 1 }} />
+            <Typography color='primary'>
+              Create your channel
+            </Typography>
+          </MenuItem>
+        )}
+      <Divider/>
+      <MenuItem onClick={handleLogout} >
+        <ListItemIcon>
+          <LogoutIcon fontSize='small' />
+        </ListItemIcon>
+        <ListItemText>Logout</ListItemText>
+      </MenuItem>
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      keepMounted
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size='large' aria-label='show 4 new mails' color='inherit'>
-          <Badge badgeContent={4} color='error'>
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size='large'
-          aria-label='show 17 new notifications'
-          color='inherit'
-        >
-          <Badge badgeContent={17} color='error'>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size='large'
-          aria-label='account of current user'
-          aria-controls='primary-search-account-menu'
-          aria-haspopup='true'
-          color='inherit'
-        >
-          <AccountCircleIcon />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
     </Menu>
-  );
+  ) : '';
+
+  // <Menu
+  //       id="basic-menu"
+  //       anchorEl={anchorEl}
+  //       open={open}
+  //       onClose={handleClose}
+  //       MenuListProps={{
+  //         'aria-labelledby': 'basic-button',
+  //       }}
+  //     >
+  //       <MenuItem onClick={handleClose}>Profile</MenuItem>
+  //       <MenuItem onClick={handleClose}>My account</MenuItem>
+  //       <MenuItem onClick={handleClose}>Logout</MenuItem>
+  //     </Menu>
 
   return (
     <Box sx={{ flexGrow: 1, marginBottom: 5 }}>
+      <CreateChannelDialog
+        isDialogOpen={createChannelDialogOpen}
+        handleClose={() => setCreateChannelDialogOpen(false)}
+      />
       <AppBar
         position='static'
         color='transparent'
@@ -159,7 +173,6 @@ const Header = (props) => {
 
           <Box
             sx={{
-              // flexGrow: 2,
               display: 'flex',
               justifyContent: 'center',
               minWidth: '40%',
@@ -203,10 +216,23 @@ const Header = (props) => {
             </Button>
           </Box>
 
+          {renderMenu}
           <Box sx={{ flexGrow: 1 }} />
           {
             isAuthenticated
-              ? <Avatar {...stringAvatar(userData?.name)} />
+              ? (
+                <IconButton
+                  aria-controls={menuId}
+                  size='small'
+                  edge='end'
+                  variant='outlined'
+                  aria-label='account of current user'
+                  // aria-haspopup='true'
+                  onClick={handleProfileMenuOpen}
+                >
+                  <Avatar {...stringAvatar(userData?.name)} />
+                </IconButton>
+              )
               : (
                 <Button
                   size='medium'
@@ -229,25 +255,9 @@ const Header = (props) => {
                 </Button>
               )
           }
-
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size='large'
-              aria-label='show more'
-              aria-controls={mobileMenuId}
-              aria-haspopup='true'
-              color='inherit'
-              onClick={handleMobileMenuOpen}
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
     </Box>
-
   );
 };
 
@@ -257,6 +267,7 @@ Header.propTypes = {
   handleSearch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   userData: PropTypes.instanceOf(Object).isRequired,
+  updateUserData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -264,4 +275,8 @@ const mapStateToProps = (state) => ({
   userData: state.user.user,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProp = (dispatch) => ({
+  updateUserData: (data) => dispatch(updateUser(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProp)(Header);
