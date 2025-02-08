@@ -137,51 +137,61 @@ const Signin = ({ handleUserState, handleMainbar }) => {
     >
       <GoogleIcon sx={{ fontSize: 50, color: '#4285F4' }} />
 
-      {page === 1 && <Page1
-        error={error}
-        username={username}
-        handleChange={handleChange}
-        setPage={setPage}
-        handlepage2={handlepage2}
-      />}
+      {page === 1 && (
+        <Page1
+          error={error}
+          username={username}
+          handleChange={handleChange}
+          setPage={setPage}
+          handlepage2={handlepage2}
+        />
+      )}
 
-      {page === 2 && <Page2
-        error={error}
-        username={username}
-        showPassword={showPassword}
-        password={password}
-        handlepage3={handlepage3}
-        setShowPassword={setShowPassword}
-        open={open}
-        handleClose={handleClose}
-        handlePassword={handlePassword}
-      />}
+      {page === 2 && (
+        <Page2
+          error={error}
+          username={username}
+          showPassword={showPassword}
+          password={password}
+          handlepage3={handlepage3}
+          setShowPassword={setShowPassword}
+          open={open}
+          handleClose={handleClose}
+          handlePassword={handlePassword}
+        />
+      )}
 
-      {page === 3 && <Page3
-        error={error}
-        username={username}
-        setUsername={setUsername}
-        email={email}
-        setEmail={setEmail}
-        setPage={setPage}
-      />}
+      {page === 3 && (
+        <Page3
+          error={error}
+          username={username}
+          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
+          setPage={setPage}
+        />
+      )}
 
-      {page === 4 && <Page4
-        password={password}
-        confirmpassword={confirmpassword}
-        handlePassword={handlePassword}
-        setConfirmPassword={setConfirmPassword}
-        setPage={setPage}
-      />}
+      {page === 4 && (
+        <Page4
+          password={password}
+          confirmpassword={confirmpassword}
+          handlePassword={handlePassword}
+          setConfirmPassword={setConfirmPassword}
+          setPage={setPage}
+        />
+      )}
 
-      {page === 5 && <Page5
-        image={image}
-        handleImageChange={handleImageChange}
-        handleClick={handleClick}
-        setPage={setPage}
-        open={open}
-        handleClose={handleClose}
-      />}
+      {page === 5 && (
+        <Page5
+          image={image}
+          handleImageChange={handleImageChange}
+          handleClick={handleClick}
+          setPage={setPage}
+          open={open}
+          handleClose={handleClose}
+        />
+      )}
     </Container>
   );
 };

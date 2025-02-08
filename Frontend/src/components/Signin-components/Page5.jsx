@@ -54,10 +54,12 @@ const Page5 = ({ image, handleImageChange, handleClick, setPage, open, handleClo
       open={open}
       autoHideDuration={2000}
       message={
-        <span style={{ display: 'flex', alignItems: 'center', color: 'white' }} className='avatar'>
-          <CheckCircleIcon style={{ marginRight: 8, color: 'green' }} />
-          Your Account is Successfully Created!
-        </span>
+        (
+          <span style={{ display: 'flex', alignItems: 'center', color: 'white' }} className='avatar'>
+            <CheckCircleIcon style={{ marginRight: 8, color: 'green' }} />
+            Your Account is Successfully Created!
+          </span>
+        )
       }
       sx={{ backgroundColor: 'white' }}
       onClose={handleClose}

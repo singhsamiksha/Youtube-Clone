@@ -11,10 +11,12 @@ const Channel = () => {
     }
   };
 
-  return(<>
-    console.log("Hello");
+  return(
+    <>
+      console.log("Hello");
 
-  </>);
+    </>
+  );
 };
 
 export default Channel;

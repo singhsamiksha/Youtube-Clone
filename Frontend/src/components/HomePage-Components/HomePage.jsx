@@ -28,7 +28,7 @@ const HomePage = () => {
     console.log(userState);
   };
 
-  const handleMainbar = () =>{
+  const handleMainbar = () => {
     setActiveMainbar(!activeMainbar);
   };
 
@@ -37,21 +37,23 @@ const HomePage = () => {
   }
 
   return (
-    userState === true ? <Signin handleUserState={handleUserState} handleMainbar={handleMainbar}/> :
-    <div className='main-page'>
-        <div className='header-div'>
-        <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch} isAuthenticated={isAuthenticated}/>
-      </div>
-        <div className='center-div'>
-        <div>
-            {activeSidebar === false ? <Sidebar /> : <SideDetailbar />}
+    userState === true
+      ? <Signin handleUserState={handleUserState} handleMainbar={handleMainbar} />
+      : (
+        <div className='main-page'>
+          <div className='header-div'>
+            <Header handleSidebar={handleSidebar} handleUserState={handleUserState} handleSearch={handleSearch} isAuthenticated={isAuthenticated} />
           </div>
-        <div style={{ position: 'relative' }}>
-            {activeMainbar === false && isAuthenticated === false ? <Welcomebar/> : <Mainbar search={search} />}
+          <div className='center-div'>
+            <div>
+              {activeSidebar === false ? <Sidebar /> : <SideDetailbar />}
+            </div>
+            <div style={{ position: 'relative' }}>
+              {activeMainbar === false && isAuthenticated === false ? <Welcomebar /> : <Mainbar search={search} />}
+            </div>
           </div>
-      </div>
-
-      </div>
+        </div>
+      )
   );
 };
 
