@@ -10,39 +10,41 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../redux/userSlice';
 import { postChannel } from '../../utils/apis';
 
-function ChannelDialog({ open, handleClose, handleCreateChannel, channelName, setChannelName, description, setDescription, channelBanner, setChannelBanner, subscribers, setSubscribers, setVideos }) {
-  return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Create Your Channel</DialogTitle>
-      <DialogContent>
-        <DialogContentText>Enter your channel details below:</DialogContentText>
-        <TextField autoFocus required margin='dense' label='Channel Name' fullWidth variant='standard'
-          value={channelName}
-          onChange={e => setChannelName(e.target.value)}
-        />
-        <TextField required margin='dense' label='Description' fullWidth variant='standard' multiline rows={3}
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-        />
-        <TextField required margin='dense' label='Channel Banner URL' fullWidth variant='standard'
-          value={channelBanner}
-          onChange={e => setChannelBanner(e.target.value)}
-        />
-        <TextField required margin='dense' label='Subscribers' fullWidth variant='standard' type='number'
-          value={subscribers}
-          onChange={e => setSubscribers(Number(e.target.value))}
-        />
-        <input type='file' multiple onChange={e => setVideos(Array.from(e.target.files))} />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleCreateChannel}>Create Channel</Button>
-      </DialogActions>
-    </Dialog>
-  );
-}
+const ChannelDialog = ({ open, handleClose, handleCreateChannel, channelName, setChannelName, description, setDescription, channelBanner, setChannelBanner, subscribers, setSubscribers, setVideos }) => (
+  <Dialog open={open} onClose={handleClose}>
+    <DialogTitle>Create Your Channel</DialogTitle>
+    <DialogContent>
+      <DialogContentText>Enter your channel details below:</DialogContentText>
+      <TextField
+        autoFocus required fullWidth margin='dense' label='Channel Name' variant='standard'
+        value={channelName}
+        onChange={e => setChannelName(e.target.value)}
+      />
+      <TextField
+        required fullWidth multiline margin='dense' label='Description' variant='standard' rows={3}
+        value={description}
+        onChange={e => setDescription(e.target.value)}
+      />
+      <TextField
+        required fullWidth margin='dense' label='Channel Banner URL' variant='standard'
+        value={channelBanner}
+        onChange={e => setChannelBanner(e.target.value)}
+      />
+      <TextField
+        required fullWidth margin='dense' label='Subscribers' variant='standard' type='number'
+        value={subscribers}
+        onChange={e => setSubscribers(Number(e.target.value))}
+      />
+      <input multiple type='file' onChange={e => setVideos(Array.from(e.target.files))} />
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClose}>Cancel</Button>
+      <Button onClick={handleCreateChannel}>Create Channel</Button>
+    </DialogActions>
+  </Dialog>
+);
 
-function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated }) {
+const Header = ({ handleSidebar, handleUserState, handleSearch, isAuthenticated }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.user.user);
   const [channelExists, setChannelExists] = useState(false);
@@ -156,7 +158,7 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
           </AuthenticationContext.Provider>
         ) : (
           <Button variant='outlined' startIcon={<AccountCircleIcon />} onClick={handleUserState}>
-                        Sign in
+            Sign in
           </Button>
         )}
       </div>
@@ -176,6 +178,6 @@ function Header({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
       />
     </div>
   );
-}
+};
 
 export default Header;

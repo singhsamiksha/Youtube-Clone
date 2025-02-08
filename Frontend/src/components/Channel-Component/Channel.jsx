@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-function Channel() {
+const Channel = () => {
   const user = useSelector(state => state.user.user);
 
   const handleClick = async() => {
@@ -12,9 +12,9 @@ function Channel() {
   };
 
   return(<>
-       console.log("Hello");
+    console.log("Hello");
 
   </>);
-}
+};
 
 export default Channel;

@@ -12,7 +12,7 @@ import '../../Stylesheets/Signin.css';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/userSlice';
 
-function Signin({ handleUserState, handleMainbar }) {
+const Signin = ({ handleUserState, handleMainbar }) => {
   const [page, setPage] = useState(1);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -61,7 +61,7 @@ function Signin({ handleUserState, handleMainbar }) {
   };
 
   const action = (
-    <React.Fragment>
+    <>
       <IconButton
         size='small'
         aria-label='close'
@@ -70,7 +70,7 @@ function Signin({ handleUserState, handleMainbar }) {
       >
         <CloseIcon fontSize='small' />
       </IconButton>
-    </React.Fragment>
+    </>
   );
 
   // Handle Input Change
@@ -142,7 +142,8 @@ function Signin({ handleUserState, handleMainbar }) {
         username={username}
         handleChange={handleChange}
         setPage={setPage}
-        handlepage2={handlepage2}/>}
+        handlepage2={handlepage2}
+      />}
 
       {page === 2 && <Page2
         error={error}
@@ -153,7 +154,8 @@ function Signin({ handleUserState, handleMainbar }) {
         setShowPassword={setShowPassword}
         open={open}
         handleClose={handleClose}
-        handlePassword={handlePassword} />}
+        handlePassword={handlePassword}
+      />}
 
       {page === 3 && <Page3
         error={error}
@@ -161,7 +163,8 @@ function Signin({ handleUserState, handleMainbar }) {
         setUsername={setUsername}
         email={email}
         setEmail={setEmail}
-        setPage={setPage}/>}
+        setPage={setPage}
+      />}
 
       {page === 4 && <Page4
         password={password}
@@ -177,9 +180,10 @@ function Signin({ handleUserState, handleMainbar }) {
         handleClick={handleClick}
         setPage={setPage}
         open={open}
-        handleClose={handleClose}/>}
+        handleClose={handleClose}
+      />}
     </Container>
   );
-}
+};
 
 export default Signin;

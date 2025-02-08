@@ -7,7 +7,7 @@ const categories = [
   'Shark Tank', 'News', 'T-Series', 'Piyush Mishra', 'Jukebox', 'Live', 'Dramedy',
 ];
 
-function Mainbar({ search }) {
+const Mainbar = ({ search }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [mainBar, setMainBar] = useState(true);
 
@@ -17,7 +17,7 @@ function Mainbar({ search }) {
 
   return (
     <>
-      {mainBar && (
+      {!!mainBar && (
         <Tabs
           categories={categories}
           selectedCategory={selectedCategory}
@@ -32,6 +32,6 @@ function Mainbar({ search }) {
       />
     </>
   );
-}
+};
 
 export default Mainbar;

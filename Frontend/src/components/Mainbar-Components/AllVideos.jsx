@@ -10,7 +10,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import ReactPlayer from 'react-player';
 import '../../Stylesheets/AllVideos.css';
 
-function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
+const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
   const [videos, setVideos] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
@@ -48,7 +48,7 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
   return selectedVideo ? (
     <div className='Video' style={{ display: 'flex', justifyContent: 'space-between' }}>
       <div className='left' style={{ width: '60%' }}>
-        <ReactPlayer url={selectedVideo.videoUrl} controls={true}/>
+        <ReactPlayer controls url={selectedVideo.videoUrl}/>
         <CardContent sx={{ border: 'none' }}>
           <Typography
             gutterBottom
@@ -62,23 +62,32 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
               {selectedVideo.uploader}
             </Typography>
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-              {selectedVideo.likes} Likes
+              {selectedVideo.likes}
+              {' '}
+              Likes
             </Typography>
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-              {selectedVideo.dislikes} Dislikes
+              {selectedVideo.dislikes}
+              {' '}
+              Dislikes
             </Typography>
           </div>
           <div className='detailBox'>
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-              {selectedVideo.views} Views
+              {selectedVideo.views}
+              {' '}
+              Views
             </Typography>
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
               {selectedVideo.description}
             </Typography>
           </div>
           <Card className='Comments' sx={{ width: '60%' }}>
-            <Typography>Comments: {selectedVideo.comments.length}</Typography>
-            <input placeholder='Add a Comment'></input>
+            <Typography>
+              Comments:
+              {selectedVideo.comments.length}
+            </Typography>
+            <input placeholder='Add a Comment' />
             {selectedVideo.comments.map(comment => (
               <div key={comment.commentId}>
                 <Typography variant='body2' sx={{ color: 'text.secondary' }}>
@@ -118,11 +127,15 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
                 </Typography>
                 <div className='subheadings'>
                   <Typography variant='body2' sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                    {video.views} Views
+                    {video.views}
+                    {' '}
+                    Views
                   </Typography>
                   <FiberManualRecordIcon sx={{ fontSize: '7px' }} />
                   <Typography variant='body2' sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                  On {video.uploadDate}
+                    On
+                    {' '}
+                    {video.uploadDate}
                   </Typography>
                 </div>
               </CardContent>
@@ -160,11 +173,15 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
               </Typography>
               <div className='subheadings'>
                 <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-                  {video.views} Views
+                  {video.views}
+                  {' '}
+                  Views
                 </Typography>
                 <FiberManualRecordIcon sx={{ fontSize: '7px' }} />
                 <Typography variant='body2' sx={{ color: 'text.secondary' }}>
-                  On {video.uploadDate}
+                  On
+                  {' '}
+                  {video.uploadDate}
                 </Typography>
               </div>
             </CardContent>
@@ -173,6 +190,6 @@ function AllVideos({ search, selectedCategory, mainBar, toggleMainBar }) {
       ))}
     </div>
   );
-}
+};
 
 export default AllVideos;

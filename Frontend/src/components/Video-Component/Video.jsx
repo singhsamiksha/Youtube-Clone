@@ -1,5 +1,3 @@
-function Video() {
-  return(<></>);
-}
+const Video = () => (<></>);
 
 export default Video;
