@@ -18,7 +18,7 @@ const AllVideos = ({ search, selectedCategory, mainBar, toggleMainBar }) => {
   useEffect(() => {
     const fetchVideos = async() => {
       try {
-        const response = await fetch('http://localhost:3000/user/videos');
+        const response = await fetch('http://localhost:3000/video');
         const data = await response.json();
         setVideos(data);
       } catch (error) {

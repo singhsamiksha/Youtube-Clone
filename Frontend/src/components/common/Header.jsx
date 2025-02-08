@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -27,6 +26,8 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilter';
 
 // Utils
 import AppLogo from '../../assets/icons/appLogo';
@@ -99,21 +100,25 @@ const Header = (props) => {
       </Box>
       <Divider/>
       <Typography variant='caption' sx={{ ml: 1.5, color: theme.palette.text.secondary }}>Channels</Typography>
-      {(userData?.channels || []).length
-        ? 'Showing channels here'
-        : (
-          <MenuItem
-            sx={{ color: theme.palette.primary.main }} onClick={() => {
-              handleMenuClose();
-              setCreateChannelDialogOpen(true);
-            }}
-          >
-            <AddCircleOutlineIcon sx={{ color: 'inherit', mr: 1 }} />
-            <Typography color='primary'>
-              Create your channel
-            </Typography>
-          </MenuItem>
-        )}
+      {(userData?.channels || []).map((channel) => (
+        <MenuItem key={channel._id} onClick={() => navigate(`/channels/${channel._id}`)} >
+          <ListItemIcon>
+            <MovieFilterOutlinedIcon fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>{channel.channelName}</ListItemText>
+        </MenuItem>
+      ))}
+      <MenuItem
+        sx={{ color: theme.palette.primary.main }} onClick={() => {
+          handleMenuClose();
+          setCreateChannelDialogOpen(true);
+        }}
+      >
+        <AddCircleOutlineIcon sx={{ color: 'inherit', mr: 1 }} />
+        <Typography color='primary'>
+          Create your channel
+        </Typography>
+      </MenuItem>
       <Divider/>
       <MenuItem onClick={handleLogout} >
         <ListItemIcon>

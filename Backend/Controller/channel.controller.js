@@ -1,43 +1,41 @@
-import channelModel from "../Model/channels.Model.js";
+import ChannelModel from "../Model/channels.Model.js";
+import UserModel from "../Model/users.model.js";
 
 // Controller to create a new channel
-export function channelCreate(req, res) {
-    const { channelName, owner, description, channelBanner, subscribers, videos } = req.body;
+export async function channelCreate(req, res) {
+    const { user } = req;
+    const { channelName, description, channelBanner } = req.body;
 
-    if (!channelName || !owner) {
-        return res.status(400).json({ message: "channelName and owner are required" });
+    if (!channelName || !description || !channelBanner) {
+        return res.status(422).json({ message: "Invalid data provided" });
     }
 
-    const newChannel = new channelModel({
+    const newChannel = new ChannelModel({
         channelName,
-        owner,
+        owner: user._id,
         description,
         channelBanner,
-        subscribers: subscribers || 0, // Default value
-        videos: videos || [],
+        subscribers: [],
+        videos: [],
     });
 
-    newChannel
-        .save()
-        .then((data) => res.status(201).json(data))
-        .catch((error) => res.status(500).json({ message: "Internal server error", error: error.message }));
+    await newChannel.save();
+
+    await UserModel.findByIdAndUpdate(user._id, {
+        $addToSet: {
+            channels: newChannel._id
+        }
+    })
+
+    const channels = await getUserChannels(user);
+
+    return res.json({
+        data: { channels }
+    });
 }
 
 // Controller to get a channel by owner
-export function channelGet(req, res) {
-    const { _id } = req.body;
-
-    if (!owner) {
-        return res.status(400).json({ message: "Owner ID is required" });
-    }
-
-    channelModel
-        .findOne({ owner })
-        .then((data) => {
-            if (!data) {
-                return res.status(404).json({ message: "Channel not found" });
-            }
-            res.status(200).send(data);
-        })
-        .catch((error) => res.status(500).json({ message: "Internal server error", error: error.message }));
+function getUserChannels(user) {
+    const { _id: userId } = user || {};
+    return ChannelModel.find({ owner: userId });
 }

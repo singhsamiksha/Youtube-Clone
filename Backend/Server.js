@@ -12,19 +12,21 @@ app.use(cors());
 
 
 //Server is connection at port 3000
-app.listen(process.env.APP_PORT, ()=> {
+app.listen(process.env.APP_PORT, () => {
     console.log("Server is running on port 3000....");
 })
 
 //Mongodb connection established
 mongoose.connect(process.env.MONGO_URI);
 const db = mongoose.connection;
-db.on("open", ()=> {
+db.on("open", () => {
     console.log("Database is connected successfully!")
 });
 
-db.off("error", ()=> {
+db.off("error", () => {
     console.log("Database connection is failed!")
 })
 
-app.use('/user', user,channel,video);
+app.use('/user', user);
+app.use('/channel', channel);
+app.use('/video', video);

@@ -1,9 +1,9 @@
-import { channelCreate, channelGet} from "../Controller/channel.controller.js";
-import express from "express"; 
+import { channelCreate } from "../Controller/channel.controller.js";
+import express from "express";
+import Auth from "../Middlewares/auth.middleware.js";
 
-const router = express.Router(); 
+const router = express.Router();
 
-router.post('/newchannel',channelCreate);
-router.get('/allchannels', channelGet);
+router.post('/', Auth.authenticateJWTToken, channelCreate);
 
 export default router;

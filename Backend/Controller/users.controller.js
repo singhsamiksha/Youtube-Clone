@@ -1,6 +1,7 @@
 import Globals from "../constants.js";
 import DataHelper from "../Helpers/data.js";
 import TokenHelper from "../Helpers/token.js";
+import ChannelModel from "../Model/channels.Model.js";
 import UserModel from "../Model/users.model.js";
 import jwt from "jsonwebtoken";
 
@@ -75,14 +76,18 @@ export async function signinUser(req, res) {
 
 export async function getAuthUser(req, res) {
     try {
-        if(req.user) {
+        const { user } = req;
+        if(user) {
+            const channels = await ChannelModel.find({
+                _id: { $in: (user.channels || []) }
+            })
             return res.json({
                 data: {
                     user: {
-                        email: req.user.email,
-                        name: req.user.username,
-                        userId: req.user._id,
-                        channels: req.user.channels,
+                        email: user.email,
+                        name: user.username,
+                        userId: user._id,
+                        channels: channels,
                     }
                 }
             })

@@ -4,12 +4,14 @@ const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
 const getHeaderToken = () => {
   let token = localStorage.getItem('token');
-  if(token) {
+  if (token) {
     token = atob(token);
     return `Bearer ${token}`;
   }
   return null;
 };
+
+const handleAPIError = (e) => e.response?.data?.message || e.message || e.code || 'Internal Server erorr';
 
 export const loginUser = async(params) => {
   const { payload, setters } = params;
@@ -24,27 +26,27 @@ export const loginUser = async(params) => {
       password: window.btoa(password),
     });
 
-    if(response?.data?.data) {
+    if (response?.data?.data) {
       const { user, token } = response.data.data;
       localStorage.setItem('token', btoa(token));
       onSuccessHandler({ user });
     }
-  } catch(e) {
-    setError(e.response?.data?.message || e.message || e.code || 'Internal Server erorr' );
+  } catch (e) {
+    setError(handleAPIError(e));
   }
 };
 
 export const getAuthUser = async() => {
   try {
     const token = getHeaderToken();
-    if(token) {
+    if (token) {
       const response = await axios.get(`${baseUrl}/user/auth`, {
         headers: {
           Authorization: token,
         },
       });
 
-      if(response.data.data) {
+      if (response.data.data) {
         const { user } = response.data.data;
         return user;
       }
@@ -53,6 +55,25 @@ export const getAuthUser = async() => {
     localStorage.removeItem('token');
   }
   return null;
+};
+
+export const validateImageUrl = async(url) => {
+  try {
+    const response = await axios.head(url);
+
+    if (!response || !response.headers) {
+      throw new Error('No response headers');
+    }
+
+    const contentType = response.headers['content-type'];
+
+    if (contentType && contentType.startsWith('image/')) {
+      return { isValid: true };
+    }
+    return { isValid: false, message: 'The provided URL is not an image' };
+  } catch {
+    return { isValid: false, message: 'Invalid image URL or resource not found' };
+  }
 };
 
 export async function postUser(username, email, password, image) {
@@ -105,29 +126,29 @@ export async function getUsers() {
   }
 }
 
-export async function postChannel(channelName, username, description, channelBanner, subscribers, videos) {
+export async function createChannelAPI(params) {
+  const { payload, setters } = params;
+  const { setLoader, onSuccess, setError } = setters;
   try {
-    const response = await fetch('http://localhost:3000/user/newchannel', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        channelName,
-        owner: username,
-        description,
-        channelBanner,
-        subscribers,
-        videos,
-      }),
+    setLoader(true);
+
+    const response = await axios.post(`${baseUrl}/channel`, payload, {
+      headers: {
+        contentType: 'application/json',
+        Authorization: getHeaderToken(),
+      },
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to create channel');
+    if (response?.data?.data) {
+      const { channels } = response.data.data;
+      onSuccess(channels);
     }
 
-    return await response.json();
+    setLoader(false);
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    setError(handleAPIError(error));
+  } finally {
+    setLoader(false);
   }
 }
 

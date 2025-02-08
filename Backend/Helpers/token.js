@@ -9,7 +9,7 @@ TokenHelper.generateUserToken = (user) => {
     const { email, username, _id: userId} = user;
     const payload = { email, username, userId };
     const options = {
-        expiresIn: '1h',
+        expiresIn: '7d',
     };
 
     const token = jwt.sign(payload, secretKey, options);

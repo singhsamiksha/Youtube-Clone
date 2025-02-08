@@ -16,6 +16,15 @@ const userSlice = createSlice({
       state.isAuthenticated = !!user;
       state.user = user;
     },
+    updateUserChannels: (state, action) => {
+      const { payload } = action;
+      if(state.isAuthenticated && state.user.userId) {
+        state.user = {
+          ...state.user,
+          channels: payload,
+        };
+      }
+    },
     logout: (state) => {
       state.user = null;
       state.isAuthenticated = false;
@@ -23,5 +32,10 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateUser, logout } = userSlice.actions;
+export const {
+  updateUser,
+  updateUserChannels,
+  logout,
+} = userSlice.actions;
+
 export default userSlice.reducer;

@@ -12,7 +12,7 @@ import SigninPasswordTab from './SigninPasswordTab';
 import GoogleIcon from '../../assets/icons/GoogleIcon';
 
 // Utils
-import { loginUser } from '../../utils/apis';
+import { getAuthUser, loginUser } from '../../utils/apis';
 import { updateUser } from '../../redux/userSlice';
 import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../constants';
 import { validateEmail } from '../../utils/common';
@@ -63,9 +63,13 @@ const Signin = (props) => {
         payload: userData,
         setters: {
           setError,
-          onSuccessHandler: ({ user }) => {
-            updateUserData({ user });
-            navigate('/');
+          onSuccessHandler: () => {
+            getAuthUser().then((user) => {
+              updateUserData({ user });
+              navigate('/');
+            }).catch((e) => {
+              setError(e?.message || '');
+            });
           },
         },
       });
