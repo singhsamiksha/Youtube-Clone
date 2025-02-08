@@ -1,4 +1,3 @@
-import '../../Stylesheets/Header.css';
 import React from 'react';
 import { TextField, Button, InputAdornment, useTheme, Avatar } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

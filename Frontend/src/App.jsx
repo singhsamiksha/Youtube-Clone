@@ -1,6 +1,5 @@
 import appRouter from './utils/routes.jsx';
 import { RouterProvider } from 'react-router-dom';
-import './App.css';
 import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Grid2, LinearProgress, Typography } from '@mui/material';

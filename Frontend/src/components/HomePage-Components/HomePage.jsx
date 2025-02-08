@@ -4,7 +4,6 @@ import Mainbar from './Mainbar';
 import Welcomebar from './Welcomebar';
 import Signin from '../Signin-components/Signin.jsx';
 import SideDetailbar from './SideDetailbar';
-import '../../Stylesheets/HomePage.css';
 import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
