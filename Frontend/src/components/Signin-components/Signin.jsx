@@ -1,199 +1,153 @@
-import React, { useState } from 'react';
-import { Container, IconButton } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+import React, { useEffect, useState } from 'react';
+import { Alert, Box, Container, Grid2, IconButton, Paper, Snackbar, Stack, useTheme } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import Page1 from './Page1';
-import Page2 from './Page2';
 import Page3 from './Page3';
 import Page4 from './Page4';
 import Page5 from './Page5';
-import { postUser, getUsers } from '../../utils/apis';
-import '../../Stylesheets/Signin.css';
-import { useDispatch } from 'react-redux';
-import { login } from '../../redux/userSlice';
+import { postUser, loginUser } from '../../utils/apis';
+import { connect, useDispatch } from 'react-redux';
+import { updateUser } from '../../redux/userSlice';
+import GoogleIcon from '../../assets/icons/GoogleIcon';
+import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../constants';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SigninEmailTab from './SigninEmailTab';
+import SigninPasswordTab from './SigninPasswordTab';
+import { validateEmail } from '../../utils/common';
 
-const Signin = ({ handleUserState, handleMainbar }) => {
-  const [page, setPage] = useState(1);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+const Signin = (props) => {
+  const {
+    // Redux Dispatchers
+    updateUser,
+  } = props;
+
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [currentPageView, setCurrentPageView] = useState(SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW);
   const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
-  const [open, setOpen] = useState(false);
-  const [image, setImage] = useState(null);
-  const dispatch = useDispatch();
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+  });
 
-  // Handle Image Selection
-  const handleImageChange = event => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
+  const theme = useTheme();
+
+  useEffect(() => {
+    const tempPage = searchParams.get('page');
+    const username = searchParams.get('username');
+    if (tempPage && SIGNIN_PAGE_STATE.PASSWORD_ASK_VIEW === window.atob(tempPage)) {
+      setCurrentPageView(window.atob(tempPage));
+      setUserData({
+        email: window.atob(username),
+        password: '',
+      });
     }
-    console.log(image);
-  };
+  }, []);
 
-  // Handle User Registration
-  const handleClick = async() => {
+  const submitLoginForm = async() => {
     try {
-      const user = await postUser(username, email, password, image);
-
-      dispatch(login(user));
-
-      setOpen(true);
-      handleUserState();
-
-      setTimeout(() => {
-        handleMainbar();
-      }, 2000);
-    } catch (error) {
-      setError('Failed to create user.');
-    }
-  };
-
-  // Close Snackbar
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const action = (
-    <>
-      <IconButton
-        size='small'
-        aria-label='close'
-        color='white'
-        onClick={handleClose}
-      >
-        <CloseIcon fontSize='small' />
-      </IconButton>
-    </>
-  );
-
-  // Handle Input Change
-  function handleChange(e) {
-    setUsername(e.target.value);
-    setError('');
-  }
-
-  // Handle Page 2
-  function handlepage2() {
-    if (username.trim() === '') {
-      setError('Please enter the Email or Username.');
-      return;
-    }
-    setEmail(username);
-    setPage(2);
-  }
-
-  function handlePassword(e) {
-    setPassword(e.target.value);
-    setError('');
-  }
-
-  const handlepage3 = async() => {
-    try {
-      if (password.trim() === '') {
-        setError('Please enter the Password.');
+      if (!validateEmail(userData.email)) {
+        setError('Invalid email format');
         return;
       }
-      const users = await getUsers();
-      const user = users.find(user => user.email === email && user.password === password);
 
-      if (user) {
-        console.log(`Welcome ${user.username}! You are successfully signed in.`);
-
-        dispatch(login(user)); // Store user in Redux
-
-        setOpen(true);
-        handleUserState();
-        setTimeout(() => {
-          handleMainbar();
-        }, 3000);
-      } else {
-        setError("User doesn't exist, Please Try again!");
+      if (userData.password.trim().length < PASSWORD_MIN_LENGTH) {
+        setError(`Password must be ${PASSWORD_MIN_LENGTH} character long`);
+        return;
       }
-    } catch (error) {
-      console.error('Error:', error);
+
+      await loginUser({
+        payload: userData,
+        setters: {
+          setError,
+          onSuccessHandler: ({ user }) => {
+            updateUser({ user });
+            navigate('/');
+          },
+        },
+      });
+    } catch {
       setError('Please check your credentials!');
     }
   };
 
+  const handleUserDataChange = (field) => (value) => {
+    setUserData((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
+  };
+
+  const resetLoginForm = () => {
+    setUserData({
+      email: '',
+      password: '',
+    });
+
+    setSearchParams({});
+    setCurrentPageView(SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW);
+  };
+
   return (
-    <Container
-      maxWidth='xs'
+    <Grid2
+      container
+      justifyContent='center'
+      alignItems='center'
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        border: 'solid 1px #D3D3D3',
-        padding: '70px',
-        marginTop: '60px',
-        borderRadius: '10px',
+        minWidth: '100vw',
+        minHeight: '100vh',
       }}
     >
-      <GoogleIcon sx={{ fontSize: 50, color: '#4285F4' }} />
+      <Grid2
+        container
+        item
+        size={{ xs: 12, md: 8, lg: 4 }}
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          padding: 5,
+          border: 1,
+          borderRadius: 2,
+          borderColor: theme.palette.divider,
+        }}
+      >
+        <GoogleIcon />
+        {currentPageView === SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW && (
+          <SigninEmailTab
+            email={userData.email}
+            setEmail={handleUserDataChange('email')}
+            setPage={setCurrentPageView}
+          />
+        )}
 
-      {page === 1 && (
-        <Page1
-          error={error}
-          username={username}
-          handleChange={handleChange}
-          setPage={setPage}
-          handlepage2={handlepage2}
-        />
-      )}
+        {currentPageView === SIGNIN_PAGE_STATE.PASSWORD_ASK_VIEW && (
+          <SigninPasswordTab
+            email={userData.email}
+            password={userData.password}
+            setPassword={handleUserDataChange('password')}
+            resetLoginForm={resetLoginForm}
+            submitLoginForm={submitLoginForm}
+            errorComponent={
+              error
+                ? (
+                  <Stack sx={{ width: '100%', paddingBottom: 1 }} spacing={2}>
+                    <Alert severity='error'>{error}</Alert>
+                  </Stack>
+                )
+                : ''
+            }
+          />
+        )}
+      </Grid2>
 
-      {page === 2 && (
-        <Page2
-          error={error}
-          username={username}
-          showPassword={showPassword}
-          password={password}
-          handlepage3={handlepage3}
-          setShowPassword={setShowPassword}
-          open={open}
-          handleClose={handleClose}
-          handlePassword={handlePassword}
-        />
-      )}
-
-      {page === 3 && (
-        <Page3
-          error={error}
-          username={username}
-          setUsername={setUsername}
-          email={email}
-          setEmail={setEmail}
-          setPage={setPage}
-        />
-      )}
-
-      {page === 4 && (
-        <Page4
-          password={password}
-          confirmpassword={confirmpassword}
-          handlePassword={handlePassword}
-          setConfirmPassword={setConfirmPassword}
-          setPage={setPage}
-        />
-      )}
-
-      {page === 5 && (
-        <Page5
-          image={image}
-          handleImageChange={handleImageChange}
-          handleClick={handleClick}
-          setPage={setPage}
-          open={open}
-          handleClose={handleClose}
-        />
-      )}
-    </Container>
+    </Grid2>
   );
 };
 
-export default Signin;
+const mapDispatchToProp = (dispatch) => ({
+  updateUser: (payload) => dispatch(updateUser(payload)),
+});
+
+export default connect(null, mapDispatchToProp)(Signin);

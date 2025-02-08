@@ -1,9 +1,8 @@
-import userModel from "../Model/users.model.js";
+import Globals from "../constants.js";
+import DataHelper from "../Helpers/data.js";
+import TokenHelper from "../Helpers/token.js";
+import UserModel from "../Model/users.model.js";
 import jwt from "jsonwebtoken";
-
-
-const SECRET_KEY = process.env.JWT_SECRET || "my_secret_key";
-
 
 //Authentication the User 
 export function authenticateUser(req, res, next) {
@@ -26,15 +25,50 @@ export function authenticateUser(req, res, next) {
 }
 
 //fetch all users
-export async function getAllUser(req, res) {
+export async function signinUser(req, res) {
     try {
-        const user = await userModel.find();
+        let { email, password } = req.body;
+        email = DataHelper.atob(email);
+        password = DataHelper.atob(password);
+
+        if (!email) {
+            return res.status(401).json({ message: 'Email is required.', })
+        }
+
+        if (!password) {
+            return res.status(401).json({ message: 'Password is required.', })
+        }
+
+        const user = await UserModel.findOne({ email });
 
         if (!user) {
-            return res.status(404).send({ message: "Users not found" });
+            return res.status(401).json({
+                errorCode: 404,
+                message: 'Email does not exists.',
+            });
         }
-        res.send(user);
+
+        const isPasswordValid = await DataHelper.compareHash(password, user.password);
+
+        if (isPasswordValid) {
+            return res.json({
+                data: {
+                    user: {
+                        _id: user._id,
+                        email: user.email,
+                        name: user.username,
+                    },
+                    token: TokenHelper.generateUserToken(user),
+                }
+            })
+        }
+
+        return res.status(401).json({
+            errorCode: Globals.ERROR_CODE.INVALID_USER_PASSWORD,
+            message: 'Password is incorrect',
+        });
     } catch (error) {
+        console.error(error);
         res.status(500).send({ message: "An error occurred", error: error.message });
     }
 }
@@ -43,7 +77,7 @@ export async function getAllUser(req, res) {
 export async function getUser(req, res) {
     try {
         const { username } = req.body;
-        const user = await userModel.findOne({ username });
+        const user = await UserModel.findOne({ username });
 
         if (!user) {
             return res.status(404).send({ message: "User not found" });
@@ -58,14 +92,14 @@ export async function getUser(req, res) {
 export function createUser(req, res) {
     const { username, email, password, image, channel } = req.body;
 
-    const user = new userModel({
+    const user = new UserModel({
         username,
         email,
         password,
         image,
         channel
     });
-    
+
     user.save().then((data) => {
         if (!data) {
             return res.status(400).json({ message: "Something went wrong" });
@@ -73,7 +107,7 @@ export function createUser(req, res) {
 
         //Generate the access token
         const accessToken = jwt.sign({ username: data.username, email: data.email }, SECRET_KEY);
-        res.send({accessToken,data});
+        res.send({ accessToken, data });
     }).catch((error) => {
         res.status(500).json({ message: "Internal server error", error: error.message });
     });

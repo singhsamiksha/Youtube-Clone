@@ -1,3 +1,30 @@
+import axios from 'axios';
+
+const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+
+export const loginUser = async(params) => {
+  const { payload, setters } = params;
+  const {
+    setError,
+    onSuccessHandler,
+  } = setters;
+  try {
+    const { email, password } = payload;
+    const response = await axios.post(`${baseUrl}/user/signin`, {
+      email: window.btoa(email),
+      password: window.btoa(password),
+    });
+
+    if(response?.data?.data) {
+      const { user, token } = response.data.data;
+      localStorage.setItem('token', btoa(token));
+      onSuccessHandler({ user });
+    }
+  } catch(e) {
+    setError(e.response?.data?.message || e.message || e.code || 'Internal Server erorr' );
+  }
+};
+
 export async function postUser(username, email, password, image) {
   try {
     const response = await fetch('http://localhost:3000/user/signup', {

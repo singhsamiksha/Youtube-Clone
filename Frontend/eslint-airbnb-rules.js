@@ -4,6 +4,7 @@ export default {
     'no-debugger': 'error',
     'no-dupe-keys': 'error',
     'no-duplicate-case': 'error',
+    'padded-blocks': ['error', 'never'],
     'no-empty': ['error', { allowEmptyCatch: true }],
     'no-multi-spaces': ['error', { ignoreEOLComments: false }],
     'no-extra-semi': 'error',
@@ -122,7 +123,7 @@ export default {
     'react/jsx-one-expression-per-line': ['error', { allow: 'single-child' }],
     'react/jsx-pascal-case': ['error', { allowAllCaps: true }],
     'react/jsx-props-no-multi-spaces': 'error',
-    'react/jsx-props-no-spreading': ['ignore', { html: 'enforce', custom: 'enforce' }],
+    'react/jsx-props-no-spreading': ['off', { html: 'enforce', custom: 'enforce' }],
     'react/jsx-sort-props': [
       'error',
       {
@@ -133,6 +134,7 @@ export default {
         reservedFirst: true,
       },
     ],
+    'react/jsx-no-useless-fragment': 'error',
     'react/no-adjacent-inline-elements': 'error',
     'react/no-array-index-key': 'warn',
     'react/no-arrow-function-lifecycle': 'error',

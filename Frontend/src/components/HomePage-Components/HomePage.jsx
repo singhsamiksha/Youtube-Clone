@@ -16,8 +16,6 @@ const HomePage = () => {
 
   const user = useSelector(state => state.user.user);
   const isAuthenticated = useSelector(state => state.user.isAuthenticated);
-  console.log('Active User:', user);
-  console.log('Is Authenticated:', isAuthenticated);
 
   const handleSidebar = () => {
     setActiveSidebar(!activeSidebar);
@@ -25,7 +23,6 @@ const HomePage = () => {
 
   const handleUserState = () => {
     setUserState(!userState);
-    console.log(userState);
   };
 
   const handleMainbar = () => {

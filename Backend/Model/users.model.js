@@ -8,6 +8,6 @@ const userSchema = new mongoose.Schema({
   channel: []
 });
 
-const userModel = mongoose.model("users", userSchema);
+const UserModel = mongoose.model("users", userSchema);
 
-export default userModel;
+export default UserModel;

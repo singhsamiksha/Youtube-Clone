@@ -29,6 +29,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AppLogo from '../../assets/icons/appLogo';
 import { stringAvatar } from '../../utils/common';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 const ChannelDialog = ({ open, handleClose, handleCreateChannel, channelName, setChannelName, description, setDescription, channelBanner, setChannelBanner, subscribers, setSubscribers, setVideos }) => (
   <Dialog open={open} onClose={handleClose}>
@@ -80,30 +81,6 @@ const Search = styled('div')(({ theme }) => ({
   },
 }));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
-
 const Header = ({ handleSidebar, handleUserState, handleSearch, isAuthenticated }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
@@ -130,6 +107,8 @@ const Header = ({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
     };
     setChannelExists(user?.channel && user?.channel.length > 0);
   }, [user?.channel]);
+
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -353,7 +332,7 @@ const Header = ({ handleSidebar, handleUserState, handleSearch, isAuthenticated 
                 aria-label='account of current user'
                 aria-controls={menuId}
                 aria-haspopup='true'
-                onClick={handleUserState}
+                onClick={() => navigate('/signin')}
                 sx={{
                   color: theme.palette.primary.main,
                   borderColor: theme.palette.divider,
