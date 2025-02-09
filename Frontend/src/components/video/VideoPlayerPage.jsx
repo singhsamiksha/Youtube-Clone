@@ -122,11 +122,11 @@ function VideoPlayerPage(props) {
 
   const isUserLikedVideo = userId
     && isAuthenticated && selectedVideo
-    && selectedVideo.likedBy.includes(userId);
+    && selectedVideo?.likedBy?.includes(userId);
 
   const isUserDislikedVideo = userId
     && isAuthenticated && selectedVideo
-    && selectedVideo.dislikedBy.includes(userId);
+    && selectedVideo?.dislikedBy?.includes(userId);
 
   return (
     <Grid2 container justifyContent="space-between">
@@ -204,7 +204,7 @@ function VideoPlayerPage(props) {
                     }}
                     >
                       <Button
-                        size="large"
+                        size="small"
                         sx={{
                           borderRadius: 5,
                           borderTopRightRadius: 0,
@@ -239,6 +239,7 @@ function VideoPlayerPage(props) {
                       </Button>
                     </Box>
                     <Button
+                      size="small"
                       variant="contained"
                       disableElevation
                       sx={{
@@ -268,12 +269,8 @@ function VideoPlayerPage(props) {
         {videoListLoader
           ? <CircularProgress />
           : (
-            <div
-              className="right"
-              style={{
-                display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', border: 'none',
-              }}
-            >
+            <Box>
+
               {videos.map((video) => (
                 <Card
                   key={video._id}
@@ -316,10 +313,8 @@ function VideoPlayerPage(props) {
                   </CardActionArea>
                 </Card>
               ))}
-            </div>
+            </Box>
           )}
-        {' '}
-
       </Grid2>
 
     </Grid2>

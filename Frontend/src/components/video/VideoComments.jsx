@@ -4,11 +4,14 @@ import {
   Box,
   Button,
   useTheme,
+  IconButton,
+  Divider,
 } from '@mui/material';
 
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
-
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
@@ -17,7 +20,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { stringAvatar } from '../../utils/common';
 import CommentPush from './CommentPush';
-import { toggleCommentLikeAPI } from '../../utils/apis/videoApi';
+import { deleteCommentAPI, toggleCommentLikeAPI } from '../../utils/apis/videoApi';
 
 function VideoComments(props) {
   const {
@@ -57,6 +60,23 @@ function VideoComments(props) {
     }
   };
 
+  const deleteComment = (comment) => {
+    deleteCommentAPI({
+      payload: {
+        videoId: video?._id,
+        commentId: comment?._id,
+      },
+      setters: {
+        setLoader: () => {},
+        setError: () => {},
+        onSuccessHandler: (comments) => {
+          updateVideoComments(comments);
+        },
+      },
+    })
+      .catch(() => {});
+  };
+
   return (
     <>
       <Typography variant="h6" fontWeight={700} sx={{ mb: 3 }}>
@@ -80,7 +100,6 @@ function VideoComments(props) {
           && comment?.dislikedBy?.includes(userId);
 
           return (
-
             <Box
               key={comment._id}
               sx={{
@@ -127,7 +146,7 @@ function VideoComments(props) {
                     </Typography>
                   </Button>
                   <Button
-                    size="small"
+                    // size="small"
                     sx={{
                       color: theme.palette.text.primary,
                     }}
@@ -138,13 +157,36 @@ function VideoComments(props) {
                         ? <ThumbDownIcon fontSize="small" />
                         : <ThumbDownOutlinedIcon fontSize="small" />
                     }
-
                   </Button>
-
+                  {
+                    isAuthenticated && userId && comment?.userId?._id === userId
+                      ? (
+                        <>
+                          <Divider orientation="vertical" flexItem />
+                          <IconButton
+                            size="small"
+                            sx={{
+                              ml: 2,
+                              color: theme.palette.text.primary,
+                            }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            size="small"
+                            sx={{
+                              color: theme.palette.text.primary,
+                            }}
+                            onClick={() => deleteComment(comment)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </>
+                      )
+                      : ''
+                  }
                 </Box>
-
               </Box>
-
             </Box>
           );
         })

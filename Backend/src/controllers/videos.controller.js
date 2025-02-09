@@ -29,14 +29,17 @@ VideoController.getVideosForUserDashboard = async (req, res) => {
   }
 
   try {
-    const videoDetails = await VideoModel.find();
+    const videoDetails = await VideoModel.find().populate([
+      { path: 'channel' },
+      { path: 'uploadedBy' },
+    ]).lean();
 
     if (!videoDetails || videoDetails.length === 0) {
       return res.status(404).send({ message: 'No videos found!' });
     }
 
     const updatedVideos = videoDetails.map((video) => ({
-      ...video.toObject(),
+      ...video,
       uploadDate: setDate(video.uploadDate),
       views: setViews(video.views),
     }));
@@ -194,6 +197,45 @@ VideoController.toggleCommentLike = async (req, res) => {
     { _id: videoId, 'comments._id': commentId },
     updateQuery,
   );
+
+  video = await VideoModel.findOne({ _id: videoId }).populate([
+    { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
+  ]);
+
+  const comments = (video.comments || [])
+    .filter((comment) => comment?.userId)
+    .sort((b, a) => a.timestamp - b.timestamp);
+
+  return res.json({
+    data: { comments },
+  });
+};
+
+VideoController.deleteComment = async (req, res) => {
+  const { user } = req;
+  const { videoId, commentId } = req.params;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  let video = await VideoModel.findOne({ _id: videoId });
+
+  if (!video) {
+    return res.status(403).json({
+      message: 'Invalid resource provided',
+    });
+  }
+
+  const updatedVideo = await VideoModel.findOneAndUpdate(
+    { _id: videoId, 'comments._id': commentId, 'comments.userId': user._id },
+    { $pull: { comments: { _id: commentId } } },
+    { new: true },
+  );
+
+  if (!updatedVideo) {
+    return res.status(404).json({ message: 'Comment not found or unauthorized' });
+  }
 
   video = await VideoModel.findOne({ _id: videoId }).populate([
     { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
