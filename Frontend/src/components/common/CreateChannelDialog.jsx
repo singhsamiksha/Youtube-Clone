@@ -13,8 +13,9 @@ import {
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { createChannelAPI, validateImageUrl } from '../../utils/apis';
+import { validateImageUrl } from '../../utils/apis';
 import { updateUserChannels } from '../../redux/userSlice';
+import { createChannelAPI } from '../../utils/apis/channelApi';
 
 function CreateChannelDialog(props) {
   const {

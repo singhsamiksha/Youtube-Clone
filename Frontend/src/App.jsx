@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Grid2, LinearProgress, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
-import AppLogo from './assets/icons/appLogo.jsx';
-import { getAuthUser } from './utils/apis.js';
-import { updateUser } from './redux/userSlice.js';
-import appRouter from './utils/routes.jsx';
+import { updateUser } from './redux/userSlice';
+import appRouter from './utils/routes';
+import { getAuthUser } from './utils/apis/userApi';
+import AppLogo from './assets/icons/AppLogo';
 
 function App(props) {
   const {

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
+export const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
-const getHeaderToken = () => {
+export const getHeaderToken = () => {
   let token = localStorage.getItem('token');
   if (token) {
     token = atob(token);
@@ -11,51 +11,7 @@ const getHeaderToken = () => {
   return null;
 };
 
-const handleAPIError = (e) => e.response?.data?.message || e.message || e.code || 'Internal Server erorr';
-
-export const loginUser = async (params) => {
-  const { payload, setters } = params;
-  const {
-    setError,
-    onSuccessHandler,
-  } = setters;
-  try {
-    const { email, password } = payload;
-    const response = await axios.post(`${baseUrl}/user/signin`, {
-      email: window.btoa(email),
-      password: window.btoa(password),
-    });
-
-    if (response?.data?.data) {
-      const { user, token } = response.data.data;
-      localStorage.setItem('token', btoa(token));
-      onSuccessHandler({ user });
-    }
-  } catch (e) {
-    setError(handleAPIError(e));
-  }
-};
-
-export const getAuthUser = async () => {
-  try {
-    const token = getHeaderToken();
-    if (token) {
-      const response = await axios.get(`${baseUrl}/user/auth`, {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      if (response.data.data) {
-        const { user } = response.data.data;
-        return user;
-      }
-    }
-  } catch {
-    localStorage.removeItem('token');
-  }
-  return null;
-};
+export const handleAPIError = (e) => e.response?.data?.message || e.message || e.code || 'Internal Server erorr';
 
 export const validateImageUrl = async (url) => {
   try {
@@ -126,28 +82,3 @@ export async function getUsers() {
   }
 }
 
-export async function createChannelAPI(params) {
-  const { payload, setters } = params;
-  const { setLoader, onSuccess, setError } = setters;
-  try {
-    setLoader(true);
-
-    const response = await axios.post(`${baseUrl}/channel`, payload, {
-      headers: {
-        contentType: 'application/json',
-        Authorization: getHeaderToken(),
-      },
-    });
-
-    if (response?.data?.data) {
-      const { channels } = response.data.data;
-      onSuccess(channels);
-    }
-
-    setLoader(false);
-  } catch (error) {
-    setError(handleAPIError(error));
-  } finally {
-    setLoader(false);
-  }
-}

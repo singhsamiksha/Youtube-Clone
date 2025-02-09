@@ -14,10 +14,10 @@ import SigninPasswordTab from './SigninPasswordTab';
 import GoogleIcon from '../../../assets/icons/GoogleIcon';
 
 // Utils
-import { getAuthUser, loginUser } from '../../../utils/apis';
 import { updateUser } from '../../../redux/userSlice';
 import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../../constants';
 import { validateEmail } from '../../../utils/common';
+import { getAuthUser, loginUser } from '../../../utils/apis/userApi';
 
 function Signin(props) {
   const {

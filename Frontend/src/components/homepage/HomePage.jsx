@@ -1,7 +1,7 @@
-import { Tabs } from '@mui/material';
 import { useState } from 'react';
-import AppDrawer from '../common/AppDrawer.jsx';
-import VideosGrid from './VideosGrid.jsx';
+import AppDrawer from '../common/AppDrawer';
+import VideosGrid from './VideosGrid';
+import CategoriesTab from './CategoriesTab';
 
 const categories = [
   'All', 'Music', 'Mixes', 'Rowan Atkinson', 'Comedy clubs', 'Game shows',
@@ -19,7 +19,7 @@ function HomePage() {
   return (
     <AppDrawer>
       {!!mainBar && (
-        <Tabs
+        <CategoriesTab
           categories={categories}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}

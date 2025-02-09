@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Chip } from '@mui/material';
 
-function Tabs({ categories, selectedCategory, setSelectedCategory }) {
+function CategoriesTab({ categories, selectedCategory, setSelectedCategory }) {
   return (
     <Box
       sx={{
@@ -35,4 +35,4 @@ function Tabs({ categories, selectedCategory, setSelectedCategory }) {
   );
 }
 
-export default Tabs;
+export default CategoriesTab;
