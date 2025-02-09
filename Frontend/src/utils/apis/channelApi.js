@@ -27,6 +27,27 @@ export async function createChannelAPI(params) {
   }
 }
 
-export const getChannels = () => {
+export const getChannels = async (params) => {
+  const { payload, setters } = params;
+  const { channelId } = payload;
+  const { setError, setLoader, onSuccessHandler } = setters;
 
+  try {
+    setLoader(true);
+    const token = getHeaderToken();
+    const response = await axios.get(`${baseUrl}/channel/${channelId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      const { channel } = response.data.data;
+      onSuccessHandler(channel);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  } finally {
+    setLoader(false);
+  }
 };

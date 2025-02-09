@@ -104,7 +104,7 @@ function Header(props) {
       <Divider />
       <Typography variant="caption" sx={{ ml: 1.5, color: theme.palette.text.secondary }}>Channels</Typography>
       {(userData?.channels || []).map((channel) => (
-        <MenuItem key={channel._id} onClick={() => navigate(`/channels/${channel._id}`)}>
+        <MenuItem key={channel._id} onClick={() => navigate(`/channel/${channel._id}`)}>
           <ListItemIcon>
             <MovieFilterOutlinedIcon fontSize="small" />
           </ListItemIcon>
