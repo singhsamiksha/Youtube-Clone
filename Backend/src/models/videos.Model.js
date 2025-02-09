@@ -44,6 +44,8 @@ const videoSchema = new mongoose.Schema({
       },
     },
   ],
+}, {
+  timestamps: true,
 });
 
 const VideoModel = mongoose.model('Videos', videoSchema);

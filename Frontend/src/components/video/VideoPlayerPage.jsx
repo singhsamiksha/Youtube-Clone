@@ -70,7 +70,7 @@ function VideoPlayerPage(props) {
         .catch((e) => setError(e?.message || 'Internal server error'));
     }
     setLoader(false);
-  }, []);
+  }, [videoId]);
 
   const toggleVideoLike = (value) => {
     if (!isAuthenticated) {
@@ -129,12 +129,10 @@ function VideoPlayerPage(props) {
     && selectedVideo?.dislikedBy?.includes(userId);
 
   return (
-    <Grid2 container justifyContent="space-between">
+    <Grid2 container justifyContent="center" spacing={2}>
       <Grid2
         item
-        size={{
-          md: 8,
-        }}
+        size={8}
       >
         {videoLoader
           ? <CircularProgress />
@@ -265,51 +263,70 @@ function VideoPlayerPage(props) {
           )}
 
       </Grid2>
-      <Grid2 item>
+      <Grid2 item size={4}>
         {videoListLoader
           ? <CircularProgress />
           : (
             <Box>
-
               {videos.map((video) => (
                 <Card
                   key={video._id}
-                  sx={{ maxWidth: 400, border: 'none', width: '100%' }}
-                  onClick={() => handleVideoClick(video)}
+                  elevation={0}
+                  sx={{
+                    border: 'none',
+                    width: '100%',
+                    mb: 1,
+                    // maxHeight: 110,
+                    // background: 'blue',
+                  }}
                 >
-                  <CardActionArea sx={{ display: 'flex' }}>
-                    <CardMedia
-                      component="img"
-                      height="100"
-                      width="100"
-                      image={video.thumbnailUrl}
-                      alt={video._id}
-                    />
-                    <CardContent sx={{ border: 'none' }}>
-                      <Typography
-                        gutterBottom
-                        component="div"
-                        sx={{ color: 'black', fontSize: '15px', fontWeight: '500' }}
-                      >
-                        {video.title}
-                      </Typography>
-                      <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                        {video.uploadedBy?.name}
-                      </Typography>
-                      <div className="subheadings">
-                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                          {video.views}
-                          {' '}
-                          Views
-                        </Typography>
-                        <FiberManualRecordIcon sx={{ fontSize: '7px' }} />
-                        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                          On
-                          {' '}
-                          {video.uploadDate}
-                        </Typography>
-                      </div>
-                    </CardContent>
+                  <CardActionArea sx={{ display: 'flex' }} onClick={() => navigate(`/video/${video._id}`)}>
+                    <Grid2 container>
+                      <Grid2 item size={5}>
+                        <img
+                          style={{
+                            width: '100%',
+                            borderRadius: 10,
+                          }}
+                          src={video.thumbnailUrl}
+                          alt={video.title}
+                        />
+                      </Grid2>
+
+                      <Grid2 item size={7}>
+                        <CardContent sx={{ border: 'none', p: 0, pl: 1 }}>
+                          <Typography
+                            width="100%"
+                            variant="subtitle2"
+                            fontWeight={500}
+                            sx={{ color: theme.palette.text.primary }}
+                          >
+                            {video.title}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                            {video.channel?.channelName}
+                          </Typography>
+                          <Box className="subheadings">
+                            <Typography
+                              variant="caption"
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                color: 'text.secondary',
+                              }}
+                            >
+                              {video.views}
+                              {' '}
+                              Views
+                              <FiberManualRecordIcon sx={{ fontSize: '5px', ml: 0.5, mr: 0.5 }} />
+                              {' '}
+                              {video.uploadDate}
+                            </Typography>
+                          </Box>
+                        </CardContent>
+                      </Grid2>
+                    </Grid2>
+
                   </CardActionArea>
                 </Card>
               ))}

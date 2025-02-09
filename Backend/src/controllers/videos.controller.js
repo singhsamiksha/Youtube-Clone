@@ -1,3 +1,4 @@
+import DataHelper from '../helpers/data.js';
 import VideoModel from '../models/videos.Model.js';
 
 const VideoController = {};
@@ -40,7 +41,7 @@ VideoController.getVideosForUserDashboard = async (req, res) => {
 
     const updatedVideos = videoDetails.map((video) => ({
       ...video,
-      uploadDate: setDate(video.uploadDate),
+      uploadDate: DataHelper.humanizeTime(video.uploadDate || video.createdAt),
       views: setViews(video.views),
     }));
 

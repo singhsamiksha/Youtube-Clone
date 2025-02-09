@@ -23,9 +23,9 @@ function CreateChannelDialog(props) {
     handleClose,
   } = props;
 
-  const [channelName, setChannelName] = useState('My Channel 1');
-  const [description, setDescription] = useState('This is first channel descriptions');
-  const [channelBanner, setChannelBanner] = useState('https://png.pngtree.com/thumb_back/fh260/back_pic/02/50/63/71577e1cf59d802.jpg');
+  const [channelName, setChannelName] = useState('');
+  const [description, setDescription] = useState('');
+  const [channelBanner, setChannelBanner] = useState('');
 
   const [channelNameError, setChannelNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');

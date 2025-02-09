@@ -37,7 +37,10 @@ function CommentPush(props) {
         setters: {
           setLoader,
           setError,
-          onSuccessHandler: ((comments) => updateVideoComments(comments)),
+          onSuccessHandler: ((comments) => {
+            updateVideoComments(comments);
+            setCommentText('');
+          }),
         },
       })
         .catch((e) => setError(e?.message || 'Internal server error'));

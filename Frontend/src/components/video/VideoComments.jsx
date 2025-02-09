@@ -19,7 +19,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { stringAvatar } from '../../utils/common';
+import { humanizeTime, stringAvatar } from '../../utils/common';
 import CommentPush from './CommentPush';
 import { deleteCommentAPI, editCommentAPI, toggleCommentLikeAPI } from '../../utils/apis/videoApi';
 
@@ -124,7 +124,7 @@ function VideoComments(props) {
               key={comment._id}
               sx={{
                 display: 'flex',
-                mb: 2,
+                mb: 4,
               }}
             >
               <Avatar {
@@ -140,7 +140,7 @@ function VideoComments(props) {
                   </Typography>
 
                   <Typography variant="caption" color="text.secondary">
-                    {comment?.timestamp}
+                    {comment?.timestamp ? humanizeTime(comment.timestamp) : ''}
                   </Typography>
                 </Box>
 
@@ -155,7 +155,7 @@ function VideoComments(props) {
                       >
                         <TextField
                           fullWidth
-                          label="Add a comment"
+                          label="Update comment"
                           variant="standard"
                           value={editMode.text}
                           color={theme.palette.text.primary}
@@ -191,7 +191,7 @@ function VideoComments(props) {
                           disabled={!editMode.text}
                           onClick={submitCommentEditForVideo}
                         >
-                          Comment
+                          Update
                         </Button>
                       </Box>
                     )
@@ -236,11 +236,11 @@ function VideoComments(props) {
                     isAuthenticated && userId && comment?.userId?._id === userId
                       ? (
                         <>
-                          <Divider orientation="vertical" flexItem />
+                          {/* <Divider orientation="vertical" flexItem /> */}
                           <IconButton
                             size="small"
                             sx={{
-                              ml: 2,
+                              mr: 1,
                               color: theme.palette.text.primary,
                             }}
                             onClick={() => setEditMode(comment)}
