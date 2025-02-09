@@ -20,6 +20,7 @@ import {
   Divider,
   ListItemIcon,
   ListItemText,
+  Link,
 } from '@mui/material';
 
 // MUI Icons
@@ -175,7 +176,9 @@ function Header(props) {
             >
               <MenuIcon />
             </IconButton>
-            <AppLogo width={100} height={30} />
+            <Link href="/">
+              <AppLogo width={100} height={30} />
+            </Link>
           </Box>
           <Box sx={{ flexGrow: 1 }} />
 

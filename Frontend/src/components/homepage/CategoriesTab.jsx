@@ -1,7 +1,11 @@
-import React from 'react';
 import { Box, Chip } from '@mui/material';
+import { VIDEO_CATEGORIES } from '../../constants';
 
-function CategoriesTab({ categories, selectedCategory, setSelectedCategory }) {
+function CategoriesTab(props) {
+  const { selectedCategory, setSelectedCategory } = props;
+
+  const categories = Object.values(VIDEO_CATEGORIES);
+
   return (
     <Box
       sx={{

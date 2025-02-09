@@ -16,13 +16,14 @@ const stringToColor = (string) => {
   return color;
 };
 
-export const stringAvatar = (name) => {
+export const stringAvatar = (name, sx = {}) => {
   const nameParts = (name || '').split(' ');
   const a = (nameParts[0] ? nameParts[0][0] : '').toUpperCase();
   const b = (nameParts[1] ? nameParts[1][0] : '').toUpperCase();
 
   return {
     sx: {
+      ...sx,
       bgcolor: stringToColor(name || ''),
     },
     children: `${a}${b}`,

@@ -3,7 +3,7 @@ import VideoModel from '../models/videos.Model.js';
 const VideoController = {};
 export default VideoController;
 
-VideoController.getVideos = async (req, res) => {
+VideoController.getVideosForUserDashboard = async (req, res) => {
   function setDate(date) {
     const now = new Date();
     const uploadedDate = new Date(date);
@@ -36,16 +36,45 @@ VideoController.getVideos = async (req, res) => {
     }
 
     const updatedVideos = videoDetails.map((video) => ({
-      ...video._doc,
+      ...video.toObject(),
       uploadDate: setDate(video.uploadDate),
       views: setViews(video.views),
     }));
 
-    res.status(200).send(updatedVideos);
+    res.status(200).json({
+      data: {
+        videos: updatedVideos,
+      },
+    });
   } catch (error) {
     res.status(500).send({ message: 'An error occurred', error: error.message });
   }
   return null;
+};
+
+VideoController.getVideoDetails = async (req, res) => {
+  const { videoId } = req.params;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  const video = await VideoModel.findOne({ _id: videoId })
+    .populate([
+      { path: 'channel' },
+      { path: 'uploadedBy' },
+    ]).lean();
+
+  return res.json({
+    data: {
+      video: {
+        ...video,
+        uploadedBy: {
+          name: video?.uploadedBy?.username,
+        },
+      },
+    },
+  });
 };
 
 VideoController.createVideo = (req, res) => {

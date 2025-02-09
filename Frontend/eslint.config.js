@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-underscore-dangle */
 import js from '@eslint/js';
 import globals from 'globals';
 import react from 'eslint-plugin-react';
@@ -7,7 +9,6 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import { FlatCompat } from '@eslint/eslintrc';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import eslintAirbnbRules from './eslint-airbnb-rules.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,6 +45,8 @@ export default [
       'linebreak-style': 0,
       'no-bitwise': 'off',
       'react/jsx-no-target-blank': 'off',
+      'react/jsx-props-no-spreading': 'off',
+      'no-underscore-dangle': ['error', { allow: ['_id'] }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

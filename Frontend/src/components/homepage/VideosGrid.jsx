@@ -1,199 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  Card,
-  CardActionArea,
-  CardMedia,
-  CardContent,
   Typography,
+  CircularProgress,
+  Alert,
+  Grid2,
 } from '@mui/material';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import ReactPlayer from 'react-player';
-import '../../Stylesheets/AllVideos.css';
+import { getDashboardVideos } from '../../utils/apis/videoApi';
+import VideoCard from '../common/VideoCard';
 
 function VideosGrid({
-  search, selectedCategory, mainBar, toggleMainBar,
+  search = '', selectedCategory,
 }) {
   const [videos, setVideos] = useState([]);
-  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [loader, setLoader] = useState(true);
+  const [error, setError] = useState('');
 
-  // Fetch videos from the API
   useEffect(() => {
-    const fetchVideos = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/video');
-        const data = await response.json();
-        setVideos(data);
-      } catch (error) {
-        console.error('Error fetching videos:', error);
-      }
-    };
-    fetchVideos();
+    getDashboardVideos({
+      setters: {
+        setLoader,
+        setError,
+        onSuccessHandler: ((v) => setVideos(v)),
+      },
+    })
+      .catch((e) => setError(e?.message || 'Internal server error'));
   }, []);
 
   // Filter videos based on search and selected category
   const filteredVideos = videos.filter((video) => (selectedCategory === 'All'
     ? video.title.toLowerCase().includes(search.toLowerCase())
     : video.title.toLowerCase().includes(search.toLowerCase())
-        && video.title.toLowerCase().includes(selectedCategory.toLowerCase())));
+    && video.title.toLowerCase().includes((selectedCategory || '').toLowerCase())));
 
-  const handleVideoClick = (video) => {
-    setSelectedVideo(video);
-    toggleMainBar();
-  };
-
-  if (videos.length === 0) {
-    return <div>Loading...</div>; // Display loading message if videos are not yet fetched
+  if (error) {
+    return (
+      <Grid2 container sx={{ width: '100%', mt: 5 }} justifyContent="center" alignItems="center">
+        <Grid2 item>
+          <Alert severity="error">{error}</Alert>
+        </Grid2>
+      </Grid2>
+    );
   }
 
-  return selectedVideo ? (
-    <div className="Video" style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div className="left" style={{ width: '60%' }}>
-        <ReactPlayer controls url={selectedVideo.videoUrl} />
-        <CardContent sx={{ border: 'none' }}>
-          <Typography
-            gutterBottom
-            component="div"
-            sx={{ color: 'black', fontSize: '25px', fontWeight: '500' }}
-          >
-            {selectedVideo.title}
+  if (loader) {
+    return (
+      <Grid2 container sx={{ width: '100%', mt: 20 }} justifyContent="center" alignItems="center">
+        <Grid2 item textAlign="center">
+          <CircularProgress />
+          <Typography variant="body2">
+            Fetching you videos...
           </Typography>
-          <div className="subheadings">
-            <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: 'large' }}>
-              {selectedVideo.uploader}
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {selectedVideo.likes}
-              {' '}
-              Likes
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {selectedVideo.dislikes}
-              {' '}
-              Dislikes
-            </Typography>
-          </div>
-          <div className="detailBox">
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {selectedVideo.views}
-              {' '}
-              Views
-            </Typography>
-            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {selectedVideo.description}
-            </Typography>
-          </div>
-          <Card className="Comments" sx={{ width: '60%' }}>
-            <Typography>
-              Comments:
-              {selectedVideo.comments.length}
-            </Typography>
-            <input placeholder="Add a Comment" />
-            {selectedVideo.comments.map((comment) => (
-              <div key={comment.commentId}>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {comment.text}
-                </Typography>
-              </div>
-            ))}
-          </Card>
-        </CardContent>
+        </Grid2>
+      </Grid2>
+    );
+  }
 
-      </div>
-      <div
-        className="right"
-        style={{
-          display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', border: 'none',
-        }}
-      >
-        {filteredVideos.map((video) => (
-          <Card
-            key={video.videoId}
-            sx={{ maxWidth: 400, border: 'none', width: '100%' }}
-            onClick={() => handleVideoClick(video)}
-          >
-            <CardActionArea sx={{ display: 'flex' }}>
-              <CardMedia
-                component="img"
-                height="100"
-                width="100"
-                image={video.thumbnailUrl}
-                alt={video.videoId}
-              />
-              <CardContent sx={{ border: 'none' }}>
-                <Typography
-                  gutterBottom
-                  component="div"
-                  sx={{ color: 'black', fontSize: '15px', fontWeight: '500' }}
-                >
-                  {video.title}
-                </Typography>
-                <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                  {video.uploader}
-                </Typography>
-                <div className="subheadings">
-                  <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                    {video.views}
-                    {' '}
-                    Views
-                  </Typography>
-                  <FiberManualRecordIcon sx={{ fontSize: '7px' }} />
-                  <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '13px' }}>
-                    On
-                    {' '}
-                    {video.uploadDate}
-                  </Typography>
-                </div>
-              </CardContent>
-            </CardActionArea>
-          </Card>
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="AllVideos">
+  return (
+    <Grid2 container spacing={1}>
       {filteredVideos.map((video) => (
-        <Card
-          key={video.videoId}
-          sx={{ maxWidth: 345, border: 'none' }}
-          onClick={() => handleVideoClick(video)}
+        <Grid2
+          key={video._id}
+          size={{
+            xs: 12, sm: 6, md: 4, lg: 3,
+          }}
         >
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              height="200"
-              width="200"
-              image={video.thumbnailUrl}
-              alt={video.videoId}
-            />
-            <CardContent sx={{ border: 'none' }}>
-              <Typography
-                gutterBottom
-                component="div"
-                sx={{ color: 'black', fontSize: '17px', fontWeight: '500' }}
-              >
-                {video.title}
-              </Typography>
-              <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: '15px' }}>
-                {video.uploader}
-              </Typography>
-              <div className="subheadings">
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {video.views}
-                  {' '}
-                  Views
-                </Typography>
-                <FiberManualRecordIcon sx={{ fontSize: '7px' }} />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  On
-                  {' '}
-                  {video.uploadDate}
-                </Typography>
-              </div>
-            </CardContent>
-          </CardActionArea>
-        </Card>
+          <VideoCard video={video} />
+        </Grid2>
       ))}
-    </div>
+
+    </Grid2>
   );
 }
 
