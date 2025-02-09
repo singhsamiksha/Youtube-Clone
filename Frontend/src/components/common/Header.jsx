@@ -38,6 +38,8 @@ import CreateChannelDialog from './CreateChannelDialog';
 
 const Header = (props) => {
   const {
+    toggleSidebar,
+
     // Redux state
     isAuthenticated,
     userData,
@@ -145,17 +147,16 @@ const Header = (props) => {
   //     </Menu>
 
   return (
-    <Box sx={{ flexGrow: 1, marginBottom: 5 }}>
+    <Box sx={{ flexGrow: 1 }}>
       <CreateChannelDialog
         isDialogOpen={createChannelDialogOpen}
         handleClose={() => setCreateChannelDialogOpen(false)}
       />
       <AppBar
-        position='static'
-        color='transparent'
+        position='fixed' sx={{ zIndex: theme.zIndex.drawer + 1, background: theme.palette.background.default }}
         elevation={0}
       >
-        <Toolbar sx={{ minHeight: '56px !important' }}>
+        <Toolbar sx={{ }}>
           <Box
             sx={{
               display: 'flex',
@@ -166,9 +167,9 @@ const Header = (props) => {
             <IconButton
               size='large'
               edge='start'
-              color='inherit'
               aria-label='open drawer'
               sx={{ mr: 2 }}
+              onClick={toggleSidebar}
             >
               <MenuIcon />
             </IconButton>
@@ -267,7 +268,7 @@ const Header = (props) => {
 };
 
 Header.propTypes = {
-  handleSidebar: PropTypes.func.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
   handleUserState: PropTypes.func.isRequired,
   handleSearch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,

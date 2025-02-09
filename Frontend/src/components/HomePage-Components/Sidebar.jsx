@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,52 +10,42 @@ import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HistoryIcon from '@mui/icons-material/History';
 
+const list = [
+  { icon: <HomeIcon />, label: 'Home' },
+  { icon: <SlideshowIcon />, label: 'Shorts' },
+  { icon: <VideoLibraryIcon />, label: 'Subscriptions' },
+  { icon: <AccountCircleIcon />, label: 'You' },
+  { icon: <HistoryIcon />, label: 'History' },
+];
+
 const Sidebar = () => (
   <Box sx={{ width: '100%', maxWidth: 200 }}>
-    <nav >
-      <List>
-        <ListItem disablePadding >
-          <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <HomeIcon/>
-            </ListItemIcon>
-            <ListItemText primary='Home'/>
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <SlideshowIcon />
-            </ListItemIcon>
-            <ListItemText primary='Shorts' />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <VideoLibraryIcon />
-            </ListItemIcon>
-            <ListItemText primary='Subscriptions' />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary='You' />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton sx={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-            <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <HistoryIcon />
-            </ListItemIcon>
-            <ListItemText primary='History' />
-          </ListItemButton>
-        </ListItem>
-      </List>
-    </nav>
+    <List>
+      {
+        list.map((listItem) => (
+          <ListItem key={listItem.label} disablePadding sx={{ mb: 2 }}>
+            <ListItemButton sx={{ display: 'flex', flexDirection: 'column', padding: 0.5 }}>
+              <ListItemIcon sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {listItem.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={listItem.label}
+                slotProps={{
+                  primary: {
+                    fontSize: 9.5,
+                    fontWeight: 400,
+                    variant: 'caption',
+                    sx: {
+                    },
+                    varient: 'subtitle2',
+                  },
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
+        ))
+      }
+    </List>
   </Box>
 );
 
