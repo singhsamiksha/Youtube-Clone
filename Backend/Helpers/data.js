@@ -1,16 +1,10 @@
 import bcrypt from 'bcrypt';
 
-const DataHelper = {}
+const DataHelper = {};
 export default DataHelper;
 
-DataHelper.atob = (encodedString) => {
-    return Buffer.from(encodedString, 'base64').toString('ascii');
-}
+DataHelper.atob = (encodedString) => Buffer.from(encodedString, 'base64').toString('ascii');
 
-DataHelper.encrypt = (target) => {
-    return bcrypt.hash(target, 8);
-}
+DataHelper.encrypt = (target) => bcrypt.hash(target, 8);
 
-DataHelper.compareHash = (targetString, encryptedString) => {
-    return bcrypt.compare(targetString, encryptedString);
-}
+DataHelper.compareHash = (targetString, encryptedString) => bcrypt.compare(targetString, encryptedString);

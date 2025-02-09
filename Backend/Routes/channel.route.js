@@ -1,6 +1,6 @@
-import { channelCreate } from "../Controller/channel.controller.js";
-import express from "express";
-import Auth from "../Middlewares/auth.middleware.js";
+import { channelCreate } from '../Controller/channel.controller.js';
+import express from 'express';
+import Auth from '../Middlewares/auth.middleware.js';
 
 const router = express.Router();
 
