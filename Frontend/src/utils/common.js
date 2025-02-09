@@ -1,5 +1,9 @@
 import moment from 'moment';
 
+export const APPErrorUtil = (...e) => {
+  console.error(...e);
+}
+
 const stringToColor = (string) => {
   let hash = 0;
   let i;

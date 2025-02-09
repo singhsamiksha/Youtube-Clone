@@ -10,7 +10,7 @@ const appRouter = createBrowserRouter([
   { path: '/', element: <HomePage /> },
   { path: '/signin', element: <Signin /> },
   { path: '/video/:videoId', element: <AppDrawer><VideoPlayerPage /></AppDrawer> },
-  { path: '/channel/:channelId', element: <AppDrawer><Channel /></AppDrawer>  },
+  { path: '/channel/:channelId', element: <AppDrawer><Channel /></AppDrawer> },
 ]);
 
 export default appRouter;

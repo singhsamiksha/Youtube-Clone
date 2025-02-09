@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
   Typography,
   CircularProgress,

@@ -32,7 +32,7 @@ import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilter';
 
 // Utils
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AppLogo from '../../assets/icons/appLogos';
+import AppLogo from '../../assets/icons/AppLogo';
 import { stringAvatar } from '../../utils/common';
 import { updateUser } from '../../redux/userSlice';
 import CreateChannelDialog from './CreateChannelDialog';

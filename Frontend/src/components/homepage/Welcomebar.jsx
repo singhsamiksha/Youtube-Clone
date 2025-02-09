@@ -17,7 +17,7 @@ function Welcomebar() {
         Try searching to get started
       </Typography>
       <Typography variant="body1" sx={{ fontSize: '16px', textAlign: 'center', color: '#808080' }}>
-        Start watching videos to help us build a feed of videos you'll love.
+        Start watching videos to help us build a feed of videos you will love.
       </Typography>
     </Box>
   );

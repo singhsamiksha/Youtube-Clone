@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { APPErrorUtil } from './common';
 
 export const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
@@ -47,16 +48,14 @@ export async function postUser(username, email, password, image) {
         channel: [],
       }),
     });
-    console.log(response);
     if (!response.ok) {
       throw new Error('Failed to create user');
     }
 
     const data = await response.json();
-    console.log('User Created:', data);
     return data;
   } catch (error) {
-    console.error('Error:', error);
+    APPErrorUtil('Error:', error);
     throw error;
   }
 }
@@ -77,7 +76,7 @@ export async function getUsers() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching users:', error);
+    APPErrorUtil('Error fetching users:', error);
     return [];
   }
 }
