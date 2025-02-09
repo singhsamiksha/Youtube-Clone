@@ -1,6 +1,9 @@
-import videoModel from '../Model/videos.Model.js';
+import VideoModel from '../models/videos.Model.js';
 
-export async function GetVideos(req, res) {
+const VideoController = {};
+export default VideoController;
+
+VideoController.getVideos = async (req, res) => {
   function setDate(date) {
     const now = new Date();
     const uploadedDate = new Date(date);
@@ -26,7 +29,7 @@ export async function GetVideos(req, res) {
   }
 
   try {
-    const videoDetails = await videoModel.find();
+    const videoDetails = await VideoModel.find();
 
     if (!videoDetails || videoDetails.length === 0) {
       return res.status(404).send({ message: 'No videos found!' });
@@ -42,9 +45,10 @@ export async function GetVideos(req, res) {
   } catch (error) {
     res.status(500).send({ message: 'An error occurred', error: error.message });
   }
-}
+  return null;
+};
 
-export function createVideo(req, res) {
+VideoController.createVideo = (req, res) => {
   const {
     title, thumbnailUrl, description, channelId, uploader, views, likes, dislikes, uploadDate, comments,
   } = req.body;
@@ -53,7 +57,7 @@ export function createVideo(req, res) {
     return res.status(400).json({ message: 'Title and thumbnail URL are required' });
   }
 
-  const newVideo = new videoModel({
+  const newVideo = new VideoModel({
     title,
     thumbnailUrl,
     description,
@@ -70,4 +74,6 @@ export function createVideo(req, res) {
     .save()
     .then((data) => res.status(201).json(data))
     .catch((error) => res.status(500).json({ message: 'Internal server error', error: error.message }));
-}
+
+  return null;
+};

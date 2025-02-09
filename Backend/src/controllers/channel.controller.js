@@ -1,8 +1,16 @@
-import ChannelModel from '../Models/channels.Model.js';
-import UserModel from '../Model/users.model.js';
+import ChannelModel from '../models/channels.Model.js';
+import UserModel from '../models/users.model.js';
+
+const ChannelController = {};
+export default ChannelController;
+
+const getUserChannels = (user) => {
+  const { _id: userId } = user || {};
+  return ChannelModel.find({ owner: userId });
+};
 
 // Controller to create a new channel
-export async function channelCreate(req, res) {
+ChannelController.channelCreate = async (req, res) => {
   const { user } = req;
   const { channelName, description, channelBanner } = req.body;
 
@@ -32,10 +40,4 @@ export async function channelCreate(req, res) {
   return res.json({
     data: { channels },
   });
-}
-
-// Controller to get a channel by owner
-function getUserChannels(user) {
-  const { _id: userId } = user || {};
-  return ChannelModel.find({ owner: userId });
-}
+};

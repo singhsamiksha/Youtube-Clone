@@ -1,32 +1,15 @@
 import jwt from 'jsonwebtoken';
-import Globals from '../constants.js';
-import DataHelper from '../Helpers/data.js';
-import TokenHelper from '../Helpers/token.js';
-import ChannelModel from '../Model/channels.Model.js';
-import UserModel from '../Model/users.model.js';
+import Globals from '../../constants.js';
+import DataHelper from '../helpers/data.js';
+import TokenHelper from '../helpers/token.js';
+import ChannelModel from '../models/channels.Model.js';
+import UserModel from '../models/users.model.js';
 
-// Authentication the User
-export function authenticateUser(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Authorization header missing' });
-  }
-  const token = authHeader;
-  if (!token) {
-    return res.status(401).json({ message: 'Token missing' });
-  }
+const UserController = {};
+export default UserController;
 
-  jwt.verify(token, SECRET_KEY, (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid JWT Token' });
-    }
-    req.user = user;
-    next();
-  });
-}
-
-// fetch all users
-export async function signinUser(req, res) {
+// Validates and provide the user a JWT Token based authentication response
+UserController.signinUser = async (req, res) => {
   try {
     let { email, password } = req.body;
     email = DataHelper.atob(email);
@@ -70,11 +53,12 @@ export async function signinUser(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'An error occurred', error: error.message });
+    return res.status(500).send({ message: 'An error occurred', error: error.message });
   }
-}
+};
 
-export async function getAuthUser(req, res) {
+// API Controller to provide the currently logged in user, with channels
+UserController.getAuthUser = async (req, res) => {
   try {
     const { user } = req;
     if (user) {
@@ -92,30 +76,17 @@ export async function getAuthUser(req, res) {
         },
       });
     }
-    res.send(user);
+    return res.status(401).json({
+      message: 'You is not authenticated',
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ message: 'An error occurred', error: error.message });
+    return res.status(500).send({ message: 'An error occurred', error: error.message });
   }
-}
+};
 
-// fetch the user data
-export async function getUser(req, res) {
-  try {
-    const { username } = req.body;
-    const user = await UserModel.findOne({ username });
-
-    if (!user) {
-      return res.status(404).send({ message: 'User not found' });
-    }
-    res.send(user);
-  } catch (error) {
-    res.status(500).send({ message: 'An error occurred', error: error.message });
-  }
-}
-
-// Create user in database
-export function createUser(req, res) {
+// Handle the signup process for the user
+UserController.createUser = async (req, res) => {
   const {
     username, email, password, image, channel,
   } = req.body;
@@ -134,9 +105,7 @@ export function createUser(req, res) {
     }
 
     // Generate the access token
-    const accessToken = jwt.sign({ username: data.username, email: data.email }, SECRET_KEY);
-    res.send({ accessToken, data });
-  }).catch((error) => {
-    res.status(500).json({ message: 'Internal server error', error: error.message });
-  });
-}
+    const accessToken = jwt.sign({ username: data.username, email: data.email });
+    return res.send({ accessToken, data });
+  }).catch((error) => res.status(500).json({ message: 'Internal server error', error: error.message }));
+};

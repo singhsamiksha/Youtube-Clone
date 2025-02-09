@@ -1,13 +1,13 @@
 import 'dotenv/config';
-import express from 'express';
+import Express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import user from './Routes/users.routes.js';
-import channel from './Routes/channel.route.js';
-import video from './Routes/videos.route.js';
+import user from './src/routes/users.routes.js';
+import channel from './src/routes/channel.route.js';
+import video from './src/routes/videos.route.js';
 
-const app = new express();
-app.use(express.json());
+const app = new Express();
+app.use(Express.json());
 app.use(cors());
 
 // Server is connection at port 3000

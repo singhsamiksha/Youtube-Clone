@@ -1,5 +1,5 @@
-import TokenHelper from '../Helpers/token.js';
-import UserModel from '../Model/users.model.js';
+import TokenHelper from '../helpers/token.js';
+import UserModel from '../models/users.model.js';
 
 const Auth = {};
 export default Auth;
