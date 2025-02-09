@@ -16,17 +16,27 @@ import {
 } from '@mui/material';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import ReactPlayer from 'react-player';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { stringAvatar } from '../../utils/common';
-import { fetchVideo, getDashboardVideos } from '../../utils/apis/videoApi';
+import { fetchVideo, getDashboardVideos, toggleVideoLikeAPI } from '../../utils/apis/videoApi';
 import VideoComments from './VideoComments';
 
-function VideoPlayerPage() {
+function VideoPlayerPage(props) {
+  const {
+    isAuthenticated,
+    userData,
+  } = props;
+
+  const { userId } = userData || {};
+
   const { videoId } = useParams();
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videos, setVideos] = useState([]);
@@ -62,6 +72,31 @@ function VideoPlayerPage() {
     setLoader(false);
   }, []);
 
+  const toggleVideoLike = (value) => {
+    if (!isAuthenticated) {
+      navigate('/signin');
+    } else {
+      toggleVideoLikeAPI({
+        payload: {
+          videoId,
+          like: value,
+        },
+        setters: {
+          setLoader: setVideoListLoader,
+          setError,
+          onSuccessHandler: ({ likedBy, dislikedBy }) => {
+            setSelectedVideo({
+              ...selectedVideo,
+              likedBy,
+              dislikedBy,
+            });
+          },
+        },
+      })
+        .catch((e) => setError(e?.message || 'Internal server error'));
+    }
+  };
+
   if (error) {
     return (
       <Grid2 container sx={{ width: '100%', mt: 5 }} justifyContent="center" alignItems="center">
@@ -84,6 +119,14 @@ function VideoPlayerPage() {
       </Grid2>
     );
   }
+
+  const isUserLikedVideo = userId
+    && isAuthenticated && selectedVideo
+    && selectedVideo.likedBy.includes(userId);
+
+  const isUserDisikedVideo = userId
+    && isAuthenticated && selectedVideo
+    && selectedVideo.dislikedBy.includes(userId);
 
   return (
     <Grid2 container justifyContent="space-between">
@@ -166,8 +209,12 @@ function VideoPlayerPage() {
                           borderRadius: 5,
                           borderTopRightRadius: 0,
                           borderBottomRightRadius: 0,
-                          color: theme.palette.text.primary,
+                          color: userId && isUserLikedVideo
+                            ? theme.palette.background.default
+                            : theme.palette.text.primary,
+                          backgroundColor: userId && isUserLikedVideo ? theme.palette.text.primary : 'transparent',
                         }}
+                        onClick={() => toggleVideoLike(true)}
                       >
                         <ThumbUpOutlinedIcon fontSize="small" />
                         <Typography sx={{ ml: 1 }} variant="subtitle2">
@@ -180,8 +227,13 @@ function VideoPlayerPage() {
                           borderRadius: 5,
                           borderTopLeftRadius: 0,
                           borderBottomLeftRadius: 0,
-                          color: theme.palette.text.primary,
+                          color: userId && isUserDisikedVideo
+                            ? theme.palette.background.default
+                            : theme.palette.text.primary,
+                          backgroundColor: userId && isUserDisikedVideo ? theme.palette.text.primary : 'transparent',
+
                         }}
+                        onClick={() => toggleVideoLike(false)}
                       >
                         <ThumbDownOutlinedIcon fontSize="small" />
                       </Button>
@@ -274,4 +326,13 @@ function VideoPlayerPage() {
   );
 }
 
-export default VideoPlayerPage;
+VideoPlayerPage.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  userData: PropTypes.instanceOf(Object).isRequired,
+};
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.isAuthenticated,
+  userData: state.user.user,
+});
+
+export default connect(mapStateToProps)(VideoPlayerPage);

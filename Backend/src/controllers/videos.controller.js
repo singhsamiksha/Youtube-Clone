@@ -120,6 +120,83 @@ VideoController.addVideoComment = async (req, res) => {
   });
 };
 
+VideoController.toggleVideoLike = async (req, res) => {
+  const { user } = req;
+  const { videoId } = req.params;
+  const { like } = req.body;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  let video = await VideoModel.findOne({ _id: videoId });
+
+  if (!video) {
+    return res.status(403).json({
+      message: 'Invalid resource provided',
+    });
+  }
+
+  const userId = user._id;
+
+  const updateQuery = like
+    ? {
+      $addToSet: { likedBy: userId },
+      $pull: { dislikedBy: userId },
+    }
+    : {
+      $addToSet: { dislikedBy: userId },
+      $pull: { likedBy: userId },
+    };
+
+  await VideoModel.findOneAndUpdate(video._id, updateQuery);
+
+  video = await VideoModel.findOne({ _id: videoId });
+
+  return res.json({
+    data: {
+      likedBy: video.likedBy,
+      dislikedBy: video.dislikedBy,
+    },
+  });
+};
+
+VideoController.toggleCommentLike = async (req, res) => {
+  const { user } = req;
+  const { videoId } = req.params;
+  const { like } = req.body;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  const video = await VideoModel.findOne({ _id: videoId });
+
+  if (!video) {
+    return res.status(403).json({
+      message: 'Invalid resource provided',
+    });
+  }
+
+  const userId = user._id;
+
+  const updateQuery = like
+    ? {
+      $addToSet: { likedBy: userId },
+      $pull: { dislikedBy: userId },
+    }
+    : {
+      $addToSet: { dislikedBy: userId },
+      $pull: { likedBy: userId },
+    };
+
+  await VideoModel.findOneAndUpdate(video._id, updateQuery);
+
+  return res.json({
+    data: true,
+  });
+};
+
 VideoController.createVideo = (req, res) => {
   const {
     title, thumbnailUrl, description, channelId, uploader, views, likes, dislikes, uploadDate, comments,
