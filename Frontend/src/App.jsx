@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { updateUser } from './redux/userSlice';
 import appRouter from './utils/routes';
 import { getAuthUser } from './utils/apis/userApi';
-import AppLogo from './assets/icons/AppLogo';
+import AppLogo from './assets/icons/appLogos';
 
 function App(props) {
   const {

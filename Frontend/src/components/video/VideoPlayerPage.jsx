@@ -129,10 +129,10 @@ function VideoPlayerPage(props) {
     && selectedVideo?.dislikedBy?.includes(userId);
 
   return (
-    <Grid2 container justifyContent="center" spacing={2}>
+    <Grid2 container justifyContent="center" spacing={2} sx={{ p: { lg: 5 } }}>
       <Grid2
         item
-        size={8}
+        size={9}
       >
         {videoLoader
           ? <CircularProgress />
@@ -143,23 +143,24 @@ function VideoPlayerPage(props) {
                 width: '100%',
               }}
               >
-                <ReactPlayer
-                  controls
-                  config={{
-                    youtube: {
-                      playerVars: { showinfo: 1 },
-                    },
-                    facebook: {
-                      appId: '12345',
-                    },
-                  }}
-                  url={selectedVideo?.videoUrl}
-                  width="100%"
-                  // height="100%"
-                  style={{
-                    borderRadius: 5,
-                  }}
-                />
+                <Box sx={{
+                  position: 'relative',
+                  paddingTop: '56.25%',
+                  borderRadius: 5,
+                }}
+                >
+                  <ReactPlayer
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      borderRadius: 5,
+                    }}
+                    url={selectedVideo?.videoUrl}
+                    width="100%"
+                    height="100%"
+                  />
+                </Box>
               </Box>
 
               <Box>
@@ -263,7 +264,7 @@ function VideoPlayerPage(props) {
           )}
 
       </Grid2>
-      <Grid2 item size={4}>
+      <Grid2 item size={3}>
         {videoListLoader
           ? <CircularProgress />
           : (
@@ -276,8 +277,6 @@ function VideoPlayerPage(props) {
                     border: 'none',
                     width: '100%',
                     mb: 1,
-                    // maxHeight: 110,
-                    // background: 'blue',
                   }}
                 >
                   <CardActionArea sx={{ display: 'flex' }} onClick={() => navigate(`/video/${video._id}`)}>

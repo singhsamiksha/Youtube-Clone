@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import PropTypes from 'prop-types';
 
 function AppLogo({ width = 100, height = 10, color = 'primary.main' }) {
