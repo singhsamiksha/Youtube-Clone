@@ -1,9 +1,9 @@
+import jwt from 'jsonwebtoken';
 import Globals from '../constants.js';
 import DataHelper from '../Helpers/data.js';
 import TokenHelper from '../Helpers/token.js';
 import ChannelModel from '../Model/channels.Model.js';
 import UserModel from '../Model/users.model.js';
-import jwt from 'jsonwebtoken';
 
 // Authentication the User
 export function authenticateUser(req, res, next) {

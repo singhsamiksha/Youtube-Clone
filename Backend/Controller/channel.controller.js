@@ -1,4 +1,4 @@
-import ChannelModel from '../Model/channels.Model.js';
+import ChannelModel from '../Models/channels.Model.js';
 import UserModel from '../Model/users.model.js';
 
 // Controller to create a new channel
@@ -12,7 +12,7 @@ export async function channelCreate(req, res) {
 
   const newChannel = new ChannelModel({
     channelName,
-    owner: user._id,
+    owner: user?._id,
     description,
     channelBanner,
     subscribers: [],
