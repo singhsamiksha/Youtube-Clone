@@ -7,24 +7,54 @@ import {
 } from '@mui/material';
 
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import { stringAvatar } from '../../utils/common';
 import CommentPush from './CommentPush';
+import { toggleCommentLikeAPI } from '../../utils/apis/videoApi';
 
 function VideoComments(props) {
   const {
     video,
     setVideo,
-    // isAuthenticated,
-    // userData,
+    isAuthenticated,
+    userData,
   } = props;
 
+  const { userId } = userData || {};
   const theme = useTheme();
+  // const navigate = useNavigate();
 
   const updateVideoComments = (comments) => {
     setVideo({ ...video, comments });
+  };
+
+  const toggleCommentLike = (value, comment) => {
+    if (isAuthenticated) {
+      // navigate('/signin');
+    // } else {
+      toggleCommentLikeAPI({
+        payload: {
+          videoId: video?._id,
+          commentId: comment?._id,
+          like: value,
+        },
+        setters: {
+          setLoader: () => {},
+          setError: () => {},
+          onSuccessHandler: (comments) => {
+            updateVideoComments(comments);
+          },
+        },
+      })
+        .catch(() => {});
+    }
   };
 
   return (
@@ -39,65 +69,85 @@ function VideoComments(props) {
         video={video}
         updateVideoComments={updateVideoComments}
       />
-
       {
-        (video.comments || []).map((comment) => (
-          <Box
-            key={comment._id}
-            sx={{
-              display: 'flex',
-              mb: 2,
-            }}
-          >
-            <Avatar {
+        (video.comments || []).map((comment) => {
+          const isUserLikedVideo = userId
+          && isAuthenticated && comment
+          && comment?.likedBy?.includes(userId);
+
+          const isUserDislikedVideo = userId
+          && isAuthenticated && comment
+          && comment?.dislikedBy?.includes(userId);
+
+          return (
+
+            <Box
+              key={comment._id}
+              sx={{
+                display: 'flex',
+                mb: 2,
+              }}
+            >
+              <Avatar {
               ...stringAvatar(comment.userId?.username)
             }
-            />
+              />
 
-            <Box sx={{ ml: 2 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="subtitle2" sx={{ mr: 1 }}>
-                  @
-                  {comment?.userId?.username}
-                </Typography>
-
-                <Typography variant="caption" color="text.secondary">
-                  {comment?.timestamp}
-                </Typography>
-              </Box>
-
-              <Typography variant="body2" sx={{ width: '100%' }}>
-                {comment.text}
-              </Typography>
-
-              <Box sx={{ display: 'flex', mt: 1 }}>
-
-                <Button
-                  size="small"
-                  sx={{
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  <ThumbUpOutlinedIcon fontSize="small" />
-                  <Typography sx={{ ml: 1 }} variant="subtitle2">
-                    {comment.likedBy?.length || 0}
+              <Box sx={{ ml: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="subtitle2" sx={{ mr: 1 }}>
+                    @
+                    {comment?.userId?.username}
                   </Typography>
-                </Button>
-                <Button
-                  size="small"
-                  sx={{
-                    color: theme.palette.text.primary,
-                  }}
-                >
-                  <ThumbDownOutlinedIcon fontSize="small" />
-                </Button>
+
+                  <Typography variant="caption" color="text.secondary">
+                    {comment?.timestamp}
+                  </Typography>
+                </Box>
+
+                <Typography variant="body2" sx={{ width: '100%' }}>
+                  {comment.text}
+                </Typography>
+
+                <Box sx={{ display: 'flex', mt: 1 }}>
+                  <Button
+                    size="small"
+                    sx={{
+                      color: theme.palette.text.primary,
+                    }}
+                    onClick={() => toggleCommentLike(true, comment)}
+                  >
+                    {
+                      isUserLikedVideo
+                        ? <ThumbUpIcon fontSize="small" />
+                        : <ThumbUpOutlinedIcon fontSize="small" />
+                    }
+                    <Typography sx={{ ml: 1 }} variant="subtitle2">
+                      {comment.likedBy?.length || 0}
+                    </Typography>
+                  </Button>
+                  <Button
+                    size="small"
+                    sx={{
+                      color: theme.palette.text.primary,
+                    }}
+                    onClick={() => toggleCommentLike(false, comment)}
+                  >
+                    {
+                      isUserDislikedVideo
+                        ? <ThumbDownIcon fontSize="small" />
+                        : <ThumbDownOutlinedIcon fontSize="small" />
+                    }
+
+                  </Button>
+
+                </Box>
 
               </Box>
 
             </Box>
-
-          </Box>
-        ))
+          );
+        })
       }
     </>
   );

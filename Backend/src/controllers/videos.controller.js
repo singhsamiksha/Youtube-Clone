@@ -163,14 +163,14 @@ VideoController.toggleVideoLike = async (req, res) => {
 
 VideoController.toggleCommentLike = async (req, res) => {
   const { user } = req;
-  const { videoId } = req.params;
+  const { videoId, commentId } = req.params;
   const { like } = req.body;
 
   if (!videoId) {
     return res.status(403).json({ message: 'Invalid data provided' });
   }
 
-  const video = await VideoModel.findOne({ _id: videoId });
+  let video = await VideoModel.findOne({ _id: videoId });
 
   if (!video) {
     return res.status(403).json({
@@ -182,18 +182,29 @@ VideoController.toggleCommentLike = async (req, res) => {
 
   const updateQuery = like
     ? {
-      $addToSet: { likedBy: userId },
-      $pull: { dislikedBy: userId },
+      $addToSet: { 'comments.$.likedBy': userId },
+      $pull: { 'comments.$.dislikedBy': userId },
     }
     : {
-      $addToSet: { dislikedBy: userId },
-      $pull: { likedBy: userId },
+      $addToSet: { 'comments.$.dislikedBy': userId },
+      $pull: { 'comments.$.likedBy': userId },
     };
 
-  await VideoModel.findOneAndUpdate(video._id, updateQuery);
+  await VideoModel.findOneAndUpdate(
+    { _id: videoId, 'comments._id': commentId },
+    updateQuery,
+  );
+
+  video = await VideoModel.findOne({ _id: videoId }).populate([
+    { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
+  ]);
+
+  const comments = (video.comments || [])
+    .filter((comment) => comment?.userId)
+    .sort((b, a) => a.timestamp - b.timestamp);
 
   return res.json({
-    data: true,
+    data: { comments },
   });
 };
 

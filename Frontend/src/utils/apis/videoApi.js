@@ -98,3 +98,28 @@ export const toggleVideoLikeAPI = async (params) => {
     setLoader(false);
   }
 };
+
+export const toggleCommentLikeAPI = async (params) => {
+  const { payload, setters } = params;
+  const { videoId, commentId, like } = payload;
+  const { setError, setLoader, onSuccessHandler } = setters;
+
+  try {
+    setLoader(true);
+    const token = getHeaderToken();
+    const response = await axios.put(`${baseUrl}/video/${videoId}/comment/${commentId}/like`, { like }, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      const { comments } = response.data.data;
+      onSuccessHandler(comments);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  } finally {
+    setLoader(false);
+  }
+};

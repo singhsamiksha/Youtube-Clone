@@ -124,7 +124,7 @@ function VideoPlayerPage(props) {
     && isAuthenticated && selectedVideo
     && selectedVideo.likedBy.includes(userId);
 
-  const isUserDisikedVideo = userId
+  const isUserDislikedVideo = userId
     && isAuthenticated && selectedVideo
     && selectedVideo.dislikedBy.includes(userId);
 
@@ -227,10 +227,10 @@ function VideoPlayerPage(props) {
                           borderRadius: 5,
                           borderTopLeftRadius: 0,
                           borderBottomLeftRadius: 0,
-                          color: userId && isUserDisikedVideo
+                          color: userId && isUserDislikedVideo
                             ? theme.palette.background.default
                             : theme.palette.text.primary,
-                          backgroundColor: userId && isUserDisikedVideo ? theme.palette.text.primary : 'transparent',
+                          backgroundColor: userId && isUserDislikedVideo ? theme.palette.text.primary : 'transparent',
 
                         }}
                         onClick={() => toggleVideoLike(false)}
