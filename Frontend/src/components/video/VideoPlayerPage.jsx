@@ -20,10 +20,17 @@ import { useParams } from 'react-router-dom';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { stringAvatar } from '../../utils/common';
 import { fetchVideo, getDashboardVideos } from '../../utils/apis/videoApi';
 
-function VideoPlayerPage() {
+function VideoPlayerPage(props) {
+  const {
+    isAuthenticated,
+    userData,
+  } = props;
+
   const { videoId } = useParams();
   const theme = useTheme();
 
@@ -98,7 +105,6 @@ function VideoPlayerPage() {
             <>
               <Box sx={{
                 borderRadius: 5,
-                background: 'blue',
                 width: '100%',
               }}
               >
@@ -130,7 +136,7 @@ function VideoPlayerPage() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Avatar {
-                      ...stringAvatar(selectedVideo.uploadedBy.name, { width: 45, height: 45 })
+                      ...stringAvatar(selectedVideo.uploadedBy?.name, { width: 45, height: 45 })
                     }
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
@@ -202,44 +208,34 @@ function VideoPlayerPage() {
                       <ReplyOutlinedIcon />
                       Share
                     </Button>
-
                   </Box>
                 </Box>
               </Box>
 
-              <CardContent sx={{ border: 'none' }}>
-                <Typography
-                  gutterBottom
-                  component="div"
-                  sx={{ color: 'black', fontSize: '25px', fontWeight: '500' }}
-                >
-                  {selectedVideo.title}
+              <Box sx={{ mt: 5 }}>
+                <Typography variant="h6" fontWeight={700}>
+                  {selectedVideo.comments?.length || 0}
+                  {' '}
+                  Comments
                 </Typography>
-                <div className="subheadings">
-                  <Typography variant="h6" sx={{ color: 'text.secondary', fontSize: 'large' }}>
-                    {selectedVideo.uploadedBy.name}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {selectedVideo.likes}
-                    {' '}
-                    Likes
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {selectedVideo.dislikes}
-                    {' '}
-                    Dislikes
-                  </Typography>
-                </div>
-                <div className="detailBox">
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {selectedVideo.views}
-                    {' '}
-                    Views
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {selectedVideo.description}
-                  </Typography>
-                </div>
+
+                {
+                  isAuthenticated
+                    ? (
+                      <Box>
+                        <Avatar {
+                          ...stringAvatar(userData?.username)
+                        }
+                        />
+                      </Box>
+                    )
+
+                    : ''
+                }
+              </Box>
+
+              <CardContent sx={{ border: 'none' }}>
+
                 <Card className="Comments" sx={{ width: '60%' }}>
                   <Typography>
                     Comments:
@@ -322,4 +318,18 @@ function VideoPlayerPage() {
   );
 }
 
-export default VideoPlayerPage;
+VideoPlayerPage.propTypes = {
+  toggleSidebar: PropTypes.func.isRequired,
+  handleUserState: PropTypes.func.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+  userData: PropTypes.instanceOf(Object).isRequired,
+  updateUserData: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.user.isAuthenticated,
+  userData: state.user.user,
+});
+
+export default connect(mapStateToProps)(VideoPlayerPage);

@@ -25,7 +25,7 @@ function VideoCard(props) {
       <CardContent sx={{ padding: 0, paddingTop: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'start' }}>
           <Avatar {
-                  ...stringAvatar(video.uploadedBy.name, {
+                  ...stringAvatar(video.uploadedBy?.name, {
                     width: 35,
                     height: 35,
                     mr: 1,
@@ -36,7 +36,7 @@ function VideoCard(props) {
               {video.title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-              {video.uploadedBy.name}
+              {video.uploadedBy?.name}
             </Typography>
             <Typography
               variant="body2"
