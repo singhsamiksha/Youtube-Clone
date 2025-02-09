@@ -26,14 +26,22 @@ const videoSchema = new mongoose.Schema({
   channel: { type: mongoose.Types.ObjectId, ref: ChannelModel, required: true },
   uploadedBy: { type: mongoose.Types.ObjectId, ref: UserModel, required: true },
   likedBy: [{ type: mongoose.Types.ObjectId, ref: UserModel, required: true }],
-  dislikeBy: [{ type: mongoose.Types.ObjectId, ref: UserModel, required: true }],
+  dislikedBy: [{ type: mongoose.Types.ObjectId, ref: UserModel, required: true }],
   uploadDate: Date,
   comments: [
     {
-      commentId: String,
-      userId: String,
+      userId: { type: mongoose.Types.ObjectId, ref: UserModel, required: true },
       text: String,
-      timestamp: String,
+      likedBy: [{
+        type: mongoose.Types.ObjectId, ref: UserModel, required: true, default: [],
+      }],
+      dislikedBy: [{
+        type: mongoose.Types.ObjectId, ref: UserModel, required: true, default: [],
+      }],
+      timestamp: {
+        type: Date,
+        default: () => Date.now(),
+      },
     },
   ],
 });

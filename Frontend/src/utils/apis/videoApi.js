@@ -49,3 +49,28 @@ export const fetchVideo = async (params) => {
     setLoader(false);
   }
 };
+
+export const postCommentForVideoAPI = async (params) => {
+  const { payload, setters } = params;
+  const { videoId, commentText } = payload;
+  const { setError, setLoader, onSuccessHandler } = setters;
+
+  try {
+    setLoader(true);
+    const token = getHeaderToken();
+    const response = await axios.post(`${baseUrl}/video/${videoId}/comment`, { commentText }, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      const { comments } = response.data.data;
+      onSuccessHandler(comments);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  } finally {
+    setLoader(false);
+  }
+};

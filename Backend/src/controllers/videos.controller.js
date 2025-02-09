@@ -63,16 +63,59 @@ VideoController.getVideoDetails = async (req, res) => {
     .populate([
       { path: 'channel' },
       { path: 'uploadedBy' },
+      { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
     ]).lean();
 
   return res.json({
     data: {
       video: {
         ...video,
+        comments: (video.comments || []).sort((b, a) => a.timestamp - b.timestamp),
         uploadedBy: {
           name: video?.uploadedBy?.username,
         },
       },
+    },
+  });
+};
+
+VideoController.addVideoComment = async (req, res) => {
+  const { user } = req;
+  const { videoId } = req.params;
+  const { commentText } = req.body;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  let video = await VideoModel.findOne({ _id: videoId });
+
+  if (!video) {
+    return res.status(403).json({
+      message: 'Invalid resource provided',
+    });
+  }
+
+  await VideoModel.findOneAndUpdate(video._id, {
+    $push: {
+      comments: {
+        userId: user._id,
+        text: commentText,
+      },
+    },
+  });
+
+  video = await VideoModel.findOne({ _id: videoId }).populate([
+    { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
+  ]);
+
+  const comments = (video.comments || [])
+    .filter((comment) => comment?.userId)
+    .sort((b, a) => a.timestamp - b.timestamp);
+
+  return res.json({
+    data: {
+      comments,
     },
   });
 };

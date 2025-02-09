@@ -20,17 +20,11 @@ import { useParams } from 'react-router-dom';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { stringAvatar } from '../../utils/common';
 import { fetchVideo, getDashboardVideos } from '../../utils/apis/videoApi';
+import VideoComments from './VideoComments';
 
-function VideoPlayerPage(props) {
-  const {
-    isAuthenticated,
-    userData,
-  } = props;
-
+function VideoPlayerPage() {
   const { videoId } = useParams();
   const theme = useTheme();
 
@@ -118,7 +112,7 @@ function VideoPlayerPage(props) {
                       appId: '12345',
                     },
                   }}
-                  url={selectedVideo.videoUrl}
+                  url={selectedVideo?.videoUrl}
                   width="100%"
                   // height="100%"
                   style={{
@@ -136,7 +130,7 @@ function VideoPlayerPage(props) {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                     <Avatar {
-                      ...stringAvatar(selectedVideo.uploadedBy?.name, { width: 45, height: 45 })
+                      ...stringAvatar(selectedVideo.channel?.channelName, { width: 45, height: 45 })
                     }
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
@@ -177,7 +171,7 @@ function VideoPlayerPage(props) {
                       >
                         <ThumbUpOutlinedIcon fontSize="small" />
                         <Typography sx={{ ml: 1 }} variant="subtitle2">
-                          {selectedVideo.likedBy.length || 0}
+                          {selectedVideo.likedBy?.length || 0}
                         </Typography>
                       </Button>
                       <Divider orientation="vertical" flexItem />
@@ -187,7 +181,6 @@ function VideoPlayerPage(props) {
                           borderTopLeftRadius: 0,
                           borderBottomLeftRadius: 0,
                           color: theme.palette.text.primary,
-                          // fontWeight: 100,
                         }}
                       >
                         <ThumbDownOutlinedIcon fontSize="small" />
@@ -199,9 +192,6 @@ function VideoPlayerPage(props) {
                       sx={{
                         borderRadius: 5,
                         background: theme.palette.divider,
-
-                        // borderTopLeftRadius: 0,
-                        // borderBottomLeftRadius: 0,
                         color: theme.palette.text.primary,
                       }}
                     >
@@ -213,46 +203,12 @@ function VideoPlayerPage(props) {
               </Box>
 
               <Box sx={{ mt: 5 }}>
-                <Typography variant="h6" fontWeight={700}>
-                  {selectedVideo.comments?.length || 0}
-                  {' '}
-                  Comments
-                </Typography>
-
-                {
-                  isAuthenticated
-                    ? (
-                      <Box>
-                        <Avatar {
-                          ...stringAvatar(userData?.username)
-                        }
-                        />
-                      </Box>
-                    )
-
-                    : ''
-                }
+                <VideoComments
+                  video={selectedVideo}
+                  setVideo={setSelectedVideo}
+                />
               </Box>
-
-              <CardContent sx={{ border: 'none' }}>
-
-                <Card className="Comments" sx={{ width: '60%' }}>
-                  <Typography>
-                    Comments:
-                    {selectedVideo.comments.length}
-                  </Typography>
-                  <input placeholder="Add a Comment" />
-                  {selectedVideo.comments.map((comment) => (
-                    <div key={comment.commentId}>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {comment.text}
-                      </Typography>
-                    </div>
-                  ))}
-                </Card>
-              </CardContent>
             </>
-
           )}
 
       </Grid2>
@@ -318,18 +274,4 @@ function VideoPlayerPage(props) {
   );
 }
 
-VideoPlayerPage.propTypes = {
-  toggleSidebar: PropTypes.func.isRequired,
-  handleUserState: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  userData: PropTypes.instanceOf(Object).isRequired,
-  updateUserData: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.user.isAuthenticated,
-  userData: state.user.user,
-});
-
-export default connect(mapStateToProps)(VideoPlayerPage);
+export default VideoPlayerPage;
