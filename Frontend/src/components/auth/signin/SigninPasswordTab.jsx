@@ -9,10 +9,10 @@ import {
   Checkbox,
   useTheme,
 } from '@mui/material';
-import { PASSWORD_MIN_LENGTH } from '../../constants';
 import PropTypes from 'prop-types';
+import { PASSWORD_MIN_LENGTH } from '../../../constants';
 
-const SigninPasswordTab = (props) => {
+function SigninPasswordTab(props) {
   const {
     email,
     password,
@@ -29,7 +29,7 @@ const SigninPasswordTab = (props) => {
 
   const validatePassword = (value) => {
     let newError = '';
-    if(value.includes(' ')) {
+    if (value.includes(' ')) {
       newError = 'Password should not contains space';
     }
     if (value.trim().length < PASSWORD_MIN_LENGTH) {
@@ -52,16 +52,16 @@ const SigninPasswordTab = (props) => {
 
   return (
     <>
-      <Typography variant='h5' sx={{ mt: 2, fontWeight: 'bold' }}>Welcome</Typography>
-      <Typography variant='body2' color='text.secondary' sx={{ mb: 3 }}>{email}</Typography>
+      <Typography variant="h5" sx={{ mt: 2, fontWeight: 'bold' }}>Welcome</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>{email}</Typography>
       <Box sx={{ width: '100%' }}>
         {errorComponent}
         <TextField
           fullWidth
           required
-          label='Password'
-          variant='outlined'
-          margin='normal'
+          label="Password"
+          variant="outlined"
+          margin="normal"
           type={showPassword ? 'text' : 'password'}
           value={password}
           error={error}
@@ -80,14 +80,14 @@ const SigninPasswordTab = (props) => {
             control={
               <Checkbox checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
             }
-            label='Show Password'
+            label="Show Password"
             sx={{ mb: 2 }}
           />
 
           <Link
-            href='#'
-            variant='body1'
-            underline='hover'
+            href="#"
+            variant="body1"
+            underline="hover"
             sx={{
               display: 'block',
               color: theme.palette.primary.main,
@@ -102,8 +102,8 @@ const SigninPasswordTab = (props) => {
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link
-            variant='body1'
-            component='button'
+            variant="body1"
+            component="button"
             sx={{
               display: 'block',
               color: theme.palette.primary.main,
@@ -114,13 +114,13 @@ const SigninPasswordTab = (props) => {
           >
             Not You? Login again
           </Link>
-          <Button variant='contained' onClick={submitForm}>Next</Button>
+          <Button variant="contained" onClick={submitForm}>Next</Button>
         </Box>
       </Box>
 
     </>
   );
-};
+}
 
 SigninPasswordTab.propTypes = {
   email: PropTypes.string.isRequired,

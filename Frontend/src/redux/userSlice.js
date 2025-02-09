@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -18,7 +19,7 @@ const userSlice = createSlice({
     },
     updateUserChannels: (state, action) => {
       const { payload } = action;
-      if(state.isAuthenticated && state.user.userId) {
+      if (state.isAuthenticated && state.user.userId) {
         state.user = {
           ...state.user,
           channels: payload,

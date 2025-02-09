@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import Header from './Header';
 import { Box, Toolbar } from '@mui/material';
-import Sidebar from '../HomePage-Components/Sidebar';
-import SideDetailbar from '../HomePage-Components/SideDetailbar';
+import Header from './Header';
+import SideBarCompact from '../homepage/SideBarCompact';
+import SideDetailbar from '../homepage/SideBarExpanded';
 
-const AppDrawer = (props) => {
+function AppDrawer(props) {
   const { children } = props;
 
   const [activeSidebar, setActiveSidebar] = useState(false);
@@ -19,17 +19,17 @@ const AppDrawer = (props) => {
       <Header toggleSidebar={handleSidebar} />
       <Box sx={{ width: '100%', height: '100vh', display: 'flex' }}>
         <Box sx={{ overflowY: 'auto', scrollbarWidth: 'none', minWidth: 'fit-content' }}>
-          <Toolbar/>
-          {activeSidebar === false ? <Sidebar /> : <SideDetailbar />}
+          <Toolbar />
+          {activeSidebar === false ? <SideBarCompact /> : <SideDetailbar />}
         </Box>
         <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
-          <Toolbar/>
+          <Toolbar />
           {children}
         </Box>
       </Box>
     </Box>
   );
-};
+}
 
 AppDrawer.propTypes = {
   children: PropTypes.elementType.isRequired,

@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Box, Container, Grid2, IconButton, Paper, Snackbar, useTheme } from '@mui/material';
+import {
+  Alert, Box, Container, Grid2, IconButton, Paper, Snackbar, useTheme,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Page3 from './Page3';
 import Page4 from './Page4';
 import Page5 from './Page5';
-import { postUser, getUsers } from '../../utils/apis';
-import { useDispatch } from 'react-redux';
-import { updateUser } from '../../redux/userSlice';
-import GoogleIcon from '../../assets/icons/GoogleIcon';
-import { SIGNIN_PAGE_STATE } from '../../constants';
-import { useSearchParams } from 'react-router-dom';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { postUser, getUsers } from '../../../utils/apis';
+import { updateUser } from '../../../redux/userSlice';
+import GoogleIcon from '../../../assets/icons/GoogleIcon';
+import { SIGNIN_PAGE_STATE } from '../../../constants';
 import SigninEmailTab from './SigninEmailTab';
 import SigninPasswordTab from './SigninPasswordTab';
 
-const Signup = ({ handleMainbar }) => {
+function Signup({ handleMainbar }) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [currentPageView, setCurrentPageView] = useState(SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW);
@@ -56,7 +58,7 @@ const Signup = ({ handleMainbar }) => {
   };
 
   // Handle User Registration
-  const handleClick = async() => {
+  const handleClick = async () => {
     try {
       const user = await postUser(username, email, password, image);
 
@@ -84,12 +86,12 @@ const Signup = ({ handleMainbar }) => {
 
   const action = (
     <IconButton
-      size='small'
-      aria-label='close'
-      color='white'
+      size="small"
+      aria-label="close"
+      color="white"
       onClick={handleClose}
     >
-      <CloseIcon fontSize='small' />
+      <CloseIcon fontSize="small" />
     </IconButton>
   );
 
@@ -114,7 +116,7 @@ const Signup = ({ handleMainbar }) => {
     setError('');
   }
 
-  const submitLoginForm = async() => {
+  const submitLoginForm = async () => {
     try {
       if (password.trim() === '') {
         setError('Please enter the Password.');
@@ -162,8 +164,8 @@ const Signup = ({ handleMainbar }) => {
   return (
     <Grid2
       container
-      justifyContent='center'
-      alignItems='center'
+      justifyContent="center"
+      alignItems="center"
       sx={{
         minWidth: '100vw',
         minHeight: '100vh',
@@ -191,9 +193,9 @@ const Signup = ({ handleMainbar }) => {
           onClose={handleClose}
         >
           <Alert
-            severity='success'
+            severity="success"
             sx={{ width: '100%' }}
-            icon={<CheckCircleIcon fontSize='inherit' />}
+            icon={<CheckCircleIcon fontSize="inherit" />}
             onClose={handleClose}
           >
             Your Account is Successfully Signed In!
@@ -254,6 +256,6 @@ const Signup = ({ handleMainbar }) => {
 
     </Grid2>
   );
-};
+}
 
 export default Signup;

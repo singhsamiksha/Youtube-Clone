@@ -1,11 +1,22 @@
-import { Alert, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Stack, TextField } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Stack,
+  TextField,
+} from '@mui/material';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { connect } from 'react-redux';
 import { createChannelAPI, validateImageUrl } from '../../utils/apis';
 import { updateUserChannels } from '../../redux/userSlice';
-import { connect } from 'react-redux';
 
-const CreateChannelDialog = (props) => {
+function CreateChannelDialog(props) {
   const {
     isDialogOpen,
     handleClose,
@@ -23,7 +34,7 @@ const CreateChannelDialog = (props) => {
 
   const [loader, setLoader] = useState(false);
 
-  const handleCreateChannel = async() => {
+  const handleCreateChannel = async () => {
     let isValid = true;
     setLoader(true);
     if (!channelName) {
@@ -38,13 +49,13 @@ const CreateChannelDialog = (props) => {
       setChannelBannerError('Channel Name required');
     } else {
       const imageValid = await validateImageUrl(channelBanner);
-      if(!imageValid.isValid) {
+      if (!imageValid.isValid) {
         isValid = false;
         setChannelBannerError(imageValid.message);
       }
     }
 
-    if(isValid) {
+    if (isValid) {
       setChannelNameError('');
       setChannelBannerError('');
       setDescriptionError('');
@@ -78,9 +89,9 @@ const CreateChannelDialog = (props) => {
           autoFocus
           required
           fullWidth
-          margin='dense'
-          label='Channel Name'
-          variant='standard'
+          margin="dense"
+          label="Channel Name"
+          variant="standard"
           value={channelName}
           error={channelNameError}
           helperText={channelNameError}
@@ -90,9 +101,9 @@ const CreateChannelDialog = (props) => {
           required
           fullWidth
           multiline
-          margin='dense'
-          label='Description'
-          variant='standard'
+          margin="dense"
+          label="Description"
+          variant="standard"
           rows={3}
           value={description}
           error={descriptionError}
@@ -102,9 +113,9 @@ const CreateChannelDialog = (props) => {
         <TextField
           required
           fullWidth
-          margin='dense'
-          label='Channel Banner URL'
-          variant='standard'
+          margin="dense"
+          label="Channel Banner URL"
+          variant="standard"
           value={channelBanner}
           error={channelBannerError}
           helperText={channelBannerError}
@@ -116,13 +127,13 @@ const CreateChannelDialog = (props) => {
           {error
             ? (
               <Stack sx={{ width: '100%', paddingBottom: 1 }} spacing={2}>
-                <Alert severity='error'>{error}</Alert>
+                <Alert severity="error">{error}</Alert>
               </Stack>
             )
             : ''}
           <Box sx={{ textAlign: 'right', mt: 2 }}>
             <Button
-              variant='outlined'
+              variant="outlined"
               sx={{ mr: 2 }}
               onClick={handleClose}
             >
@@ -130,7 +141,7 @@ const CreateChannelDialog = (props) => {
             </Button>
             <Button
               loading={loader}
-              variant='contained'
+              variant="contained"
               disabled={loader}
               onClick={handleCreateChannel}
             >
@@ -142,7 +153,7 @@ const CreateChannelDialog = (props) => {
       </DialogActions>
     </Dialog>
   );
-};
+}
 
 CreateChannelDialog.propTypes = {
   isDialogOpen: PropTypes.bool.isRequired,

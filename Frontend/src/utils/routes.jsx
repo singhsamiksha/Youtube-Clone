@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
-import Video from '../components/Video-Component/video';
-import Channel from '../components/Channel-Component/Channel';
-import HomePage from '../components/HomePage-Components/HomePage';
-import Signin from '../components/Signin-components/Signin';
+import Video from '../components/common/Video';
+import Channel from '../components/channel/Channel';
+import HomePage from '../components/homepage/HomePage';
+import Signin from '../components/auth/signin/Signin';
 
 const appRouter = createBrowserRouter([
   { path: '/', element: <HomePage /> },

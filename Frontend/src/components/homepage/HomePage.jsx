@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import Tabs from '../Mainbar-Components/Tabs';
-import AllVideos from '../Mainbar-Components/AllVideos.jsx';
+import { Tabs } from '@mui/material';
+import { useState } from 'react';
+import AppDrawer from '../common/AppDrawer.jsx';
+import VideosGrid from './VideosGrid.jsx';
 
 const categories = [
   'All', 'Music', 'Mixes', 'Rowan Atkinson', 'Comedy clubs', 'Game shows',
   'Shark Tank', 'News', 'T-Series', 'Piyush Mishra', 'Jukebox', 'Live', 'Dramedy',
 ];
 
-const Mainbar = ({ search }) => {
+function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [mainBar, setMainBar] = useState(true);
 
@@ -16,7 +17,7 @@ const Mainbar = ({ search }) => {
   };
 
   return (
-    <>
+    <AppDrawer>
       {!!mainBar && (
         <Tabs
           categories={categories}
@@ -24,14 +25,14 @@ const Mainbar = ({ search }) => {
           setSelectedCategory={setSelectedCategory}
         />
       )}
-      <AllVideos
-        search={search}
+      <VideosGrid
+        search=""
         selectedCategory={selectedCategory}
         mainBar={mainBar}
         toggleMainBar={toggleMainBar}
       />
-    </>
+    </AppDrawer>
   );
-};
+}
 
-export default Mainbar;
+export default HomePage;

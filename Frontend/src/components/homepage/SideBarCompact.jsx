@@ -18,10 +18,11 @@ const list = [
   { icon: <HistoryIcon />, label: 'History' },
 ];
 
-const Sidebar = () => (
-  <Box sx={{ width: '100%', maxWidth: 200 }}>
-    <List>
-      {
+function SideBarCompact() {
+  return (
+    <Box sx={{ width: '100%', maxWidth: 200 }}>
+      <List>
+        {
         list.map((listItem) => (
           <ListItem key={listItem.label} disablePadding sx={{ mb: 2 }}>
             <ListItemButton sx={{ display: 'flex', flexDirection: 'column', padding: 0.5 }}>
@@ -45,8 +46,9 @@ const Sidebar = () => (
           </ListItem>
         ))
       }
-    </List>
-  </Box>
-);
+      </List>
+    </Box>
+  );
+}
 
-export default Sidebar;
+export default SideBarCompact;

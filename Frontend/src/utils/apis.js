@@ -13,7 +13,7 @@ const getHeaderToken = () => {
 
 const handleAPIError = (e) => e.response?.data?.message || e.message || e.code || 'Internal Server erorr';
 
-export const loginUser = async(params) => {
+export const loginUser = async (params) => {
   const { payload, setters } = params;
   const {
     setError,
@@ -36,7 +36,7 @@ export const loginUser = async(params) => {
   }
 };
 
-export const getAuthUser = async() => {
+export const getAuthUser = async () => {
   try {
     const token = getHeaderToken();
     if (token) {
@@ -57,7 +57,7 @@ export const getAuthUser = async() => {
   return null;
 };
 
-export const validateImageUrl = async(url) => {
+export const validateImageUrl = async (url) => {
   try {
     const response = await axios.head(url);
 
@@ -84,10 +84,10 @@ export async function postUser(username, email, password, image) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password,
-        image: image,
+        username,
+        email,
+        password,
+        image,
         channel: [],
       }),
     });
@@ -151,4 +151,3 @@ export async function createChannelAPI(params) {
     setLoader(false);
   }
 }
-

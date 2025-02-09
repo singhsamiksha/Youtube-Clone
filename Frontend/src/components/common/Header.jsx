@@ -30,13 +30,13 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilter';
 
 // Utils
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AppLogo from '../../assets/icons/appLogo';
 import { stringAvatar } from '../../utils/common';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { updateUser } from '../../redux/userSlice';
 import CreateChannelDialog from './CreateChannelDialog';
 
-const Header = (props) => {
+function Header(props) {
   const {
     toggleSidebar,
 
@@ -94,37 +94,38 @@ const Header = (props) => {
         paddingBottom: 1,
       }}
       >
-        <Avatar {...stringAvatar(userData?.name)}/>
+        <Avatar {...stringAvatar(userData?.name)} />
         <Box>
-          <Typography variant='body1' sx={{ ml: 1 }}>{userData?.name}</Typography>
-          <Typography variant='subtitle2' sx={{ ml: 1 }}>{userData?.email}</Typography>
+          <Typography variant="body1" sx={{ ml: 1 }}>{userData?.name}</Typography>
+          <Typography variant="subtitle2" sx={{ ml: 1 }}>{userData?.email}</Typography>
         </Box>
       </Box>
-      <Divider/>
-      <Typography variant='caption' sx={{ ml: 1.5, color: theme.palette.text.secondary }}>Channels</Typography>
+      <Divider />
+      <Typography variant="caption" sx={{ ml: 1.5, color: theme.palette.text.secondary }}>Channels</Typography>
       {(userData?.channels || []).map((channel) => (
-        <MenuItem key={channel._id} onClick={() => navigate(`/channels/${channel._id}`)} >
+        <MenuItem key={channel._id} onClick={() => navigate(`/channels/${channel._id}`)}>
           <ListItemIcon>
-            <MovieFilterOutlinedIcon fontSize='small' />
+            <MovieFilterOutlinedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>{channel.channelName}</ListItemText>
         </MenuItem>
       ))}
       <MenuItem
-        sx={{ color: theme.palette.primary.main }} onClick={() => {
+        sx={{ color: theme.palette.primary.main }}
+        onClick={() => {
           handleMenuClose();
           setCreateChannelDialogOpen(true);
         }}
       >
         <AddCircleOutlineIcon sx={{ color: 'inherit', mr: 1 }} />
-        <Typography color='primary'>
+        <Typography color="primary">
           Create your channel
         </Typography>
       </MenuItem>
-      <Divider/>
-      <MenuItem onClick={handleLogout} >
+      <Divider />
+      <MenuItem onClick={handleLogout}>
         <ListItemIcon>
-          <LogoutIcon fontSize='small' />
+          <LogoutIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText>Logout</ListItemText>
       </MenuItem>
@@ -153,7 +154,8 @@ const Header = (props) => {
         handleClose={() => setCreateChannelDialogOpen(false)}
       />
       <AppBar
-        position='fixed' sx={{ zIndex: theme.zIndex.drawer + 1, background: theme.palette.background.default }}
+        position="fixed"
+        sx={{ zIndex: theme.zIndex.drawer + 1, background: theme.palette.background.default }}
         elevation={0}
       >
         <Toolbar sx={{ }}>
@@ -165,9 +167,9 @@ const Header = (props) => {
             }}
           >
             <IconButton
-              size='large'
-              edge='start'
-              aria-label='open drawer'
+              size="large"
+              edge="start"
+              aria-label="open drawer"
               sx={{ mr: 2 }}
               onClick={toggleSidebar}
             >
@@ -187,9 +189,9 @@ const Header = (props) => {
           >
             <TextField
               fullWidth
-              id='outlined-start-adornment'
-              placeholder='Search'
-              size='small'
+              id="outlined-start-adornment"
+              placeholder="Search"
+              size="small"
               slotProps={{
                 input: {
                   sx: {
@@ -197,14 +199,14 @@ const Header = (props) => {
                     borderTopRightRadius: 0,
                     borderBottomRightRadius: 0,
                   },
-                  startAdornment: <InputAdornment position='start'><SearchIcon /></InputAdornment>,
+                  startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                 },
               }}
             />
             <Button
               disableElevation
-              aria-label='search'
-              variant='contained'
+              aria-label="search"
+              variant="contained"
               sx={{
                 border: 1,
                 borderColor: theme.palette.divider,
@@ -229,10 +231,10 @@ const Header = (props) => {
               ? (
                 <IconButton
                   aria-controls={menuId}
-                  size='small'
-                  edge='end'
-                  variant='outlined'
-                  aria-label='account of current user'
+                  size="small"
+                  edge="end"
+                  variant="outlined"
+                  aria-label="account of current user"
                   // aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
                 >
@@ -241,22 +243,23 @@ const Header = (props) => {
               )
               : (
                 <Button
-                  size='medium'
-                  edge='end'
-                  variant='outlined'
-                  aria-label='account of current user'
+                  size="medium"
+                  edge="end"
+                  variant="outlined"
+                  aria-label="account of current user"
                   aria-controls={menuId}
-                  aria-haspopup='true'
+                  aria-haspopup="true"
                   sx={{
                     color: theme.palette.primary.main,
                     borderColor: theme.palette.divider,
                     borderRadius: 5,
-                    pl: 1, pr: 1,
+                    pl: 1,
+                    pr: 1,
                     textTransform: 'none',
                   }}
                   onClick={() => navigate('/signin')}
                 >
-                  <AccountCircleOutlinedIcon fontSize='medium' sx={{ mr: 1 }} />
+                  <AccountCircleOutlinedIcon fontSize="medium" sx={{ mr: 1 }} />
                   Sign in
                 </Button>
               )
@@ -265,7 +268,7 @@ const Header = (props) => {
       </AppBar>
     </Box>
   );
-};
+}
 
 Header.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,

@@ -4,20 +4,22 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // MUI Components
-import { Alert, Grid2, Stack, useTheme } from '@mui/material';
+import {
+  Alert, Grid2, Stack, useTheme,
+} from '@mui/material';
 
 // Components
 import SigninEmailTab from './SigninEmailTab';
 import SigninPasswordTab from './SigninPasswordTab';
-import GoogleIcon from '../../assets/icons/GoogleIcon';
+import GoogleIcon from '../../../assets/icons/GoogleIcon';
 
 // Utils
-import { getAuthUser, loginUser } from '../../utils/apis';
-import { updateUser } from '../../redux/userSlice';
-import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../constants';
-import { validateEmail } from '../../utils/common';
+import { getAuthUser, loginUser } from '../../../utils/apis';
+import { updateUser } from '../../../redux/userSlice';
+import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../../constants';
+import { validateEmail } from '../../../utils/common';
 
-const Signin = (props) => {
+function Signin(props) {
   const {
     // Redux Dispatchers
     updateUserData,
@@ -47,7 +49,7 @@ const Signin = (props) => {
     }
   }, []);
 
-  const submitLoginForm = async() => {
+  const submitLoginForm = async () => {
     try {
       if (!validateEmail(userData.email)) {
         setError('Invalid email format');
@@ -98,8 +100,8 @@ const Signin = (props) => {
   return (
     <Grid2
       container
-      justifyContent='center'
-      alignItems='center'
+      justifyContent="center"
+      alignItems="center"
       sx={{
         minWidth: '100vw',
         minHeight: '100vh',
@@ -139,7 +141,7 @@ const Signin = (props) => {
               error
                 ? (
                   <Stack sx={{ width: '100%', paddingBottom: 1 }} spacing={2}>
-                    <Alert severity='error'>{error}</Alert>
+                    <Alert severity="error">{error}</Alert>
                   </Stack>
                 )
                 : ''
@@ -150,7 +152,7 @@ const Signin = (props) => {
 
     </Grid2>
   );
-};
+}
 
 Signin.propTypes = {
   updateUserData: PropTypes.func.isRequired,
