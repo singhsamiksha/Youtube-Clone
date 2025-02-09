@@ -22,7 +22,9 @@ import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { stringAvatar } from '../../utils/common';
-import { fetchVideo, getDashboardVideos, toggleVideoLikeAPI } from '../../utils/apis/videoApi';
+import {
+  fetchVideo, getDashboardVideos, markVideoViewAPI, toggleVideoLikeAPI,
+} from '../../utils/apis/videoApi';
 import VideoComments from './VideoComments';
 
 function VideoPlayerPage(props) {
@@ -96,6 +98,19 @@ function VideoPlayerPage(props) {
     }
   };
 
+  const markVideoView = () => {
+    markVideoViewAPI({
+      payload: {
+        videoId,
+      },
+      setters: {
+        setError: () => {},
+        onSuccessHandler: {},
+      },
+    })
+      .catch(() => {});
+  };
+
   if (error) {
     return (
       <Grid2 container sx={{ width: '100%', mt: 5 }} justifyContent="center" alignItems="center">
@@ -158,6 +173,7 @@ function VideoPlayerPage(props) {
                     url={selectedVideo?.videoUrl}
                     width="100%"
                     height="100%"
+                    onStart={() => markVideoView()}
                   />
                 </Box>
               </Box>

@@ -4,7 +4,7 @@ import {
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { stringAvatar } from '../../utils/common';
+import { humanizeTime, stringAvatar } from '../../utils/common';
 
 function VideoCard(props) {
   const { video } = props;
@@ -25,11 +25,11 @@ function VideoCard(props) {
       <CardContent sx={{ padding: 0, paddingTop: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'start' }}>
           <Avatar {
-                  ...stringAvatar(video.uploadedBy?.name, {
-                    width: 35,
-                    height: 35,
-                    mr: 1,
-                  })}
+            ...stringAvatar(video.channel?.channelName, {
+              width: 35,
+              height: 35,
+              mr: 1,
+            })}
           />
           <Box>
             <Typography variant="body1" fontWeight={500}>
@@ -53,7 +53,7 @@ function VideoCard(props) {
               {' '}
               <FiberManualRecordIcon sx={{ fontSize: 5, color: 'text.secondary' }} />
               {' '}
-              {video.uploadDate}
+              {humanizeTime(video.createdAt)}
             </Typography>
           </Box>
         </Box>

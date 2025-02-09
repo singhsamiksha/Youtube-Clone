@@ -15,6 +15,7 @@ export const VIDEO_CATEGORIES = {
   LIVE: 'Live',
   DRAMEDY: 'Dramedy',
   NEWS: 'News',
+  OTHERS: 'Other',
   // 'Rowan Atkinson',
   // 'Comedy clubs',
   // 'Game shows',

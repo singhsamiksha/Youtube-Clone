@@ -23,3 +23,22 @@ Auth.authenticateJWTToken = async (req, res, next) => {
     return res.status(400).json({ message: 'Invalid token' });
   }
 };
+
+Auth.optionalTokenMiddleware = async (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1];
+  if (!token) return next();
+
+  try {
+    const decoded = TokenHelper.verifyToken(token);
+    const { userId } = decoded;
+
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return next();
+    }
+    req.user = user;
+    return next();
+  } catch (err) {
+    return next();
+  }
+};

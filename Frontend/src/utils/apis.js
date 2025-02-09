@@ -29,7 +29,24 @@ export const validateImageUrl = async (url) => {
     }
     return { isValid: false, message: 'The provided URL is not an image' };
   } catch {
-    return { isValid: false, message: 'Invalid image URL or resource not found' };
+    return { isValid: true, message: 'Invalid image URL or resource not found' };
+  }
+};
+
+export const embedYouTube = async (url) => {
+  try {
+    const response = await axios.get(`https://www.youtube.com/oembed?url=${url}&format=json`);
+
+    if (response.status === 200 && response?.data?.title) {
+      return {
+        title: response?.data?.title,
+        thumnailURL: response.data.thumbnail_url,
+      };
+    }
+
+    return null;
+  } catch {
+    return null;
   }
 };
 

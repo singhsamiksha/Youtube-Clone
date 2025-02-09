@@ -25,7 +25,7 @@ const channelSchema = new mongoose.Schema({
   ],
   // There will be youtube video URLs that belongs to this channel
   videos: [
-    { type: String },
+    { type: mongoose.Types.ObjectId, ref: 'Videos' },
   ],
 });
 

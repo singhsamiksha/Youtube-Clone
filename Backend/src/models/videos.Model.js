@@ -3,7 +3,7 @@ import UserModel from './users.model.js';
 import ChannelModel from './channels.Model.js';
 
 const videoSchema = new mongoose.Schema({
-  videoId: {
+  videoUrl: {
     type: String,
     required: true,
   },
@@ -20,14 +20,15 @@ const videoSchema = new mongoose.Schema({
     required: true,
   },
   views: {
-    type: String,
+    type: Number,
     required: true,
+    default: 0,
   },
+  category: { type: String, required: true },
   channel: { type: mongoose.Types.ObjectId, ref: ChannelModel, required: true },
   uploadedBy: { type: mongoose.Types.ObjectId, ref: UserModel, required: true },
   likedBy: [{ type: mongoose.Types.ObjectId, ref: UserModel, required: true }],
   dislikedBy: [{ type: mongoose.Types.ObjectId, ref: UserModel, required: true }],
-  uploadDate: Date,
   comments: [
     {
       userId: { type: mongoose.Types.ObjectId, ref: UserModel, required: true },

@@ -4,6 +4,7 @@ import DataHelper from '../helpers/data.js';
 import TokenHelper from '../helpers/token.js';
 import ChannelModel from '../models/channels.Model.js';
 import UserModel from '../models/users.model.js';
+import ErrorUtil from '../helpers/error.js';
 
 const UserController = {};
 export default UserController;
@@ -52,8 +53,7 @@ UserController.signinUser = async (req, res) => {
       message: 'Password is incorrect',
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({ message: 'An error occurred', error: error.message });
+    return ErrorUtil.APIError(error, res);
   }
 };
 
@@ -80,8 +80,7 @@ UserController.getAuthUser = async (req, res) => {
       message: 'You is not authenticated',
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).send({ message: 'An error occurred', error: error.message });
+    return ErrorUtil.APIError(error, res);
   }
 };
 

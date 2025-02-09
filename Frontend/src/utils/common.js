@@ -1,9 +1,5 @@
 import moment from 'moment';
 
-export const APPErrorUtil = (...e) => {
-  console.error(...e);
-}
-
 const stringToColor = (string) => {
   let hash = 0;
   let i;
@@ -62,4 +58,20 @@ export const humanizeTime = (createdAt) => {
   if (diffInMinutes === 1) return 'a minute ago';
 
   return 'just now';
+};
+
+export const APPErrorUtil = (...e) => {
+  console.error(...e);
+};
+
+export const extractVideoId = (url) => {
+  // eslint-disable-next-line no-useless-escape
+  const regex = /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|\S+\/\S+\?v=|\S+?\/v\/|(?:\S+\?v=)))?([\w-]{11})/;
+  const match = url.match(regex);
+  return match ? match[1] : null; // Return the video ID if matched, or null if no match
+};
+
+export const isValidYouTubeUrl = (url) => {
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube|youtu|youtube-nocookie)\.(com|be)\/(watch\?v=|embed\/|v\/|shorts\/|.+\/videos\/)([a-zA-Z0-9_-]{11})(\S+)?$/;
+  return youtubeRegex.test(url);
 };

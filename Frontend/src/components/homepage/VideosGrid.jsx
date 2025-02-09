@@ -5,11 +5,12 @@ import {
   Alert,
   Grid2,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 import { getDashboardVideos } from '../../utils/apis/videoApi';
 import VideoCard from '../common/VideoCard';
 
 function VideosGrid({
-  search = '', selectedCategory,
+  selectedCategory,
 }) {
   const [videos, setVideos] = useState([]);
   const [loader, setLoader] = useState(true);
@@ -27,10 +28,7 @@ function VideosGrid({
   }, []);
 
   // Filter videos based on search and selected category
-  const filteredVideos = videos.filter((video) => (selectedCategory === 'All'
-    ? video.title.toLowerCase().includes(search.toLowerCase())
-    : video.title.toLowerCase().includes(search.toLowerCase())
-    && video.title.toLowerCase().includes((selectedCategory || '').toLowerCase())));
+  const filteredVideos = videos.filter((video) => (selectedCategory === 'All' ? true : video.category === selectedCategory));
 
   if (error) {
     return (
@@ -61,7 +59,7 @@ function VideosGrid({
         <Grid2
           key={video._id}
           size={{
-            xs: 12, sm: 6, md: 4, lg: 3,
+            xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4,
           }}
         >
           <VideoCard video={video} />
@@ -71,5 +69,9 @@ function VideosGrid({
     </Grid2>
   );
 }
+
+VideosGrid.propTypes = {
+  selectedCategory: PropTypes.string.isRequired,
+};
 
 export default VideosGrid;

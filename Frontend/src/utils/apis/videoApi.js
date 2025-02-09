@@ -99,6 +99,27 @@ export const toggleVideoLikeAPI = async (params) => {
   }
 };
 
+export const markVideoViewAPI = async (params) => {
+  const { payload, setters } = params;
+  const { videoId } = payload;
+  const { setError, onSuccessHandler } = setters;
+
+  try {
+    const token = getHeaderToken();
+    const response = await axios.put(`${baseUrl}/video/${videoId}/view`, {}, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      onSuccessHandler();
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  }
+};
+
 export const toggleCommentLikeAPI = async (params) => {
   const { payload, setters } = params;
   const { videoId, commentId, like } = payload;
@@ -166,6 +187,43 @@ export const editCommentAPI = async (params) => {
     if (response?.data?.data) {
       const { comments } = response.data.data;
       onSuccessHandler(comments);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  } finally {
+    setLoader(false);
+  }
+};
+
+export const uploadVideo = async (params) => {
+  const { payload, setters } = params;
+  const {
+    youtubeURL,
+    videoTitle,
+    videoDescription,
+    videoThumbnailURL,
+    videoCategory,
+    channelId,
+  } = payload;
+  const { setError, setLoader, onSuccessHandler } = setters;
+
+  try {
+    setLoader(true);
+    const token = getHeaderToken();
+    const response = await axios.post(`${baseUrl}/channel/${channelId}/video`, {
+      youtubeURL,
+      videoTitle,
+      videoDescription,
+      videoThumbnailURL,
+      videoCategory,
+    }, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      onSuccessHandler();
     }
   } catch (e) {
     setError(handleAPIError(e));
