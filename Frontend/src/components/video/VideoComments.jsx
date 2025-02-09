@@ -6,6 +6,7 @@ import {
   useTheme,
   IconButton,
   Divider,
+  TextField,
 } from '@mui/material';
 
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -17,10 +18,10 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { stringAvatar } from '../../utils/common';
 import CommentPush from './CommentPush';
-import { deleteCommentAPI, toggleCommentLikeAPI } from '../../utils/apis/videoApi';
+import { deleteCommentAPI, editCommentAPI, toggleCommentLikeAPI } from '../../utils/apis/videoApi';
 
 function VideoComments(props) {
   const {
@@ -32,7 +33,8 @@ function VideoComments(props) {
 
   const { userId } = userData || {};
   const theme = useTheme();
-  // const navigate = useNavigate();
+
+  const [editMode, setEditMode] = useState(false);
 
   const updateVideoComments = (comments) => {
     setVideo({ ...video, comments });
@@ -71,6 +73,24 @@ function VideoComments(props) {
         setError: () => {},
         onSuccessHandler: (comments) => {
           updateVideoComments(comments);
+        },
+      },
+    })
+      .catch(() => {});
+  };
+  const submitCommentEditForVideo = () => {
+    editCommentAPI({
+      payload: {
+        videoId: video?._id,
+        commentId: editMode?._id,
+        commentText: editMode.text,
+      },
+      setters: {
+        setLoader: () => {},
+        setError: () => {},
+        onSuccessHandler: (comments) => {
+          updateVideoComments(comments);
+          setEditMode(false);
         },
       },
     })
@@ -124,9 +144,63 @@ function VideoComments(props) {
                   </Typography>
                 </Box>
 
-                <Typography variant="body2" sx={{ width: '100%' }}>
-                  {comment.text}
-                </Typography>
+                {
+                  editMode && editMode?._id === comment?._id
+                    ? (
+                      <Box
+                        sx={{
+                          width: '100%',
+                          textAlign: 'right',
+                        }}
+                      >
+                        <TextField
+                          fullWidth
+                          label="Add a comment"
+                          variant="standard"
+                          value={editMode.text}
+                          color={theme.palette.text.primary}
+                          onChange={(e) => setEditMode({
+                            ...editMode,
+                            text: e.target.value,
+                          })}
+                        />
+
+                        <Button
+                          size="small"
+                          disableElevation
+                          sx={{
+                            borderRadius: 5,
+                            mt: 1,
+                            color: theme.palette.text.primary,
+                          }}
+                          onClick={() => setEditMode(false)}
+                        >
+                          Cancel
+                        </Button>
+
+                        <Button
+                          size="small"
+                          variant="contained"
+                          sx={{
+                            mt: 1,
+                            ml: 1,
+                            borderRadius: 5,
+                            textTransform: 'none',
+                          }}
+                          disableElevation
+                          disabled={!editMode.text}
+                          onClick={submitCommentEditForVideo}
+                        >
+                          Comment
+                        </Button>
+                      </Box>
+                    )
+                    : (
+                      <Typography variant="body2" sx={{ width: '100%' }}>
+                        {comment.text}
+                      </Typography>
+                    )
+                }
 
                 <Box sx={{ display: 'flex', mt: 1 }}>
                   <Button
@@ -169,6 +243,7 @@ function VideoComments(props) {
                               ml: 2,
                               color: theme.palette.text.primary,
                             }}
+                            onClick={() => setEditMode(comment)}
                           >
                             <EditIcon />
                           </IconButton>

@@ -148,3 +148,28 @@ export const deleteCommentAPI = async (params) => {
     setLoader(false);
   }
 };
+
+export const editCommentAPI = async (params) => {
+  const { payload, setters } = params;
+  const { videoId, commentId, commentText } = payload;
+  const { setError, setLoader, onSuccessHandler } = setters;
+
+  try {
+    setLoader(true);
+    const token = getHeaderToken();
+    const response = await axios.put(`${baseUrl}/video/${videoId}/comment/${commentId}`, { commentText }, {
+      headers: {
+        Authorization: token,
+      },
+    });
+
+    if (response?.data?.data) {
+      const { comments } = response.data.data;
+      onSuccessHandler(comments);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  } finally {
+    setLoader(false);
+  }
+};

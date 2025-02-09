@@ -250,6 +250,53 @@ VideoController.deleteComment = async (req, res) => {
   });
 };
 
+VideoController.editComment = async (req, res) => {
+  const { user } = req;
+  const { videoId, commentId } = req.params;
+  const { commentText } = req.body;
+
+  if (!videoId) {
+    return res.status(403).json({ message: 'Invalid data provided' });
+  }
+
+  let video = await VideoModel.findOne({ _id: videoId });
+
+  if (!video) {
+    return res.status(403).json({
+      message: 'Invalid resource provided',
+    });
+  }
+
+  const updatedVideo = await VideoModel.updateOne(
+    { _id: videoId },
+    {
+      $set: {
+        'comments.$[elem].text': commentText,
+      },
+    },
+    {
+      arrayFilters: [{ 'elem._id': commentId, 'elem.userId': user._id }],
+      new: true,
+    },
+  );
+
+  if (!updatedVideo) {
+    return res.status(404).json({ message: 'Comment not found or unauthorized' });
+  }
+
+  video = await VideoModel.findOne({ _id: videoId }).populate([
+    { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
+  ]);
+
+  const comments = (video.comments || [])
+    .filter((comment) => comment?.userId)
+    .sort((b, a) => a.timestamp - b.timestamp);
+
+  return res.json({
+    data: { comments },
+  });
+};
+
 VideoController.createVideo = (req, res) => {
   const {
     title, thumbnailUrl, description, channelId, uploader, views, likes, dislikes, uploadDate, comments,

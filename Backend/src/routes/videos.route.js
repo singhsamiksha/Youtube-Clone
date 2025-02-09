@@ -12,5 +12,6 @@ router.put('/:videoId/like', Auth.authenticateJWTToken, VideoController.toggleVi
 router.post('/:videoId/comment', Auth.authenticateJWTToken, VideoController.addVideoComment);
 router.put('/:videoId/comment/:commentId/like', Auth.authenticateJWTToken, VideoController.toggleCommentLike);
 router.delete('/:videoId/comment/:commentId', Auth.authenticateJWTToken, VideoController.deleteComment);
+router.put('/:videoId/comment/:commentId', Auth.authenticateJWTToken, VideoController.editComment);
 
 export default router;
