@@ -31,6 +31,7 @@ export default [
       'no-param-reassign': ['error', { props: false }],
       'no-plusplus': 'off',
       'linebreak-style': 0,
+      'import/extensions': ['error', { js: 'ignorePackages' }],
       camelcase: 'off',
       indent: ['error', 2],
       semi: ['error', 'always'],
