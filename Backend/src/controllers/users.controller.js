@@ -144,7 +144,7 @@ UserController.registerUser = async (req, res) => {
       displayName: fullName,
       username,
       email,
-      password,
+      password: await DataHelper.encrypt(password),
       avatar,
     });
 
