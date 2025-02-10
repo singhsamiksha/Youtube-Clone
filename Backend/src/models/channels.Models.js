@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import UserModel from './users.model.js';
+import UserModel from './users.Models.js';
 
 const channelSchema = new mongoose.Schema({
   channelName: {
