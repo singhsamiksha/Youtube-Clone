@@ -13,6 +13,8 @@ import { getChannels } from '../../utils/apis/channelApi';
 import AddVideoDialog from '../common/AddVideoDialog';
 import VideoCard from '../common/VideoCard';
 import ChannelAvatar from '../common/ChannelAvatar';
+import { useSelector } from 'react-redux';
+
 
 function Channel() {
   const { channelId } = useParams();
@@ -21,6 +23,8 @@ function Channel() {
   const [addVideoDialogOpen, setAddVideoDialogOpen] = useState(false);
   const [error, setError] = useState('');
   const [selectedChannel, setSelectedChannel] = useState();
+
+  const user = useSelector((state) => state.user.user);
 
   const fetchChannel = () => {
     getChannels({
@@ -42,8 +46,6 @@ function Channel() {
     }
     setLoader(false);
   }, [channelId]);
-
-  const user = { name: 'John Doe' }; // Active user
 
   if (error) {
     return (
@@ -89,7 +91,7 @@ function Channel() {
         <Box>
           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{selectedChannel?.channelName}</Typography>
           <Box sx={{ display: 'flex', gap: 2, color: 'gray' }}>
-            <Typography>{user.name}</Typography>
+            <Typography>@{user.username}</Typography>
             <Typography>
               {selectedChannel?.subscribers?.length || 0}
               {' '}
