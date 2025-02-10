@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -35,6 +35,7 @@ import AppLogo from '../../assets/icons/AppLogo';
 import { updateUser } from '../../redux/userSlice';
 import CreateChannelDialog from './CreateChannelDialog';
 import UserAvatar from './UserAvatar';
+import { getAuthUser } from '../../utils/apis/userApi';
 
 function Header(props) {
   const {
@@ -54,6 +55,12 @@ function Header(props) {
   const [createChannelDialogOpen, setCreateChannelDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      getAuthUser().then((user) => updateUserData({ user }));
+    }
+  }, [isMenuOpen]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -87,7 +94,7 @@ function Header(props) {
     >
       <Box sx={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'start',
         paddingLeft: 2,
         paddingRight: 5,
         paddingTop: 1,
@@ -97,7 +104,10 @@ function Header(props) {
         <UserAvatar user={userData} />
         <Box>
           <Typography variant="body1" sx={{ ml: 1 }}>{userData?.displayName}</Typography>
-          <Typography variant="subtitle2" sx={{ ml: 1 }}>{userData?.email}</Typography>
+          <Typography variant="subtitle2" sx={{ ml: 1 }}>
+            @
+            {userData?.username}
+          </Typography>
         </Box>
       </Box>
       <Divider />
