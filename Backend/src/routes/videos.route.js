@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/dashboard', VideoController.getVideosForUserDashboard);
 router.get('/:videoId', VideoController.getVideoDetails);
 router.delete('/:videoId', Auth.authenticateJWTToken, VideoController.deleteVideoFromChannel);
+router.put('/:videoId', Auth.authenticateJWTToken, VideoController.updateVideo);
 router.put('/:videoId/like', Auth.authenticateJWTToken, VideoController.toggleVideoLike);
 router.put('/:videoId/view', VideoController.handleVideoView);
 

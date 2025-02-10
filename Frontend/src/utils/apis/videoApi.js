@@ -255,3 +255,29 @@ export const deleteVideo = async (params) => {
     setError(handleAPIError(e));
   }
 };
+
+export const updateVideo = async (params) => {
+  const { payload, setters } = params;
+  const { videoId, title, description } = payload;
+  const { setError, onSuccessHandler } = setters;
+
+  try {
+    const token = getHeaderToken();
+    const response = await axios.put(
+      `${baseUrl}/video/${videoId}`,
+      { title, description },
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+
+    if (response?.data?.data) {
+      const { comments } = response.data.data;
+      onSuccessHandler(comments);
+    }
+  } catch (e) {
+    setError(handleAPIError(e));
+  }
+};

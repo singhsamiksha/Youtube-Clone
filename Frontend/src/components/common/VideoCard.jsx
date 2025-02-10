@@ -10,6 +10,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { humanizeTime } from '../../utils/common';
 import ChannelAvatar from './ChannelAvatar';
 import { deleteVideo } from '../../utils/apis/videoApi';
+import VideoEditDialog from './VideoEditDialog';
 
 function VideoCard(props) {
   const {
@@ -24,6 +25,7 @@ function VideoCard(props) {
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isEditOpen, setIsEditOpen] = useState(null);
 
   // Handle menu open
   const handleMenuOpen = (event) => {
@@ -37,8 +39,9 @@ function VideoCard(props) {
   };
 
   const onEdit = () => {
-    console.log('edit viewo ', video);
+    setIsEditOpen(true);
   };
+
   const onDelete = () => {
     deleteVideo({
       payload: {
@@ -52,7 +55,7 @@ function VideoCard(props) {
   };
 
   const handleCardClick = (event) => {
-    if (anchorEl) {
+    if (anchorEl || isEditOpen) {
       event.stopPropagation();
     } else {
       navigate(`/video/${video._id}`);
@@ -106,6 +109,15 @@ function VideoCard(props) {
           </Box>
           {allowEdit && isAuthenticated ? (
             <Box>
+
+              <VideoEditDialog
+                isOpen={isEditOpen}
+                handleClose={(success) => {
+                  setIsEditOpen(false);
+                  if (success) onVideoEdit();
+                }}
+                video={video}
+              />
 
               <IconButton
                 sx={{

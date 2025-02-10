@@ -354,10 +354,45 @@ VideoController.deleteVideoFromChannel = async (req, res) => {
       });
     }
 
+    await VideoModel.deleteOne({ _id: videoId });
+
     await ChannelModel.updateOne(
       { _id: video.channel },
       { $pull: { videos: videoId } },
     );
+
+    return res.json({
+      data: true,
+    });
+  } catch (error) {
+    return ErrorUtil.APIError(error, res);
+  }
+};
+VideoController.updateVideo = async (req, res) => {
+  try {
+    const { user } = req;
+    const { videoId } = req.params;
+    const { title, description } = req.body;
+
+    if (!videoId) {
+      return res.status(403).json({ message: 'Invalid data provided' });
+    }
+
+    const video = await VideoModel.findOne({
+      _id: videoId,
+      uploadedBy: user._id,
+    });
+
+    if (!video) {
+      return res.status(403).json({
+        message: 'Invalid resource provided',
+      });
+    }
+
+    video.title = title;
+    video.description = description;
+
+    await video.save();
 
     return res.json({
       data: true,
