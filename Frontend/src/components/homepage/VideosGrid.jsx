@@ -6,18 +6,23 @@ import {
   Grid2,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { useSearchParams } from 'react-router-dom';
 import { getDashboardVideos } from '../../utils/apis/videoApi';
 import VideoCard from '../common/VideoCard';
 
 function VideosGrid({
   selectedCategory,
 }) {
+  const [searchParams] = useSearchParams();
   const [videos, setVideos] = useState([]);
   const [loader, setLoader] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     getDashboardVideos({
+      payload: {
+        search: searchParams.get('search'),
+      },
       setters: {
         setLoader,
         setError,
@@ -25,7 +30,7 @@ function VideosGrid({
       },
     })
       .catch((e) => setError(e?.message || 'Internal server error'));
-  }, []);
+  }, [searchParams]);
 
   // Filter videos based on search and selected category
   const filteredVideos = videos.filter((video) => (selectedCategory === 'All' ? true : video.category === selectedCategory));

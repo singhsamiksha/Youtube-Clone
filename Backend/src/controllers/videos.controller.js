@@ -7,10 +7,17 @@ export default VideoController;
 
 VideoController.getVideosForUserDashboard = async (req, res) => {
   try {
-    const videoDetails = await VideoModel.find().populate([
+    const { search } = req.query;
+    const query = {};
+
+    if (search) {
+      query.title = { $regex: new RegExp(search, 'i') };
+    }
+
+    const videoDetails = await VideoModel.find(query).populate([
       { path: 'channel' },
       { path: 'uploadedBy' },
-    ]).lean();
+    ]).sort({ createdAt: -1 }).lean();
 
     if (!videoDetails || videoDetails.length === 0) {
       return res.status(404).send({ message: 'No videos found!' });

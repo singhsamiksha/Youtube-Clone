@@ -9,12 +9,11 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import { useSelector } from 'react-redux';
 import { getChannels } from '../../utils/apis/channelApi';
 import AddVideoDialog from '../common/AddVideoDialog';
 import VideoCard from '../common/VideoCard';
 import ChannelAvatar from '../common/ChannelAvatar';
-import { useSelector } from 'react-redux';
-
 
 function Channel() {
   const { channelId } = useParams();
@@ -91,7 +90,10 @@ function Channel() {
         <Box>
           <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{selectedChannel?.channelName}</Typography>
           <Box sx={{ display: 'flex', gap: 2, color: 'gray' }}>
-            <Typography>@{user.username}</Typography>
+            <Typography>
+              @
+              {user.username}
+            </Typography>
             <Typography>
               {selectedChannel?.subscribers?.length || 0}
               {' '}

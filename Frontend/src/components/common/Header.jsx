@@ -53,6 +53,7 @@ function Header(props) {
   const navigate = useNavigate();
 
   const [createChannelDialogOpen, setCreateChannelDialogOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -143,19 +144,11 @@ function Header(props) {
     </Menu>
   ) : '';
 
-  // <Menu
-  //       id="basic-menu"
-  //       anchorEl={anchorEl}
-  //       open={open}
-  //       onClose={handleClose}
-  //       MenuListProps={{
-  //         'aria-labelledby': 'basic-button',
-  //       }}
-  //     >
-  //       <MenuItem onClick={handleClose}>Profile</MenuItem>
-  //       <MenuItem onClick={handleClose}>My account</MenuItem>
-  //       <MenuItem onClick={handleClose}>Logout</MenuItem>
-  //     </Menu>
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const qs = new URLSearchParams({ search: searchValue });
+    navigate(`/?${qs.toString()}`);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -199,41 +192,47 @@ function Header(props) {
               borderRadius: 5,
             }}
           >
-            <TextField
-              fullWidth
-              id="outlined-start-adornment"
-              placeholder="Search"
-              size="small"
-              slotProps={{
-                input: {
-                  sx: {
-                    borderRadius: 5,
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
+            <form onSubmit={handleSearchSubmit} style={{ width: '100%', display: 'flex' }}>
+              <TextField
+                fullWidth
+                id="outlined-start-adornment"
+                placeholder="Search"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                size="small"
+                slotProps={{
+                  input: {
+                    sx: {
+                      borderRadius: 5,
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    },
+                    startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
                   },
-                  startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
-                },
-              }}
-            />
-            <Button
-              disableElevation
-              aria-label="search"
-              variant="contained"
-              sx={{
-                border: 1,
-                borderColor: theme.palette.divider,
-                borderLeft: 0,
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.divider,
-                borderRadius: 5,
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                paddingLeft: 2,
-                paddingRight: 2,
-              }}
-            >
-              <SearchIcon />
-            </Button>
+                }}
+              />
+              <Button
+                disableElevation
+                aria-label="search"
+                variant="contained"
+                type="submit"
+                sx={{
+                  border: 1,
+                  borderColor: theme.palette.divider,
+                  borderLeft: 0,
+                  color: theme.palette.text.primary,
+                  backgroundColor: theme.palette.divider,
+                  borderRadius: 5,
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  paddingLeft: 2,
+                  paddingRight: 2,
+                }}
+              >
+                <SearchIcon />
+              </Button>
+            </form>
+
           </Box>
 
           {renderMenu}

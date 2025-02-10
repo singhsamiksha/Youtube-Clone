@@ -1,10 +1,9 @@
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import AppDrawer from '../common/AppDrawer';
 import VideosGrid from './VideosGrid';
 import CategoriesTab from './CategoriesTab';
-import { useSelector } from 'react-redux';
 import Welcomebar from './Welcomebar';
-
 
 function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -25,13 +24,12 @@ function HomePage() {
         />
       )}
       {isAuthenticated ? (
-                <VideosGrid
-                search=""
-                selectedCategory={selectedCategory}
-                mainBar={mainBar}
-                toggleMainBar={toggleMainBar}
-                
-              />
+        <VideosGrid
+          search=""
+          selectedCategory={selectedCategory}
+          mainBar={mainBar}
+          toggleMainBar={toggleMainBar}
+        />
       ) : (
         <Welcomebar />
       )}
