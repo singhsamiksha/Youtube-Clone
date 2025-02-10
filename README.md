@@ -30,24 +30,30 @@ npm or yarn (For managing dependencies)
 
 ## Installation & Setup
 
--**1️. Clone the Repository**
+**1️. Clone the Repository**
 
 git clone https://github.com/singhsamiksha/YouTube-Clone.git
 cd YouTube-Clone
 
--**2️. Install Dependencies**
+Now do the following steps for both by 
+
+`cd Frontend`
+`cd Backend`
+
+
+**2️. Install Dependencies**
 
 For both frontend and backend, run:
 
 npm install
 
--**3️. Configure Environment Variables**
+**3️. Configure Environment Variables**
 
 Copy .env.example and create a new file named .env and paste the copied content here in this file.
 
-Fill in the required MongoDB URI and configurations.
+Fill in the required MongoDB URI and configurations. (Please see attachment there should be the env values with database having some data filled)
 
--**4️.  Run the Development Server**
+**4️.  Run the Development Server**
 
 npm run dev
 
