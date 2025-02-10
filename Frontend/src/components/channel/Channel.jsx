@@ -138,7 +138,10 @@ function Channel() {
                 {(selectedChannel?.videos || []).map((video) => (
                   <Grid2 key={video._id} item size={{ lg: 2.4 }}>
                     <VideoCard
+                      allowEdit
+                      channel={selectedChannel}
                       video={video}
+                      onVideoEdit={fetchChannel}
                     />
                   </Grid2>
                 ))}

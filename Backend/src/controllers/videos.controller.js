@@ -1,5 +1,6 @@
 import DataHelper from '../helpers/data.js';
 import ErrorUtil from '../helpers/error.js';
+import ChannelModel from '../models/channels.model.js';
 import VideoModel from '../models/videos.model.js';
 
 const VideoController = {};
@@ -327,6 +328,39 @@ VideoController.editComment = async (req, res) => {
 
     return res.json({
       data: { comments },
+    });
+  } catch (error) {
+    return ErrorUtil.APIError(error, res);
+  }
+};
+
+VideoController.deleteVideoFromChannel = async (req, res) => {
+  try {
+    const { user } = req;
+    const { videoId } = req.params;
+
+    if (!videoId) {
+      return res.status(403).json({ message: 'Invalid data provided' });
+    }
+
+    const video = await VideoModel.findOne({
+      _id: videoId,
+      uploadedBy: user._id,
+    });
+
+    if (!video) {
+      return res.status(403).json({
+        message: 'Invalid resource provided',
+      });
+    }
+
+    await ChannelModel.updateOne(
+      { _id: video.channel },
+      { $pull: { videos: videoId } },
+    );
+
+    return res.json({
+      data: true,
     });
   } catch (error) {
     return ErrorUtil.APIError(error, res);

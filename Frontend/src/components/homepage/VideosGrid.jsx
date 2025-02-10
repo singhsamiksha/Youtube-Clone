@@ -67,7 +67,10 @@ function VideosGrid({
             xs: 12, sm: 6, md: 4, lg: 3, xl: 2.4,
           }}
         >
-          <VideoCard video={video} />
+          <VideoCard
+            channel={video?.channel}
+            video={video}
+          />
         </Grid2>
       ))}
 
