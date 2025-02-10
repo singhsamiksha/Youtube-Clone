@@ -3,13 +3,13 @@ import { baseUrl, getHeaderToken, handleAPIError } from '../apis';
 
 export const getDashboardVideos = async (params) => {
   const { payload, setters } = params;
-  const { search } = payload;
+  const { search } = payload || {};
   const { setError, setLoader, onSuccessHandler } = setters;
 
   try {
     setLoader(true);
     const token = getHeaderToken();
-    const query = new URLSearchParams({ search });
+    const query = search ? new URLSearchParams({ search }) : null;
     const response = await axios.get(`${baseUrl}/video/dashboard${search ? `?${query.toString()}` : ''}`, {
       headers: {
         Authorization: token,

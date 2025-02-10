@@ -169,6 +169,8 @@ function VideoPlayerPage(props) {
                       left: 0,
                       borderRadius: 5,
                     }}
+                    playing
+                    controls
                     url={selectedVideo?.videoUrl}
                     width="100%"
                     height="100%"
