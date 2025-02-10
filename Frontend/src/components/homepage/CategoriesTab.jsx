@@ -1,4 +1,5 @@
 import { Box, Chip } from '@mui/material';
+import PropTypes from 'prop-types';
 import { VIDEO_CATEGORIES } from '../../constants';
 
 function CategoriesTab(props) {
@@ -38,5 +39,10 @@ function CategoriesTab(props) {
     </Box>
   );
 }
+
+CategoriesTab.propTypes = {
+  selectedCategory: PropTypes.string.isRequired,
+  setSelectedCategory: PropTypes.func.isRequired,
+};
 
 export default CategoriesTab;

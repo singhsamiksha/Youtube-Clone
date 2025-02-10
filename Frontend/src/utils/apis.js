@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { APPErrorUtil } from './common';
 
 export const baseUrl = import.meta.env.VITE_BACKEND_BASE_URL;
 
@@ -49,51 +48,3 @@ export const embedYouTube = async (url) => {
     return null;
   }
 };
-
-export async function postUser(username, email, password, image) {
-  try {
-    const response = await fetch('http://localhost:3000/user/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-        image,
-        channel: [],
-      }),
-    });
-    if (!response.ok) {
-      throw new Error('Failed to create user');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    APPErrorUtil('Error:', error);
-    throw error;
-  }
-}
-
-export async function getUsers() {
-  try {
-    const response = await fetch('http://localhost:3000/user/signin', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to find any user!');
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    APPErrorUtil('Error fetching users:', error);
-    return [];
-  }
-}

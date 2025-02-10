@@ -3,6 +3,11 @@ export const SIGNIN_PAGE_STATE = {
   PASSWORD_ASK_VIEW: 'PASSWORD_ASK_VIEW',
 };
 
+export const SIGNUP_PAGE_STATE = {
+  BASIC_DETAILS_VIEW: 'BASIC_DETAILS_VIEW',
+  PASSWORD_ASK_VIEW: 'PASSWORD_ASK_VIEW',
+};
+
 export const GOOGLE_INCOGNITO_TUTORIAL_GUIDE = 'https://support.google.com/chrome/answer/6130773?hl=en';
 
 export const PASSWORD_MIN_LENGTH = 8;

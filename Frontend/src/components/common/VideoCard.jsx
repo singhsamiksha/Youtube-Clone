@@ -1,10 +1,11 @@
 import {
-  Avatar, Box, Card, CardContent, CardMedia, Typography,
+  Box, Card, CardContent, CardMedia, Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import { humanizeTime, stringAvatar } from '../../utils/common';
+import { humanizeTime } from '../../utils/common';
+import ChannelAvatar from './ChannelAvatar';
 
 function VideoCard(props) {
   const { video } = props;
@@ -24,12 +25,13 @@ function VideoCard(props) {
       />
       <CardContent sx={{ padding: 0, paddingTop: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'start' }}>
-          <Avatar {
-            ...stringAvatar(video.channel?.channelName, {
+          <ChannelAvatar
+            channel={video.channel}
+            sx={{
               width: 35,
               height: 35,
               mr: 1,
-            })}
+            }}
           />
           <Box>
             <Typography variant="body1" fontWeight={500}>

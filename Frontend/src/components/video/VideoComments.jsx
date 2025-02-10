@@ -1,6 +1,5 @@
 import {
   Typography,
-  Avatar,
   Box,
   Button,
   useTheme,
@@ -18,9 +17,10 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { humanizeTime, stringAvatar } from '../../utils/common';
+import { humanizeTime } from '../../utils/common';
 import CommentPush from './CommentPush';
 import { deleteCommentAPI, editCommentAPI, toggleCommentLikeAPI } from '../../utils/apis/videoApi';
+import UserAvatar from '../common/UserAvatar';
 
 function VideoComments(props) {
   const {
@@ -126,11 +126,7 @@ function VideoComments(props) {
                 mb: 4,
               }}
             >
-              <Avatar {
-              ...stringAvatar(comment.userId?.username)
-            }
-              />
-
+              <UserAvatar user={comment.userId} />
               <Box sx={{ ml: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <Typography variant="subtitle2" sx={{ mr: 1 }}>

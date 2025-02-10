@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Alert,
   Grid2,
-  Avatar,
   Box,
   Button,
   useTheme,
@@ -21,11 +20,11 @@ import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ReplyOutlinedIcon from '@mui/icons-material/ReplyOutlined';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { stringAvatar } from '../../utils/common';
 import {
   fetchVideo, getDashboardVideos, markVideoViewAPI, toggleVideoLikeAPI,
 } from '../../utils/apis/videoApi';
 import VideoComments from './VideoComments';
+import ChannelAvatar from '../common/ChannelAvatar';
 
 function VideoPlayerPage(props) {
   const {
@@ -186,9 +185,9 @@ function VideoPlayerPage(props) {
                 </Typography>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Avatar {
-                      ...stringAvatar(selectedVideo.channel?.channelName, { width: 45, height: 45 })
-                    }
+                    <ChannelAvatar
+                      channel={selectedVideo?.channel}
+                      sx={{ width: 45, height: 45 }}
                     />
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignContent: 'center' }}>
                       <Typography variant="body1" fontWeight={450}>{selectedVideo.channel?.channelName}</Typography>

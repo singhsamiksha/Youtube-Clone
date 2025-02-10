@@ -9,7 +9,6 @@ import {
   Button,
   InputAdornment,
   useTheme,
-  Avatar,
   Typography,
   AppBar,
   Box,
@@ -33,9 +32,9 @@ import MovieFilterOutlinedIcon from '@mui/icons-material/MovieFilter';
 // Utils
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AppLogo from '../../assets/icons/AppLogo';
-import { stringAvatar } from '../../utils/common';
 import { updateUser } from '../../redux/userSlice';
 import CreateChannelDialog from './CreateChannelDialog';
+import UserAvatar from './UserAvatar';
 
 function Header(props) {
   const {
@@ -95,9 +94,9 @@ function Header(props) {
         paddingBottom: 1,
       }}
       >
-        <Avatar {...stringAvatar(userData?.name)} />
+        <UserAvatar user={userData} />
         <Box>
-          <Typography variant="body1" sx={{ ml: 1 }}>{userData?.name}</Typography>
+          <Typography variant="body1" sx={{ ml: 1 }}>{userData?.displayName}</Typography>
           <Typography variant="subtitle2" sx={{ ml: 1 }}>{userData?.email}</Typography>
         </Box>
       </Box>
@@ -241,7 +240,7 @@ function Header(props) {
                   // aria-haspopup='true'
                   onClick={handleProfileMenuOpen}
                 >
-                  <Avatar {...stringAvatar(userData?.name)} />
+                  <UserAvatar user={userData} />
                 </IconButton>
               )
               : (
@@ -275,8 +274,6 @@ function Header(props) {
 
 Header.propTypes = {
   toggleSidebar: PropTypes.func.isRequired,
-  handleUserState: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   userData: PropTypes.instanceOf(Object).isRequired,
   updateUserData: PropTypes.func.isRequired,

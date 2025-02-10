@@ -4,7 +4,6 @@ import Auth from '../middlewares/auth.middleware.js';
 
 const router = express.Router();
 
-router.get('/newvideo', VideoController.createVideo);
 router.get('/dashboard', VideoController.getVideosForUserDashboard);
 router.get('/:videoId', VideoController.getVideoDetails);
 router.put('/:videoId/like', Auth.authenticateJWTToken, VideoController.toggleVideoLike);

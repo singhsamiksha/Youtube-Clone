@@ -1,7 +1,7 @@
 import ErrorUtil from '../helpers/error.js';
-import ChannelModel from '../models/channels.Model.js';
+import ChannelModel from '../models/channels.model.js';
 import UserModel from '../models/users.model.js';
-import VideoModel from '../models/videos.Model.js';
+import VideoModel from '../models/videos.model.js';
 
 const ChannelController = {};
 export default ChannelController;
@@ -15,7 +15,9 @@ const getUserChannels = (user) => {
 ChannelController.channelCreate = async (req, res) => {
   try {
     const { user } = req;
-    const { channelName, description, channelBanner } = req.body;
+    const {
+      channelName, description, channelIcon, channelBanner,
+    } = req.body;
 
     if (!channelName || !description || !channelBanner) {
       return res.status(422).json({ message: 'Invalid data provided' });
@@ -25,6 +27,7 @@ ChannelController.channelCreate = async (req, res) => {
       channelName,
       owner: user?._id,
       description,
+      channelIcon,
       channelBanner,
       subscribers: [],
       videos: [],

@@ -4,7 +4,8 @@ import UserController from '../controllers/users.controller.js';
 
 const router = express.Router();
 
-router.post('/signup', UserController.createUser);
+router.post('/register/validate1', UserController.validateSignupForm1);
+router.post('/signup', UserController.registerUser);
 router.post('/signin', UserController.signinUser);
 router.get('/auth', Auth.authenticateJWTToken, UserController.getAuthUser);
 

@@ -1,8 +1,7 @@
-import jwt from 'jsonwebtoken';
 import Globals from '../../constants.js';
 import DataHelper from '../helpers/data.js';
 import TokenHelper from '../helpers/token.js';
-import ChannelModel from '../models/channels.Model.js';
+import ChannelModel from '../models/channels.model.js';
 import UserModel from '../models/users.model.js';
 import ErrorUtil from '../helpers/error.js';
 
@@ -68,8 +67,10 @@ UserController.getAuthUser = async (req, res) => {
       return res.json({
         data: {
           user: {
+            displayName: user.displayName,
+            username: user.username,
             email: user.email,
-            name: user.username,
+            avatar: user.avatar,
             userId: user._id,
             channels,
           },
@@ -84,27 +85,81 @@ UserController.getAuthUser = async (req, res) => {
   }
 };
 
-// Handle the signup process for the user
-UserController.createUser = async (req, res) => {
-  const {
-    username, email, password, image, channel,
-  } = req.body;
+// API Controller to provide the currently logged in user, with channels
+UserController.validateSignupForm1 = async (req, res) => {
+  try {
+    const { username, email } = req.body;
 
-  const user = new UserModel({
-    username,
-    email,
-    password,
-    image,
-    channel,
-  });
-
-  user.save().then((data) => {
-    if (!data) {
-      return res.status(400).json({ message: 'Something went wrong' });
+    if (!username || !email) {
+      return res.json({
+        username: !username ? 'Username is required' : undefined,
+        email: !email ? 'Email is required' : undefined,
+      });
     }
 
-    // Generate the access token
-    const accessToken = jwt.sign({ username: data.username, email: data.email });
-    return res.send({ accessToken, data });
-  }).catch((error) => res.status(500).json({ message: 'Internal server error', error: error.message }));
+    const usernameCheck = await UserModel.countDocuments({ username });
+    const emailCheck = await UserModel.countDocuments({ email });
+
+    return res.json({
+      data: {
+        username: usernameCheck ? 'Username has already been taken' : null,
+        email: emailCheck ? 'Email has already been taken' : '',
+      },
+    });
+  } catch (error) {
+    return ErrorUtil.APIError(error, res);
+  }
+};
+
+// Handle the signup process for the user
+UserController.registerUser = async (req, res) => {
+  try {
+    const { fullName, username, avatar } = req.body;
+    let { email, password } = req.body;
+    email = DataHelper.atob(email);
+    password = DataHelper.atob(password);
+
+    if (!email) {
+      return res.status(401).json({ message: 'Email is required.' });
+    }
+
+    if (!password) {
+      return res.status(401).json({ message: 'Password is required.' });
+    }
+
+    const existingUser = await UserModel.countDocuments({
+      $or: [
+        { email }, { username },
+      ],
+    });
+
+    if (existingUser) {
+      return res.status(401).json({
+        errorCode: 404,
+        message: 'User already exists',
+      });
+    }
+
+    const user = await UserModel.create({
+      displayName: fullName,
+      username,
+      email,
+      password,
+      avatar,
+    });
+
+    return res.json({
+      data: {
+        user: {
+          _id: user._id,
+          email: user.email,
+          displayName: user.fullName,
+          username: user.username,
+        },
+        token: TokenHelper.generateUserToken(user),
+      },
+    });
+  } catch (error) {
+    return ErrorUtil.APIError(error, res);
+  }
 };

@@ -61,6 +61,7 @@ export const humanizeTime = (createdAt) => {
 };
 
 export const APPErrorUtil = (...e) => {
+  // eslint-disable-next-line no-console
   console.error(...e);
 };
 

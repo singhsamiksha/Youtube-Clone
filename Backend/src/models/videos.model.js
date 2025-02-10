@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import UserModel from './users.Models.js';
-import ChannelModel from './channels.Models.js';
+import UserModel from './users.model.js';
+import ChannelModel from './channels.model.js';
 
 const videoSchema = new mongoose.Schema({
   videoUrl: {

@@ -1,6 +1,6 @@
 import DataHelper from '../helpers/data.js';
 import ErrorUtil from '../helpers/error.js';
-import VideoModel from '../models/videos.Model.js';
+import VideoModel from '../models/videos.model.js';
 
 const VideoController = {};
 export default VideoController;
@@ -44,7 +44,7 @@ VideoController.getVideoDetails = async (req, res) => {
       .populate([
         { path: 'channel' },
         { path: 'uploadedBy' },
-        { path: 'comments.userId', select: 'username email likedBy dislikedBy timestamp' },
+        { path: 'comments.userId', select: 'username email avatar' },
       ]).lean();
 
     return res.json({
@@ -53,7 +53,8 @@ VideoController.getVideoDetails = async (req, res) => {
           ...video,
           comments: (video.comments || []).sort((b, a) => a.timestamp - b.timestamp),
           uploadedBy: {
-            name: video?.uploadedBy?.username,
+            displayName: video?.uploadedBy?.displayName,
+            username: video?.uploadedBy?.username,
           },
         },
       },
@@ -323,34 +324,4 @@ VideoController.editComment = async (req, res) => {
   } catch (error) {
     return ErrorUtil.APIError(error, res);
   }
-};
-
-VideoController.createVideo = (req, res) => {
-  const {
-    title, thumbnailUrl, description, channelId, uploader, views, likes, dislikes, uploadDate, comments,
-  } = req.body;
-
-  if (!thumbnailUrl || !title) {
-    return res.status(400).json({ message: 'Title and thumbnail URL are required' });
-  }
-
-  const newVideo = new VideoModel({
-    title,
-    thumbnailUrl,
-    description,
-    channelId,
-    uploader,
-    views: views || 0, // Default value if not provided
-    likes: likes || 0,
-    dislikes: dislikes || 0,
-    uploadDate: uploadDate || new Date(),
-    comments: comments || [],
-  });
-
-  newVideo
-    .save()
-    .then((data) => res.status(201).json(data))
-    .catch((error) => res.status(500).json({ message: 'Internal server error', error: error.message }));
-
-  return null;
 };

@@ -1,5 +1,5 @@
 import {
-  Avatar, Typography, Box, Tab,
+  Typography, Box, Tab,
   Grid2,
   Alert,
   CircularProgress,
@@ -10,9 +10,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { getChannels } from '../../utils/apis/channelApi';
-import { stringAvatar } from '../../utils/common';
 import AddVideoDialog from '../common/AddVideoDialog';
 import VideoCard from '../common/VideoCard';
+import ChannelAvatar from '../common/ChannelAvatar';
 
 function Channel() {
   const { channelId } = useParams();
@@ -82,8 +82,8 @@ function Channel() {
         display: 'flex', alignItems: 'center', gap: 3, padding: 2,
       }}
       >
-        <Avatar
-          {...stringAvatar(selectedChannel?.channelName)}
+        <ChannelAvatar
+          channel={selectedChannel}
           sx={{ width: 100, height: 100 }}
         />
         <Box>
@@ -101,7 +101,7 @@ function Channel() {
               Videos
             </Typography>
           </Box>
-          <Typography sx={{ marginTop: 1 }}>{selectedChannel?.description}</Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>{selectedChannel?.description}</Typography>
         </Box>
       </Box>
 

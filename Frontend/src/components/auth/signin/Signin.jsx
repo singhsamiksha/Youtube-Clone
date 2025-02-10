@@ -15,8 +15,7 @@ import GoogleIcon from '../../../assets/icons/GoogleIcon';
 
 // Utils
 import { updateUser } from '../../../redux/userSlice';
-import { PASSWORD_MIN_LENGTH, SIGNIN_PAGE_STATE } from '../../../constants';
-import { validateEmail } from '../../../utils/common';
+import { SIGNIN_PAGE_STATE } from '../../../constants';
 import { getAuthUser, loginUser } from '../../../utils/apis/userApi';
 
 function Signin(props) {
@@ -51,16 +50,6 @@ function Signin(props) {
 
   const submitLoginForm = async () => {
     try {
-      if (!validateEmail(userData.email)) {
-        setError('Invalid email format');
-        return;
-      }
-
-      if (userData.password.trim().length < PASSWORD_MIN_LENGTH) {
-        setError(`Password must be ${PASSWORD_MIN_LENGTH} character long`);
-        return;
-      }
-
       await loginUser({
         payload: userData,
         setters: {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   Alert,
   Grid2,
-  Avatar,
   Box,
   Button,
   useTheme,
@@ -11,8 +10,8 @@ import {
 import { useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { stringAvatar } from '../../utils/common';
 import { postCommentForVideoAPI } from '../../utils/apis/videoApi';
+import UserAvatar from '../common/UserAvatar';
 
 function CommentPush(props) {
   const {
@@ -66,10 +65,7 @@ function CommentPush(props) {
             gap: 2,
           }}
           >
-            <Avatar {
-            ...stringAvatar(userData?.name)
-          }
-            />
+            <UserAvatar user={userData} />
             <Box
               sx={{
                 width: '100%',
@@ -125,9 +121,6 @@ function CommentPush(props) {
 
 CommentPush.propTypes = {
   video: PropTypes.instanceOf(Object).isRequired,
-  toggleSidebar: PropTypes.func.isRequired,
-  handleUserState: PropTypes.func.isRequired,
-  handleSearch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   userData: PropTypes.instanceOf(Object).isRequired,
   updateVideoComments: PropTypes.func.isRequired,

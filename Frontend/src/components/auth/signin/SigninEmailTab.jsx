@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
   Box,
@@ -16,6 +17,7 @@ function SigninEmailTab(props) {
   const { email, setEmail, setPage } = props;
 
   const theme = useTheme();
+  const navigate = useNavigate();
   const [, setSearchParams] = useSearchParams();
 
   const [error, setError] = useState('');
@@ -100,7 +102,7 @@ function SigninEmailTab(props) {
 
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-          <Button variant="text" onClick={() => setPage(3)}>Create account</Button>
+          <Button variant="text" onClick={() => navigate('/signup')}>Create an account</Button>
           <Button
             variant="contained"
             onClick={submitForm}

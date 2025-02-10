@@ -46,6 +46,7 @@ export default [
       'no-bitwise': 'off',
       'react/jsx-no-target-blank': 'off',
       'react/jsx-props-no-spreading': 'off',
+      'react-hooks/exhaustive-deps': 'off',
       'no-underscore-dangle': ['error', { allow: ['_id'] }],
       'react-refresh/only-export-components': [
         'warn',

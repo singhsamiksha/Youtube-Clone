@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import UserModel from './users.Models.js';
+import UserModel from './users.model.js';
 
 const channelSchema = new mongoose.Schema({
   channelName: {
@@ -18,6 +18,10 @@ const channelSchema = new mongoose.Schema({
   channelBanner: {
     type: String,
     required: true,
+  },
+  channelIcon: {
+    type: String,
+    default: null,
   },
   // There will be users id who will subscribe to this channel
   subscribers: [

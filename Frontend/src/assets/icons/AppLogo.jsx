@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unknown-property */
 import PropTypes from 'prop-types';
 
-function AppLogo({ width = 100, height = 10, color = 'primary.main' }) {
+function AppLogo({ width = 100, height = 10 }) {
   return (
     <svg viewBox="409.289 277.787 512 114.301" width={width} height={height} xmlns="http://www.w3.org/2000/svg">
       <g viewBox="0 0 90 20" preserveAspectRatio="xMidYMid meet" className="style-scope yt-icon" transform="matrix(5.715038, 0, 0, 5.715038, 409.288757, 277.787231)">
@@ -25,9 +26,8 @@ function AppLogo({ width = 100, height = 10, color = 'primary.main' }) {
 }
 
 AppLogo.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number,
-  color: PropTypes.string,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 };
 
 export default AppLogo;

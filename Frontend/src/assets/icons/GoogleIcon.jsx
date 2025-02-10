@@ -1,3 +1,4 @@
+/* eslint-disable no-tabs */
 /* eslint-disable max-len */
 import PropTypes from 'prop-types';
 

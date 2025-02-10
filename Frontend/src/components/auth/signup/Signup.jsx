@@ -1,164 +1,77 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Alert, Box, Container, Grid2, IconButton, Paper, Snackbar, useTheme,
+  Alert, Grid2, Stack, useTheme,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import Page3 from './Page3';
-import Page4 from './Page4';
-import Page5 from './Page5';
-import { postUser, getUsers } from '../../../utils/apis';
+import { connect } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import SignupUserBasicDetails from './SignupUserBasicDetails';
+import SignupUserPassword from './SignupUserPassword';
 import { updateUser } from '../../../redux/userSlice';
 import GoogleIcon from '../../../assets/icons/GoogleIcon';
-import { SIGNIN_PAGE_STATE } from '../../../constants';
-import SigninEmailTab from './SigninEmailTab';
-import SigninPasswordTab from './SigninPasswordTab';
+import { SIGNIN_PAGE_STATE, SIGNUP_PAGE_STATE } from '../../../constants';
+import { getAuthUser, registerUser } from '../../../utils/apis/userApi';
 
-function Signup({ handleMainbar }) {
-  const [searchParams, setSearchParams] = useSearchParams();
+const formData = {
+  fullName: '',
+  username: '',
+  email: '',
+  avatar: '',
+  password: '',
+  confirmPassword: '',
+};
 
-  const [currentPageView, setCurrentPageView] = useState(SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW);
-  const [userData, setUserData] = useState({
-    username: '',
-    password: '',
-  });
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmpassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
-  const [open, setOpen] = useState(false);
-  const [image, setImage] = useState(null);
-  const dispatch = useDispatch();
+function Signup(props) {
+  const {
+    // Redux Dispatchers
+    updateUserData,
+  } = props;
+
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const [currentPageView, setCurrentPageView] = useState(SIGNUP_PAGE_STATE.BASIC_DETAILS_VIEW);
+  const [userFormData, setUserFormData] = useState({ ...formData });
+
+  const [formErrors, setFormErrors] = useState({ ...formData });
+  const [error, setError] = useState();
 
   const theme = useTheme();
 
   useEffect(() => {
-    const tempPage = searchParams.get('page');
-    const username = searchParams.get('username');
-    if (tempPage && SIGNIN_PAGE_STATE.PASSWORD_ASK_VIEW === window.atob(tempPage)) {
-      setCurrentPageView(window.atob(tempPage));
-      setUserData({
-        username: window.atob(username),
-        password: '',
+    const tempPage = searchParams.get('page') ? window.atob(searchParams.get('page')) : '';
+    const parsedFormData = searchParams.get('userData') ? JSON.parse(window.atob(searchParams.get('userData')) || '') : '';
+
+    if (tempPage) {
+      setCurrentPageView(tempPage);
+    }
+    if (parsedFormData) {
+      setUserFormData({
+        ...userFormData,
+        ...(parsedFormData || {}),
       });
     }
-  }, []);
+  }, [searchParams]);
 
-  // Handle Image Selection
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImage(URL.createObjectURL(file));
-    }
-    console.log(image);
-  };
-
-  // Handle User Registration
-  const handleClick = async () => {
+  const submitSignupForm = async () => {
     try {
-      const user = await postUser(username, email, password, image);
-
-      dispatch(updateUser(user));
-
-      setOpen(true);
-      handleUserState();
-
-      setTimeout(() => {
-        handleMainbar();
-      }, 2000);
-    } catch (error) {
-      setError('Failed to create user.');
-    }
-  };
-
-  // Close Snackbar
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  const action = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="white"
-      onClick={handleClose}
-    >
-      <CloseIcon fontSize="small" />
-    </IconButton>
-  );
-
-  // Handle Input Change
-  function handleChange(e) {
-    setUsername(e.target.value);
-    setError('');
-  }
-
-  // Handle Page 2
-  function handlepage2() {
-    if (username.trim() === '') {
-      setError('Please enter the Email or Username.');
-      return;
-    }
-    setEmail(username);
-    setCurrentPageView(2);
-  }
-
-  function handlePassword(e) {
-    setPassword(e.target.value);
-    setError('');
-  }
-
-  const submitLoginForm = async () => {
-    try {
-      if (password.trim() === '') {
-        setError('Please enter the Password.');
-        return;
-      }
-      const users = await getUsers();
-      const user = users.find((user) => user.email === email && user.password === password);
-
-      if (user) {
-        console.log(`Welcome ${user.username}! You are successfully signed in.`);
-
-        dispatch(updateUser(user)); // Store user in Redux
-
-        setOpen(true);
-        handleUserState();
-        setTimeout(() => {
-          handleMainbar();
-        }, 3000);
-      } else {
-        setError("User doesn't exist, Please Try again!");
-      }
-    } catch (error) {
-      console.error('Error:', error);
+      await registerUser({
+        payload: userFormData,
+        setters: {
+          setError,
+          onSuccessHandler: () => {
+            getAuthUser().then((user) => {
+              updateUserData({ user });
+              navigate('/');
+            }).catch((e) => {
+              setError(e?.message || '');
+            });
+          },
+        },
+      });
+    } catch {
       setError('Please check your credentials!');
     }
-  };
-
-  const handleUserDataChange = (field) => (value) => {
-    setUserData((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
-  };
-
-  const resetLoginForm = () => {
-    setUserData({
-      username: '',
-      password: '',
-    });
-
-    setSearchParams({});
-    setCurrentPageView(SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW);
   };
 
   return (
@@ -185,71 +98,36 @@ function Signup({ handleMainbar }) {
           borderColor: theme.palette.divider,
         }}
       >
-
-        <Snackbar
-          open={open}
-          autoHideDuration={2000}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          onClose={handleClose}
-        >
-          <Alert
-            severity="success"
-            sx={{ width: '100%' }}
-            icon={<CheckCircleIcon fontSize="inherit" />}
-            onClose={handleClose}
-          >
-            Your Account is Successfully Signed In!
-          </Alert>
-        </Snackbar>
-
         <GoogleIcon />
-        {currentPageView === SIGNIN_PAGE_STATE.EMAIL_ASK_VIEW && (
-          <SigninEmailTab
-            username={userData.username}
-            setUsername={handleUserDataChange('username')}
-            nextPage={setCurrentPageView}
+
+        {
+          error
+            ? (
+              <Stack sx={{ mt: 3, minWidth: '50%', paddingBottom: 1 }} spacing={2}>
+                <Alert severity="error">{error}</Alert>
+              </Stack>
+            )
+            : ''
+        }
+
+        {currentPageView === SIGNUP_PAGE_STATE.BASIC_DETAILS_VIEW && (
+          <SignupUserBasicDetails
+            formData={userFormData}
+            errors={formErrors}
+            setFormData={setUserFormData}
+            setErrors={setFormErrors}
+            nextPage={() => setCurrentPageView(SIGNIN_PAGE_STATE.PASSWORD_ASK_VIEW)}
           />
         )}
 
         {currentPageView === SIGNIN_PAGE_STATE.PASSWORD_ASK_VIEW && (
-          <SigninPasswordTab
-            username={userData.username}
-            password={userData.password}
-            setPassword={handleUserDataChange('password')}
-            resetLoginForm={resetLoginForm}
-            submitLoginForm={submitLoginForm}
-          />
-        )}
-
-        {currentPageView === 3 && (
-          <Page3
-            error={error}
-            username={username}
-            setUsername={setUsername}
-            email={email}
-            setEmail={setEmail}
-            setPage={setCurrentPageView}
-          />
-        )}
-
-        {currentPageView === 4 && (
-          <Page4
-            password={password}
-            confirmpassword={confirmpassword}
-            handlePassword={handlePassword}
-            setConfirmPassword={setConfirmPassword}
-            setPage={setCurrentPageView}
-          />
-        )}
-
-        {currentPageView === 5 && (
-          <Page5
-            image={image}
-            handleImageChange={handleImageChange}
-            handleClick={handleClick}
-            setPage={setCurrentPageView}
-            open={open}
-            handleClose={handleClose}
+          <SignupUserPassword
+            formData={userFormData}
+            errors={formErrors}
+            setFormData={setUserFormData}
+            setErrors={setFormErrors}
+            submitForm={submitSignupForm}
+            previousPage={() => setCurrentPageView(SIGNIN_PAGE_STATE.BASIC_DETAILS_VIDE)}
           />
         )}
       </Grid2>
@@ -258,4 +136,12 @@ function Signup({ handleMainbar }) {
   );
 }
 
-export default Signup;
+Signup.propTypes = {
+  updateUserData: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProp = (dispatch) => ({
+  updateUserData: (payload) => dispatch(updateUser(payload)),
+});
+
+export default connect(null, mapDispatchToProp)(Signup);

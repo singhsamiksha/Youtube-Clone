@@ -19,7 +19,6 @@ Auth.authenticateJWTToken = async (req, res, next) => {
     req.user = user;
     return next();
   } catch (err) {
-    console.error(err);
     return res.status(400).json({ message: 'Invalid token' });
   }
 };

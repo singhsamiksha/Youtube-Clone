@@ -25,10 +25,12 @@ function CreateChannelDialog(props) {
 
   const [channelName, setChannelName] = useState('');
   const [description, setDescription] = useState('');
+  const [channelIcon, setChannelIcon] = useState('');
   const [channelBanner, setChannelBanner] = useState('');
 
   const [channelNameError, setChannelNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
+  const [channelIconError, setChannelIconError] = useState('');
   const [channelBannerError, setChannelBannerError] = useState('');
 
   const [error, setError] = useState('');
@@ -45,7 +47,18 @@ function CreateChannelDialog(props) {
     if (!description) {
       isValid = false;
       setDescriptionError('Channel Name required');
-    } if (!channelBanner) {
+    }
+    if (!channelIcon) {
+      isValid = false;
+      setChannelIconError('Channel Name required');
+    } else {
+      const imageValid = await validateImageUrl(channelIcon);
+      if (!imageValid.isValid) {
+        isValid = false;
+        setChannelIconError(imageValid.message);
+      }
+    }
+    if (!channelBanner) {
       isValid = false;
       setChannelBannerError('Channel Name required');
     } else {
@@ -58,6 +71,7 @@ function CreateChannelDialog(props) {
 
     if (isValid) {
       setChannelNameError('');
+      setChannelIconError('');
       setChannelBannerError('');
       setDescriptionError('');
 
@@ -65,6 +79,7 @@ function CreateChannelDialog(props) {
         payload: {
           channelName,
           description,
+          channelIcon,
           channelBanner,
         },
         setters: {
@@ -110,6 +125,17 @@ function CreateChannelDialog(props) {
           error={descriptionError}
           helperText={descriptionError}
           onChange={(e) => setDescription(e.target.value)}
+        />
+        <TextField
+          required
+          fullWidth
+          margin="dense"
+          label="Channel Icon URL"
+          variant="standard"
+          value={channelIcon}
+          error={channelIconError}
+          helperText={channelIconError}
+          onChange={(e) => setChannelIcon(e.target.value)}
         />
         <TextField
           required
